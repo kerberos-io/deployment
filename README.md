@@ -89,3 +89,20 @@ If you have chosen to use the `NodePort` configuration you should be able to rea
 ### MinIO storage provider
 
     kubectl create namespace minio-tenant
+
+    kubectl apply -f minio-storageclass.yaml
+
+    # This will create the operator
+    kubectl kustomize github.com/minio/operator?ref=v6.0.1 | kubectl apply -f -
+
+    # Install the tenants
+    kubectl apply -f tenant-base.yaml
+
+    # Watch the tenant creation
+    watch kubectl get all -n minio-tenant
+
+### Configure the Kerberos Vault
+
+..... (should be done through env files so we do not need to get in the UI)
+
+### Create an agent
