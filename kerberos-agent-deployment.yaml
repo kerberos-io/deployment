@@ -44,6 +44,8 @@ spec:
               value: mybucket
             - name: AGENT_KERBEROSVAULT_DIRECTORY		
               value: myagent
+            - name: AGENT_CAPTURE_CONTINUOUS
+              value: "true"
             
             # find full list of environment variables here: https://github.com/kerberos-io/agent#override-with-environment-variables
 ---
