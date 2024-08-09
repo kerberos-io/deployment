@@ -2,6 +2,8 @@
 
 This ...
 
+## Kerberos Vault
+
 ### OpenEBS
 
 Some of the services we'll leverage such as MongoDB or Minio require storage, to persist their data safely. In a managed Kubernetes cluster, the relevant cloud provider will allocate storage automatically for you, as you might expect this is not the case for a self-hosted cluster.
@@ -77,3 +79,13 @@ Create the config map in the `kerberos-vault` namespace.
 To install the Kerberos Vault web app inside your cluster, simply execute below `kubectl` command. This will create the deployment for us with the necessary configurations, and exposed it on internal/external IP address, thanks to our `LoadBalancer` MetalLB or cloud provider.
 
     kubectl apply -f ./kerberos-vault-deployment.yaml -n kerberos-vault
+
+### Access the Kerberos Vault
+
+If you have chosen to use the `NodePort` configuration you should be able to reach the Kerberos Vault using the `http://localhost:30080` endpoint in your browser. However if you have a server installation without a GUI, you might choose to do a reverse proxy so you can open the browser on your local machine.
+
+    ssh -L 8080:localhost:30080 user@server-ip -p 22
+
+### MinIO storage provider
+
+    kubectl create namespace minio-tenant
