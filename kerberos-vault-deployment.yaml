@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vault
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: vault
+    spec:
+      containers:
+      - name: vault
+        image: kerberos/vault:1.0.1398121865
+        #imagePullPolicy: Always
+        resources:
+          limits:
+            memory: 4096Mi
+            cpu: 2000m
+        ports:
+          - containerPort: 80
+        envFrom:
+          - configMapRef:
+              name: mongodb
+        # Injecting the ca-certificates inside the container.
+        #volumeMounts:
+        #- name: rootcerts
+        #  mountPath: /etc/ssl/certs/ca-certificates.crt
+        #  subPath: ca-certificates.crt
+        env:
+        - name: GIN_MODE
+          value: release
+        - name: KERBEROS_LOGIN_USERNAME
+          value: "root"
+        - name: KERBEROS_LOGIN_PASSWORD
+          value: "kerberos"
+
+        # Mongodb configuration (if you are not using the configmap)
+        # This is the mongodb database where data will be stored, you might use a different name if you want.
+        #- name: MONGODB_DATABASE_STORAGE
+        #  value : "KerberosStorage"
+
+        # MongoDB URI (for example for a SaaS service like MongoDB Atlas)
+        # If uri is set, the below properties are not used (host, adminDatabase, username, password)
+        #MONGODB_URI: "mongodb+srv://xx:xx@kerberos-hub.xxx.mongodb.net/?retryWrites=true&w=majority&appName=xxx"
+        
+        # If you do not wish to use the URI, you can specify the individual values.
+        #- name: MONGODB_HOST
+        #  value: "mongodb.mongodb"
+        #- name: MONGODB_DATABASE_CREDENTIALS
+        #  value: "admin"
+        #- name: MONGODB_USERNAME
+        #  value: "root"
+        #- name: MONGODB_PASSWORD
+        #  value: "yourmongodbpassword"
+
+        # MQTT broker to be used for on-demand forwarding.
+        - name : MQTTURI
+          value: "tcp://mqtt.kerberos.io:1883"
+        - name : MQTT_USERNAME
+          value: ""
+        - name : MQTT_PASSWORD
+          value: ""
+
+        # If you have a chained vault setup, enable this.
+        - name: CONTINUOUS_FORWARDING
+          value: "false"
+      #volumes:
+      #- name: rootcerts
+      #  configMap:
+      #    name: rootcerts
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vault-lb
+  labels:
+    app: vault
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+    name: frontend
+    protocol: TCP
+  selector:
+    app: vault
