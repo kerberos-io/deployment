@@ -76,4 +76,4 @@ Create the config map in the `kerberos-vault` namespace.
 
 To install the Kerberos Vault web app inside your cluster, simply execute below `kubectl` command. This will create the deployment for us with the necessary configurations, and exposed it on internal/external IP address, thanks to our `LoadBalancer` MetalLB or cloud provider.
 
-    kubectl apply -f ./kerberos-vault/deployment.yaml -n kerberos-vault
+    kubectl apply -f ./kerberos-vault-deployment.yaml -n kerberos-vault

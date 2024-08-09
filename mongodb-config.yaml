@@ -14,4 +14,4 @@ data:
   MONGODB_HOST: "mongodb.mongodb"
   MONGODB_DATABASE_CREDENTIALS: "admin"
   MONGODB_USERNAME: "root"
-  MONGODB_PASSWORD: "yourmongodbpassword"
+  MONGODB_PASSWORD: "yourpassword"
