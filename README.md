@@ -48,3 +48,26 @@ Once installed successfully, we should verify if the password has been set corre
 
     export MONGODB_ROOT_PASSWORD=$(kubectl get secret -n mongodb mongodb -o jsonpath="{.data.mongodb-root-password}" | base64 --decode)
     echo $MONGODB_ROOT_PASSWORD
+
+### Config Map
+
+Kerberos Vault requires a configuration to connect to the MongoDB instance. To handle this `configmap` map is created in the `./mongodb/mongodb.config.yaml` file. However you might also use the environment variables within the `./kerberos-vault/deployment.yaml` file to configure the mongodb connection.
+
+Modify the MongoDB credentials in the `./mongodb/mongodb.config.yaml`, and make sure they match the credentials of your MongoDB instance, as described above. There are two ways of configuring the mongodb connection, either you provide a `MONGODB_URI` or you specify the individual variables `MONGODB_USERNAME`, `MONGODB_PASSWORD`, etc.
+
+As mentioned above a managed MongoDB is easier to setup and manage, for example for MongoDB Atlas, you will get a MongoDB URI in the form of `"mongodb+srv://xx:xx@kerberos-hub.xxx.mongodb.net/?retryWrites=true&w=majority&appName=xxx"`. By applying this value into the `MONGODB_URI` field, you will have setup your MongoDB connection successfully.
+
+        - name: MONGODB_URI
+          value: "mongodb+srv://xx:xx@kerberos-hub.xxx.mongodb.net/?retryWrites=true&w=majority&appName=xxx"
+
+Once you applied this value, the other values like `MONGODB_USERNAME`, `MONGODB_PASSWORD` and others will be ignored. If you don't like the `MONGODB_URI` format you can still use the old way of defining the MongoDB connection by providing the different values.
+
+        - name: MONGODB_USERNAME
+          value: "root"
+        - name: MONGODB_PASSWORD
+    -->   value: "yourmongodbpassword"
+
+Create the config map in the `kerberos-vault` namespace.
+
+    kubectl create namespace kerberos-vault
+    kubectl apply -f ./mongodb/mongodb-config.yaml -n kerberos-vault
