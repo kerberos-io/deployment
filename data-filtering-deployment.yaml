@@ -52,6 +52,19 @@ spec:
             - name: OUTPUT_MEDIA_SAVEPATH
               value: "/ml/data/input/output_video.mp4"
 
+            - name: CREATE_BBOX_FRAME
+              value: "False"
+            - name: SAVE_BBOX_FRAME
+              value: "False"
+            - name: BBOX_FRAME_SAVEPATH
+              value: "path/to/your/output_bbox.jpg"
+
+            - name: CREATE_RETURN_JSON
+              value: "True"
+            - name: SAVE_RETURN_JSON
+              value: "False"
+            - name: RETURN_JSON_SAVEPATH
+              value: "path/to/your/output_json.json"
 
             - name: TIME_VERBOSE
               value: "True"
@@ -60,10 +73,24 @@ spec:
               value: "3"
             - name: CLASSIFICATION_THRESHOLD
               value: "0.3"
+            - name: MIN_DETECTIONS
+              value: "5"
+            - name: MIN_DISTANCE
+              value: "100"
+            - name: MIN_STATIC_DISTANCE
+              value: "50"
             - name: MAX_NUMBER_OF_PREDICTIONS
               value: "100"
+            - name: FIND_DOMINANT_COLORS
+              value: "True"
             - name: ALLOWED_CLASSIFICATIONS
               value: "0, 1, 2, 3, 5, 7, 14, 15, 16, 24, 26, 28"
+            - name: COLOR_PREDICTION_INTERVAL
+              value: "5"
+            - name: MIN_CLUSTERS
+              value: "4"
+            - name: MAX_CLUSTERS
+              value: "4"
 
             #- name: FORWARDING_MEDIA
             #  value: "false"
