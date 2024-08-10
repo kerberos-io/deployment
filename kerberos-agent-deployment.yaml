@@ -35,7 +35,7 @@ spec:
             - name: AGENT_CLOUD	
               value: kstorage
             - name: AGENT_KERBEROSVAULT_URI	
-              value: http:/vault-lb.kerberos-vault.svc.cluster.local/api
+              value: http://vault-lb.kerberos-vault/api
             - name: AGENT_KERBEROSVAULT_ACCESS_KEY	
               value: 52gyELgxutOXUWhF
             - name: AGENT_KERBEROSVAULT_SECRET_KEY		
