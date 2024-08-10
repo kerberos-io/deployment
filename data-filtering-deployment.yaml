@@ -46,7 +46,7 @@ spec:
             - name: PLOT
               value: "False"
             - name: SAVE_VIDEO
-              value: "True"
+              value: "False"
             - name: MEDIA_SAVEPATH
               value: "/ml/data/input/video.mp4"
             - name: OUTPUT_MEDIA_SAVEPATH
