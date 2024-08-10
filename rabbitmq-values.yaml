@@ -979,7 +979,7 @@ persistentVolumeClaimRetentionPolicy:
 service:
   ## @param service.type Kubernetes Service type
   ##
-  type: ClusterIP
+  type: NodePort
   ## @param service.portEnabled Amqp port. Cannot be disabled when `auth.tls.enabled` is `false`. Listener can be disabled with `listeners.tcp = none`.
   ##
   portEnabled: true
@@ -1032,12 +1032,13 @@ service:
   ## @param service.nodePorts.metrics Node port for RabbitMQ Prometheues metrics
   ##
   nodePorts:
-    amqp: ""
-    amqpTls: ""
+    amqp: "35672"
+    amqpTls: "35671"
     dist: ""
-    manager: ""
+    manager: "30081"
     epmd: ""
-    metrics: ""
+    metrics: "39419"
+
   ## @param service.extraPorts Extra ports to expose in the service
   ## E.g.:
   ## extraPorts:
