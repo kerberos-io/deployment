@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: data-filtering
-          image: uugai/data-filter:1.0.3
+          image: uugai/data-filter:1.0.4
           resources:
             limits:
               nvidia.com/gpu: 1 # requesting a single GPU
@@ -24,7 +24,7 @@ spec:
             - name: MODEL_NAME
               value: "yolov8n.pt"
             - name: CONDITION
-              value:  "2 persons detected"
+              value:  "1 persons detected"
 
             - name: QUEUE_NAME
               value: "data-filtering" # This is the topic of kafka we will read messages from.
