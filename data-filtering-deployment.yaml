@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-filtering
+  labels:
+    app: data-filtering
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-filtering
+  template:
+    metadata:
+      labels:
+        app: data-filtering
+    spec:
+      containers:
+        - name: data-filtering
+          image: uugai/data-filter:latest
+          resources:
+            limits:
+              nvidia.com/gpu: 1 # requesting a single GPU
+          env:
+            - name: QUEUE_NAME
+              value: "data-filtering" # This is the topic of kafka we will read messages from.
+            - name: QUEUE_HOST
+              value: rabbitmq.rabbitmq:5672
+            - name: QUEUE_EXCHANGE
+            - name: QUEUE_USERNAME
+              value: yourusername
+            - name: QUEUE_PASSWORD
+              value: yourpassword
+
+            - name: STORAGE_URI
+              value: "http://vault-lb.kerberos-vault/api"
+            - name: STORAGE_ACCESS_KEY
+              value: "52gyELgxutOXUWhF"
+            - name: STORAGE_SECRET_KEY
+              value: "k8DrcB@hQ5XfxDENzDKcnkxBHx"
+
+            - name: MODEL_NAME
+              value: "yolov8n.pt"
+            - name: MEDIA_SAVEPATH
+              value: "/ml/data/input/video.mp4"
+
+            - name: LOGGING
+              value: "True"
+            - name: PLOT
+              value: "False"
+            - name: SAVE_VIDEO
+              value: "True"
+            - name: OUTPUT_MEDIA_SAVEPATH
+              value: "/ml/data/input/output_video.mp4"
+
+
+            - name: TIME_VERBOSE
+              value: "True"
+
+            - name: CLASSIFICATION_FPS
+              value: "3"
+            - name: CLASSIFICATION_THRESHOLD
+              value: "0.3"
+            - name: MAX_NUMBER_OF_PREDICTIONS
+              value: "100"
+            - name: ALLOWED_CLASSIFICATIONS
+              value: "0, 1, 2, 3, 5, 7, 14, 15, 16, 24, 26, 28"
+
+            #- name: FORWARDING_MEDIA
+            #  value: "false"
+            #- name: FORWARDING_METADATA
+            #  value: "false"
+            #- name: FORWARDING_OBJECT_THRESHOLD
+            #  value: "1"
+            #- name: REMOVE_AFTER_PROCESSED
+            #  value: "false"
+            #- name: NUMBER_OF_PREDICTIONS
+            #  valu
