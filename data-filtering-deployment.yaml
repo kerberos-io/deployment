@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: data-filtering
-          image: uugai/data-filter:1.0.0
+          image: uugai/data-filter:1.0.1
           resources:
             limits:
               nvidia.com/gpu: 1 # requesting a single GPU
