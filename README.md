@@ -1,6 +1,6 @@
-# Edge deployment on k8s
+# Edge deployment on k8s, microk8s, k3s
 
-This ...
+Within this tutorial we will install the Kerberos.io edge stack (Kerberos Agent, Kerberos Vault and the Data filtering service). This will allow us to store recordings from multiple cameras at the edge
 
 ## Kerberos Vault
 
@@ -101,14 +101,19 @@ If you have chosen to use the `NodePort` configuration you should be able to rea
     # Watch the tenant creation
     watch kubectl get all -n minio-tenant
 
-### Configure the Kerberos Vault
-
-..... (should be done through env files so we do not need to get in the UI)
-
-### Create an agent
-
 ### Create the integration RabbitMQ
 
     kubectl create namespace rabbitmq
 
     helm install rabbitmq bitnami/rabbitmq -n rabbitmq -f rabbitmq-values.yaml
+
+### Configure the Kerberos Vault
+
+..... (should be done through env files so we do not need to get in the UI)
+create the minio provider, add integration
+
+### Create an agent
+
+### Create the data filtering
+
+### add forwarding integration

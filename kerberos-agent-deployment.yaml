@@ -43,10 +43,15 @@ spec:
             - name: AGENT_KERBEROSVAULT_PROVIDER		
               value: mybucket
             - name: AGENT_KERBEROSVAULT_DIRECTORY		
-              value: myagent
+              value: myhubaccount
             - name: AGENT_CAPTURE_CONTINUOUS
               value: "true"
-            
+            - name: AGENT_HUB_URI	
+              value: https://api.cloud.kerberos.io # or your own hub installation
+            - name: AGENT_HUB_KEY
+              value: xxx
+            - name: AGENT_HUB_PRIVATE_KEY
+              value: xxx
             # find full list of environment variables here: https://github.com/kerberos-io/agent#override-with-environment-variables
 ---
 apiVersion: v1
