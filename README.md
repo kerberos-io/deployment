@@ -106,3 +106,9 @@ If you have chosen to use the `NodePort` configuration you should be able to rea
 ..... (should be done through env files so we do not need to get in the UI)
 
 ### Create an agent
+
+### Create the integration RabbitMQ
+
+    kubectl create namespace rabbitmq
+
+    helm install rabbitmq bitnami/rabbitmq -n rabbitmq -f rabbitmq-values.yaml
