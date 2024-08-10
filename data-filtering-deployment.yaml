@@ -69,4 +69,4 @@ spec:
             - name: FORWARDING_MEDIA
               value: "True"
             - name: REMOVE_AFTER_PROCESSED
-              value: "False"
+              value: "True"
