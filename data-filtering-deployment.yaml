@@ -23,6 +23,8 @@ spec:
           env:
             - name: MODEL_NAME
               value: "yolov8n.pt"
+            - name: CONDITION
+              value:  "2 persons detected"
 
             - name: QUEUE_NAME
               value: "data-filtering" # This is the topic of kafka we will read messages from.
