@@ -57,10 +57,12 @@ spec:
 
             - name: CLASSIFICATION_FPS
               value: "3"
-            - name: ALLOWED_CLASSIFICATIONS
-              value: "0, 1, 2, 3, 5, 7, 14, 15, 16, 24, 26, 28"
             - name: CLASSIFICATION_THRESHOLD
               value: "0.3"
+            - name: MAX_NUMBER_OF_PREDICTIONS
+              value: "100"
+            - name: ALLOWED_CLASSIFICATIONS
+              value: "0, 1, 2, 3, 5, 7, 14, 15, 16, 24, 26, 28"
 
             - name: FORWARDING_MEDIA
               value: "True"
