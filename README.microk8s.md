@@ -175,3 +175,80 @@ microk8s helm upgrade rabbitmq bitnami/rabbitmq -n rabbitmq -f rabbitmq-values.y
 ```bash
 microk8s helm del rabbitmq -n rabbitmq
 ```
+
+### Kerberos Vautl
+
+#### Config Map
+
+Kerberos Vault requires a configuration to connect to the MongoDB instance. To handle this `configmap` map is created in the `./mongodb/mongodb.config.yaml` file. However you might also use the environment variables within the `./kerberos-vault/deployment.yaml` file to configure the mongodb connection.
+
+Modify the MongoDB credentials in the `./mongodb/mongodb.config.yaml`, and make sure they match the credentials of your MongoDB instance, as described above. There are two ways of configuring the mongodb connection, either you provide a `MONGODB_URI` or you specify the individual variables `MONGODB_USERNAME`, `MONGODB_PASSWORD`, etc.
+
+As mentioned above a managed MongoDB is easier to setup and manage, for example for MongoDB Atlas, you will get a MongoDB URI in the form of `"mongodb+srv://xx:xx@kerberos-hub.xxx.mongodb.net/?retryWrites=true&w=majority&appName=xxx"`. By applying this value into the `MONGODB_URI` field, you will have setup your MongoDB connection successfully.
+
+        - name: MONGODB_URI
+          value: "mongodb+srv://xx:xx@kerberos-hub.xxx.mongodb.net/?retryWrites=true&w=majority&appName=xxx"
+
+Once you applied this value, the other values like `MONGODB_USERNAME`, `MONGODB_PASSWORD` and others will be ignored. If you don't like the `MONGODB_URI` format you can still use the old way of defining the MongoDB connection by providing the different values.
+
+        - name: MONGODB_USERNAME
+          value: "root"
+        - name: MONGODB_PASSWORD
+    -->   value: "yourmongodbpassword"
+
+Create the config map in the `kerberos-vault` namespace.
+
+    kubectl create namespace kerberos-vault
+    kubectl apply -f ./mongodb-config.yaml -n kerberos-vault
+
+#### Deployment
+
+To install the Kerberos Vault web app inside your cluster, simply execute below `kubectl` command. This will create the deployment for us with the necessary configurations, and exposed it on internal/external IP address, thanks to our `LoadBalancer` MetalLB or cloud provider.
+
+    kubectl apply -f ./kerberos-vault-deployment.yaml -n kerberos-vault
+
+#### Access the UI
+
+If you have chosen to use the `NodePort` configuration you should be able to reach the Kerberos Vault using the `http://localhost:30080` endpoint in your browser. However if you have a server installation without a GUI, you might choose to do a reverse proxy so you can open the browser on your local machine.
+
+    ssh -L 8080:localhost:30080 user@server-ip -p 22
+
+#### Configure the Kerberos Vault
+
+..... (should be done through env files so we do not need to get in the UI)
+create the minio provider, add integration
+
+- Add storage provider
+
+  - Minio
+    - Provider name: minio
+    - Bucket name: mybucket
+    - Region: na
+    - Hostname: myminio-hl.minio-tenant:9000
+    - Access key: minio
+    - Secret key: minio123
+
+- Add an integration
+
+  - RabbitMQ
+    - Integration name: rabbitmq
+    - Broker: rabbitmq.rabbitmq:5672
+    - Exchange:
+    - Queue: data-filtering
+    - Username: yourusername
+    - Password: yourpassword
+
+- Add an account
+  - Account name: myaccount
+  - Main provider: minio
+  - Day limit: 30
+  - Integration: rabbitmq
+  - Directory: \*
+  - Access key: XJoi2@bgSOvOYBy#
+  - Secret key: OGGqat4lXRpL@9XBYc8FUaId@5
+
+### Create an agent
+
+### Create the data filtering
+
+### add forwarding integration
