@@ -221,6 +221,7 @@ create the minio provider, add integration
 - Add storage provider
 
   - Minio
+    - Enabled: true
     - Provider name: minio
     - Bucket name: mybucket
     - Region: na
@@ -231,6 +232,7 @@ create the minio provider, add integration
 - Add an integration
 
   - RabbitMQ
+    - Enabled: true
     - Integration name: rabbitmq
     - Broker: rabbitmq.rabbitmq:5672
     - Exchange:
@@ -239,6 +241,7 @@ create the minio provider, add integration
     - Password: yourpassword
 
 - Add an account
+  - Enabled: true
   - Account name: myaccount
   - Main provider: minio
   - Day limit: 30
@@ -249,6 +252,37 @@ create the minio provider, add integration
 
 ### Create an agent
 
+Now we have deployed the Kerberos Vault and provided the correct configuration, and linked all the relevant services for storage, database and integrate, we can deploy the Kerberos Agent with the relevant configuration. Have a look in the `kerberos-agent-deployment.yaml` file and make sure to modify the relevant settings such as the RTSP url etc.
+
+```bash
+kubectl apply -f kerberos-agent-deployment.yaml
+```
+
 ### Create the data filtering
 
-### add forwarding integration
+The idea of filtering can have multiple reasons please check the repo here for more indepth information.
+
+```bash
+kubectl apply -f data-filtering-deployment.yaml
+```
+
+### Add forwarding integration
+
+We'll need to access the UI again to add the integration
+
+```bash
+ssh -L 8080:localhost:30080 user@server-ip -p 22
+```
+
+Go to the Kerberos Vault application in your browser and open the integration section, add a new integration.
+
+- Add an integration
+
+  - Kerberos Vault
+    - Enabled: true
+    - Integration name: rabbitmq
+    - Broker: rabbitmq.rabbitmq:5672
+    - Exchange:
+    - Queue: data-filtering
+    - Username: yourusername
+    - Password: yourpassword

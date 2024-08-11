@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: agent
+  name: agent1
   labels:
-    name: agent
+    name: agent1
 spec:
   selector:
     matchLabels:
-      app: agent
+      app: agent1
   replicas: 1
   template:
     metadata:
       labels:
-        app: agent
+        app: agent1
     spec:
       containers:
-        - name: agent
+        - name: agent1
           image: kerberos/agent:latest
           ports:
             - containerPort: 80
@@ -28,18 +28,22 @@ spec:
               cpu: 100m
               memory: 128Mi
           env:
+            - name: AGENT_KEY
+              value: demo-agent1
             - name: AGENT_NAME
-              value: demo-agent
+              value: demo-agent1
             - name: AGENT_CAPTURE_IPCAMERA_RTSP
+              value: rtsp://fake.kerberos.io/stream
+            - name: AGENT_CAPTURE_IPCAMERA_SUB_RTSP
               value: rtsp://fake.kerberos.io/stream
             - name: AGENT_CLOUD	
               value: kstorage
             - name: AGENT_KERBEROSVAULT_URI	
               value: http://vault-lb.kerberos-vault/api
             - name: AGENT_KERBEROSVAULT_ACCESS_KEY	
-              value: 52gyELgxutOXUWhF
+              value: XJoi2@bgSOvOYBy#
             - name: AGENT_KERBEROSVAULT_SECRET_KEY		
-              value: k8DrcB@hQ5XfxDENzDKcnkxBHx
+              value: OGGqat4lXRpL@9XBYc8FUaId@5
             - name: AGENT_KERBEROSVAULT_PROVIDER		
               value: mybucket
             - name: AGENT_KERBEROSVAULT_DIRECTORY		
@@ -53,17 +57,17 @@ spec:
             - name: AGENT_HUB_PRIVATE_KEY
               value: xxx
             # find full list of environment variables here: https://github.com/kerberos-io/agent#override-with-environment-variables
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: agent-svc
-  labels:
-    name: agent-svc
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 80
-      targetPort: 80
-  selector:
-    app: agent
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: agent-svc
+#  labels:
+#    name: agent-svc
+#spec:
+#  type: LoadBalancer
+#  ports:
+#    - port: 80
+#      targetPort: 80
+#  selector:
+#    app: agent
