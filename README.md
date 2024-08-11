@@ -14,5 +14,5 @@ In light of these variations, we have meticulously developed distinct architectu
 
 Follow the deployment guides for each Kubernetes distro:
 
-- [Microk8s](/README.microk8s.md)
-- [Kubernetes](/README.k8s.md)
+- [Install Kerberos.io on Microk8s](/README.microk8s.md)
+- [Install Kerberos.io on Kubernetes](/README.k8s.md)
