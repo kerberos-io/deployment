@@ -44,6 +44,20 @@ To install MicroK8s on your system, follow these steps.
    microk8s status --wait-ready
    ```
 
+6. Add an alias for kubectl as microk8s:
+
+To simplify the usage of `kubectl` with MicroK8s, you can create an alias. This allows you to use the `kubectl` command without needing to prefix it with `microk8s.` every time. Add the following line to your shell configuration file (e.g., `.bashrc`, `.zshrc`):
+
+```sh
+alias kubectl='microk8s kubectl'
+```
+
+or use the `snap` command:
+
+```sh
+sudo snap alias microk8s.kubectl kubectl
+```
+
 For more detailed instructions and troubleshooting, please refer to the official MicroK8s documentation.
 
 ## Dependencies
