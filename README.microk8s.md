@@ -16,32 +16,42 @@ To install MicroK8s on your system, follow these steps.
    ```bash
    sudo apt update
    sudo apt install snapd
-
    ```
 
 2. Install MicroK8s. Once snapd is installed, you can install MicroK8s with:
 
+   ```bash
    sudo snap install microk8s --classic
+   ```
 
 3. Add your user to the microk8s group. This step is necessary to avoid using sudo for MicroK8s commands:
 
+   ```bash
    sudo usermod -a -G microk8s $USER
    sudo chown -f -R $USER ~/.kube
 
+   ```
+
 4. Apply the new group membership. You need to re-enter your session for the group change to take effect:
 
+   ```bash
    su - $USER
+   ```
 
 5. Check the status of MicroK8s. Ensure that MicroK8s is running correctly:
 
+   ```bash
    microk8s status --wait-ready
+   ```
 
 6. Enable common services. You can enable common services like DNS and the dashboard with:
 
+   ```bash
    microk8s enable dns
    microk8s enable dashboard
    microk8s enable gpu
    microk8s enable hostpath-storage
+   ```
 
 For more detailed instructions and troubleshooting, please refer to the official MicroK8s documentation.
 
