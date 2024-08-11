@@ -9,3 +9,5 @@ As previously indicated, several integral components, including Object Storage, 
 It is important to note that the ease of installation may vary depending on the chosen Kubernetes distribution. For instance, distributions like Microk8s, which offer an addons feature, may simplify the installation process significantly. Managed Kubernetes services on platforms such as AWS, Azure, GCP, and others offer a range of supplementary services. These include, but are not limited to, cloud-based object storage, load balancers, persistent volumes, and additional resources that enhance the deployment experience.
 
 In light of these variations, we have meticulously developed distinct architectural frameworks to clearly delineate between self-hosted deployments and those based in the cloud. This differentiation ensures that each deployment scenario is optimized for its respective environment, leveraging the unique advantages and services provided by each platform.
+
+![Self-hosted deployment ](./assets/images/deployment-self-hosted.png)
