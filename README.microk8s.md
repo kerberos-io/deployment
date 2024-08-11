@@ -52,24 +52,24 @@ When installing the Kerberos.io stack, several dependencies are required for sto
 
 One of the key advantages of MicroK8s is its out-of-the-box addons, which can be enabled with a single command. This eliminates the need for complex Helm charts or operators, simplifying the setup process. We will enable some common services, such as DNS, GPU support, and storage, to streamline the installation.
 
-    ```bash
-    microk8s enable dns
-    microk8s enable dashboard
-    microk8s enable gpu
-    microk8s enable hostpath-storage
-    ```
+```bash
+microk8s enable dns
+microk8s enable dashboard
+microk8s enable gpu
+microk8s enable hostpath-storage
+```
 
 You can verify the status of the enabled addons by running the following command:
 
-    ```sh
-    microk8s.status
-    ```
+```sh
+microk8s.status
+```
 
 Or view the pod status with:
 
-    ```bash
-    kubectl get po -w -A
-    ```
+```bash
+kubectl get po -w -A
+```
 
 ## Kerberos Vault
 
