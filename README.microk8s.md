@@ -124,7 +124,7 @@ export PATH=$PATH:$HOME/minio-binaries/
 ```
 
 ```bash
-mc alias set myminio https://localhost:9000 minio minio123 --insecure
+mc alias set myminio http://localhost:9000 minio minio123 --insecure
 mc mb myminio/mybucket --insecure
 
 ```
