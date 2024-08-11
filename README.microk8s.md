@@ -91,16 +91,49 @@ MinIO is a high-performance, distributed object storage system that is compatibl
 
 In the context of the Kerberos.io stack, MinIO will be used to store recordings from the Kerberos Agents. These recordings are crucial for surveillance and monitoring purposes, and having a reliable storage solution like MinIO ensures that the data is stored securely and can be accessed efficiently.
 
-To enable MinIO in your MicroK8s cluster, you can use the following command:
-
-```sh
-microk8s enable minio
+```bash
+kubectl create namespace minio-tenant
 ```
 
-This command will set up MinIO with default configurations, allowing you to start using it immediately. You can verify the status of the MinIO deployment by checking the pods:
+```bash
+kubectl apply -k github.com/minio/operator\?ref=v6.0.1
+```
 
-```sh
-kubectl get po -w -A
+Next we'll create a tenant
+
+```bash
+sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./minio-tenant-base.yaml
+kubectl apply -f minio-tenant-base.yaml
+```
+
+We create a bucket in the minio tenant
+
+```bash
+kubectl port-forward svc/myminio-hl 9000 -n minio-tenant
+```
+
+You might need to install the minio client if not yet available.
+
+```bash
+curl https://dl.min.io/client/mc/release/linux-amd64/mc \
+  --create-dirs \
+  -o $HOME/minio-binaries/mc
+
+chmod +x $HOME/minio-binaries/mc
+export PATH=$PATH:$HOME/minio-binaries/
+```
+
+```bash
+mc alias set myminio https://localhost:9000 minio minio123 --insecure
+mc mb myminio/mybucket --insecure
+
+```
+
+or if not possible we will access the minio console using a reverse tunnel.
+
+```bash
+kubectl port-forward svc/myminio-console -n minio-tenant 8080:9090
+ssh -L 8080:localhost:8080 youruser@x.x.x.x
 ```
 
 ### Database: MongoDB
@@ -116,9 +149,29 @@ Next to that you might also consider a SaaS MongoDB deployment using MongoDB Atl
 
 Note: If you are installing a self-hosted Kubernetes cluster, we recommend using `openebs`. Therefore make sure to uncomment the `global`.`storageClass` attribute, and make sure it's using `microk8s-hostpath` instead.
 
-    sed -i '' 's/openebs-hostpath/microk8s-hostpath/g' ./mongodb-values.yaml
+    sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./mongodb-values.yaml
     microk8s helm install mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
 
 Or after updating the `./mongodb-values.yaml` file again
 
     microk8s helm upgrade mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
+
+### Message broker: RabbitMQ
+
+```bash
+ kubectl create namespace rabbitmq
+```
+
+```bash
+sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./rabbitmq-values.yaml
+microk8s helm install rabbitmq bitnami/rabbitmq -n rabbitmq -f rabbitmq-values.yaml
+kubectl get po -A -w
+```
+
+```bash
+microk8s helm upgrade rabbitmq bitnami/rabbitmq -n rabbitmq -f rabbitmq-values.yaml
+```
+
+```bash
+microk8s helm del rabbitmq -n rabbitmq
+```
