@@ -44,20 +44,32 @@ To install MicroK8s on your system, follow these steps.
    microk8s status --wait-ready
    ```
 
-6. Enable common services. You can enable common services like DNS and the dashboard with:
-
-   ```bash
-   microk8s enable dns
-   microk8s enable dashboard
-   microk8s enable gpu
-   microk8s enable hostpath-storage
-   ```
-
 For more detailed instructions and troubleshooting, please refer to the official MicroK8s documentation.
 
 ## Dependencies
 
-While installing the Kerberos.io stack several dependencies are required for storage such as a database (such as MongoDB), a message broker (such as RabbitMQ) for async behaviour. We'll install these compononents before installing the Kerberos Agents and Kerberos Vault.
+When installing the Kerberos.io stack, several dependencies are required for storage, such as a database (e.g., MongoDB) and a message broker (e.g., RabbitMQ) for asynchronous behavior. We will install these components before setting up the Kerberos Agents and Kerberos Vault.
+
+One of the key advantages of MicroK8s is its out-of-the-box addons, which can be enabled with a single command. This eliminates the need for complex Helm charts or operators, simplifying the setup process. We will enable some common services, such as DNS, GPU support, and storage, to streamline the installation.
+
+    ```bash
+    microk8s enable dns
+    microk8s enable dashboard
+    microk8s enable gpu
+    microk8s enable hostpath-storage
+    ```
+
+You can verify the status of the enabled addons by running the following command:
+
+    ```sh
+    microk8s.status
+    ```
+
+Or view the pod status with:
+
+    ```bash
+    kubectl get po -w -A
+    ```
 
 ## Kerberos Vault
 
