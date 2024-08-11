@@ -10,4 +10,4 @@ It is important to note that the ease of installation may vary depending on the 
 
 In light of these variations, we have meticulously developed distinct architectural frameworks to clearly delineate between self-hosted deployments and those based in the cloud. This differentiation ensures that each deployment scenario is optimized for its respective environment, leveraging the unique advantages and services provided by each platform.
 
-![Self-hosted deployment ](./assets/images/deployment-self-hosted.png)
+![Self-hosted deployment ](./assets/images/deployment-self-hosted.svg)
