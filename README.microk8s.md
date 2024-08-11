@@ -85,6 +85,24 @@ Or view the pod status with:
 kubectl get po -w -A
 ```
 
+### Object storage: MinIO
+
+MinIO is a high-performance, distributed object storage system that is compatible with Amazon S3 cloud storage service. It is designed to handle large-scale data storage and retrieval, making it an ideal choice for modern cloud-native applications.
+
+In the context of the Kerberos.io stack, MinIO will be used to store recordings from the Kerberos Agents. These recordings are crucial for surveillance and monitoring purposes, and having a reliable storage solution like MinIO ensures that the data is stored securely and can be accessed efficiently.
+
+To enable MinIO in your MicroK8s cluster, you can use the following command:
+
+```sh
+microk8s enable minio
+```
+
+This command will set up MinIO with default configurations, allowing you to start using it immediately. You can verify the status of the MinIO deployment by checking the pods:
+
+```sh
+kubectl get po -w -A
+```
+
 ### Database: MongoDB
 
 When using Kerberos Vault, it will persist references to the recordings stored in your storage provider in a MongoDB database. As used before, we are using `helm` to install MongoDB in our Kubernetes cluster. Within the Kerberos Vault project we are using the latest official mongodb driver, so we support all major MongoDB versions (4.x, 5.x, 6.x, 7.x).
@@ -93,9 +111,14 @@ Have a look into the `./mongodb-values.yaml` file, you will find plenty of confi
 
 Next to that you might also consider a SaaS MongoDB deployment using MongoDB Atlas or using a managed cloud like AWS, GCP, Azure or Alibaba cloud. A managed service takes away a lot of management and maintenance from your side (backups, security, sharing, etc). If you do want to install MongoDB in your own cluster then please continue with this tutorial.
 
-    helm repo add bitnami https://charts.bitnami.com/bitnami
+    microk8s helm repo add bitnami https://charts.bitnami.com/bitnami
     kubectl create namespace mongodb
 
-Note: If you are installing a self-hosted Kubernetes cluster, we recommend using `openebs`. Therefore make sure to uncomment the `global`.`storageClass` attribute, and make sure it's using `openebs-hostpath` instead.
+Note: If you are installing a self-hosted Kubernetes cluster, we recommend using `openebs`. Therefore make sure to uncomment the `global`.`storageClass` attribute, and make sure it's using `microk8s-hostpath` instead.
 
-    helm install mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
+    sed -i '' 's/openebs-hostpath/microk8s-hostpath/g' ./mongodb-values.yaml
+    microk8s helm install mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
+
+Or after updating the `./mongodb-values.yaml` file again
+
+    microk8s helm upgrade mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
