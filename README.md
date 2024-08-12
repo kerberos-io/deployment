@@ -12,9 +12,13 @@ In light of these variations, we have meticulously developed distinct architectu
 
 ## Self-hosted deployment
 
-![Self-hosted deployment ](./assets/images/deployment-self-hosted.svg)
+![Self-hosted deployment](./assets/images/deployment-self-hosted.svg)
 
 Follow the deployment guides for each Kubernetes distro:
 
 - [Install Kerberos.io on Microk8s](/README.microk8s.md)
 - [Install Kerberos.io on Kubernetes](/README.k8s.md)
+
+## Managed deployment
+
+![Managed deployment](./assets/images/deployment-managed.svg)
