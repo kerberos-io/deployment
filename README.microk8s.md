@@ -50,12 +50,14 @@ To simplify the usage of `kubectl` with MicroK8s, you can create an alias. This 
 
 ```sh
 alias kubectl='microk8s kubectl'
+alias helm='microk8s helm'
 ```
 
 or use the `snap` command:
 
 ```sh
 sudo snap alias microk8s.kubectl kubectl
+sudo snap alias microk8s.helm helm
 ```
 
 For more detailed instructions and troubleshooting, please refer to the official MicroK8s documentation.
@@ -126,7 +128,6 @@ export PATH=$PATH:$HOME/minio-binaries/
 ```bash
 mc alias set myminio http://localhost:9000 minio minio123 --insecure
 mc mb myminio/mybucket --insecure
-
 ```
 
 or if not possible we will access the minio console using a reverse tunnel.
@@ -136,6 +137,8 @@ kubectl port-forward svc/myminio-console -n minio-tenant 8080:9090
 ssh -L 8080:localhost:8080 youruser@x.x.x.x
 ```
 
+To access the application, open your browser and navigate to `localhost:8080`. Use the credentials specified in the `minio-tenant-base.yaml` configuration file to log in. Once logged in, you can create a new bucket, such as `mybucket`, or choose a name of your preference.
+
 ### Database: MongoDB
 
 When using Kerberos Vault, it will persist references to the recordings stored in your storage provider in a MongoDB database. As used before, we are using `helm` to install MongoDB in our Kubernetes cluster. Within the Kerberos Vault project we are using the latest official mongodb driver, so we support all major MongoDB versions (4.x, 5.x, 6.x, 7.x).
@@ -144,17 +147,17 @@ Have a look into the `./mongodb-values.yaml` file, you will find plenty of confi
 
 Next to that you might also consider a SaaS MongoDB deployment using MongoDB Atlas or using a managed cloud like AWS, GCP, Azure or Alibaba cloud. A managed service takes away a lot of management and maintenance from your side (backups, security, sharing, etc). If you do want to install MongoDB in your own cluster then please continue with this tutorial.
 
-    microk8s helm repo add bitnami https://charts.bitnami.com/bitnami
+    helm repo add bitnami https://charts.bitnami.com/bitnami
     kubectl create namespace mongodb
 
 Note: If you are installing a self-hosted Kubernetes cluster, we recommend using `openebs`. Therefore make sure to uncomment the `global`.`storageClass` attribute, and make sure it's using `microk8s-hostpath` instead.
 
     sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./mongodb-values.yaml
-    microk8s helm install mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
+    helm install mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
 
 Or after updating the `./mongodb-values.yaml` file again
 
-    microk8s helm upgrade mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
+    helm upgrade mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
 
 ### Message broker: RabbitMQ
 
@@ -164,19 +167,19 @@ Or after updating the `./mongodb-values.yaml` file again
 
 ```bash
 sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./rabbitmq-values.yaml
-microk8s helm install rabbitmq bitnami/rabbitmq -n rabbitmq -f rabbitmq-values.yaml
+helm install rabbitmq bitnami/rabbitmq -n rabbitmq -f rabbitmq-values.yaml
 kubectl get po -A -w
 ```
 
 ```bash
-microk8s helm upgrade rabbitmq bitnami/rabbitmq -n rabbitmq -f rabbitmq-values.yaml
+helm upgrade rabbitmq bitnami/rabbitmq -n rabbitmq -f rabbitmq-values.yaml
 ```
 
 ```bash
-microk8s helm del rabbitmq -n rabbitmq
+helm del rabbitmq -n rabbitmq
 ```
 
-### Kerberos Vautl
+### Kerberos Vault
 
 #### Config Map
 
@@ -186,39 +189,59 @@ Modify the MongoDB credentials in the `./mongodb/mongodb.config.yaml`, and make 
 
 As mentioned above a managed MongoDB is easier to setup and manage, for example for MongoDB Atlas, you will get a MongoDB URI in the form of `"mongodb+srv://xx:xx@kerberos-hub.xxx.mongodb.net/?retryWrites=true&w=majority&appName=xxx"`. By applying this value into the `MONGODB_URI` field, you will have setup your MongoDB connection successfully.
 
-        - name: MONGODB_URI
-          value: "mongodb+srv://xx:xx@kerberos-hub.xxx.mongodb.net/?retryWrites=true&w=majority&appName=xxx"
+```yaml
+- name: MONGODB_URI
+  value: "mongodb+srv://xx:xx@kerberos-hub.xxx.mongodb.net/?retryWrites=true&w=majority&appName=xxx"
+```
 
 Once you applied this value, the other values like `MONGODB_USERNAME`, `MONGODB_PASSWORD` and others will be ignored. If you don't like the `MONGODB_URI` format you can still use the old way of defining the MongoDB connection by providing the different values.
 
-        - name: MONGODB_USERNAME
-          value: "root"
-        - name: MONGODB_PASSWORD
-    -->   value: "yourmongodbpassword"
+```yaml
+    - name: MONGODB_USERNAME
+      value: "root"
+    - name: MONGODB_PASSWORD
+->    value: "yourmongodbpassword"
+```
 
 Create the config map in the `kerberos-vault` namespace.
 
-    kubectl create namespace kerberos-vault
-    kubectl apply -f ./mongodb-config.yaml -n kerberos-vault
+```bash
+kubectl create namespace kerberos-vault
+```
+
+Apply the mongodb configuration file, so the Kerberos Vault application knows how to connect to the MongoDB.
+
+```bash
+kubectl apply -f ./mongodb-config.yaml -n kerberos-vault
+```
 
 #### Deployment
 
 To install the Kerberos Vault web app inside your cluster, simply execute below `kubectl` command. This will create the deployment for us with the necessary configurations, and exposed it on internal/external IP address, thanks to our `LoadBalancer` MetalLB or cloud provider.
 
-    kubectl apply -f ./kerberos-vault-deployment.yaml -n kerberos-vault
+```bash
+kubectl apply -f ./kerberos-vault-deployment.yaml -n kerberos-vault
+```
+
+Verify if the pod is running
+
+```bash
+kubectl get po -w -A
+```
 
 #### Access the UI
 
-If you have chosen to use the `NodePort` configuration you should be able to reach the Kerberos Vault using the `http://localhost:30080` endpoint in your browser. However if you have a server installation without a GUI, you might choose to do a reverse proxy so you can open the browser on your local machine.
+If you have opted for the `NodePort` configuration, you can access the Kerberos Vault via the `http://localhost:30080` endpoint in your browser. For server installations without a GUI, consider setting up a reverse proxy to enable browser access from your local machine. Alternatively, you may utilize a `LoadBalancer` if one is available or if you are deploying on a managed Kubernetes service.
 
-    ssh -L 8080:localhost:30080 user@server-ip -p 22
+```bash
+ssh -L 8080:localhost:30080 user@server-ip -p 22
+```
 
 #### Configure the Kerberos Vault
 
-..... (should be done through env files so we do not need to get in the UI)
-create the minio provider, add integration
+With the Kerberos Vault installed, we can proceed to configure the various components. Currently, this must be done through the Kerberos Vault UI, but we plan to make it configurable via environment variables, eliminating the need for manual UI configurations.
 
-- Add storage provider
+- Navigate to the `Storage Providers` menu and select the (+ Add Storage Provider) button. A modal will appear where you can input the required details. After entering the information, click the "Verify" button to ensure the configuration is valid. Once you receive a "Configuration is valid and working" message, click the "Add Storage Provider" button to complete the process.
 
   - Minio
     - Enabled: true
@@ -229,7 +252,7 @@ create the minio provider, add integration
     - Access key: minio
     - Secret key: minio123
 
-- Add an integration
+- Navigate to the `Integrations` menu and select the (+ Add Integration) button. A modal will appear where you can input the required details. After entering the information, click the "Verify" button to ensure the configuration is valid. Once you receive a "Configuration is valid and working" message, click the "Add Integration" button to complete the process.
 
   - RabbitMQ
     - Enabled: true
@@ -240,7 +263,8 @@ create the minio provider, add integration
     - Username: yourusername
     - Password: yourpassword
 
-- Add an account
+- Navigate to the `Accounts` menu and click the (+ Add Account) button. A modal will appear where you can input the required details. After entering the information, click the "Add Account" button to complete the process.
+
   - Enabled: true
   - Account name: myaccount
   - Main provider: minio
@@ -250,21 +274,34 @@ create the minio provider, add integration
   - Access key: XJoi2@bgSOvOYBy#
   - Secret key: OGGqat4lXRpL@9XBYc8FUaId@5
 
-### Create an agent
+### Create a Kerberos Agent
 
-Now we have deployed the Kerberos Vault and provided the correct configuration, and linked all the relevant services for storage, database and integrate, we can deploy the Kerberos Agent with the relevant configuration. Have a look in the `kerberos-agent-deployment.yaml` file and make sure to modify the relevant settings such as the RTSP url etc.
+After deploying the Kerberos Vault and configuring the necessary services for storage, database, and integration, you can proceed to deploy the Kerberos Agent with the appropriate configuration. Review the `kerberos-agent-deployment.yaml` file and adjust the relevant settings, such as the RTSP URL, to ensure proper functionality. Please note that you can allow opt for the [Kerberos Factory](https://github.com/kerberos-io/factory/tree/master/kubernetes) which gives you a UI to manage the creation of Kerberos Agents.
 
 ```bash
 kubectl apply -f kerberos-agent-deployment.yaml
 ```
 
-### Create the data filtering
+Review the creation of the Kerberos Agent and review the logs of the container to validate the Kerberos Agent is able to connect to the IP camera, and if a recording is being created and transferred to the Kerberos Vault
 
-The idea of filtering can have multiple reasons please check the repo here for more indepth information.
+```bash
+kubectl get po -w -A
+kubectl logs -f kerberos-agent...
+```
+
+To validate the Kerberos Vault and review any stored recordings, access the user interface at `http://localhost:30080` (after establishing the reverse tunnel).
+
+### Optimized Data Filtering for Enhanced Bandwidth Efficiency and Relevance
+
+Once your Kerberos Agents are properly connected and all recordings are stored in the Kerberos Vault, you may encounter additional challenges such as bandwidth limitations, storage constraints, and the need to efficiently locate relevant data. To accomplish this, we can configure an integration to filter the recordings, ensuring that only the relevant ones are retained.
+
+Assuming all configurations are correctly set and all Kubernetes deployments are operational, you can apply the `data-filtering-deployment.yaml` deployment. This deployment will schedule a pod that listens to the configured integration in Kerberos Vault and runs a YOLOv8 model to evaluate the recordings and match them against specified conditions.
 
 ```bash
 kubectl apply -f data-filtering-deployment.yaml
 ```
+
+Each time a recording is stored in the Kerberos Vault, the `data-filtering` pod will receive a notification and execute the specified model (YOLOv8 by default). Based on the defined conditions, the `data-filtering` pod may forward the recording to a remote Kerberos Vault, trigger alerts, or send notifications.
 
 ### Add forwarding integration
 
