@@ -303,6 +303,13 @@ kubectl apply -f data-filtering-deployment.yaml
 
 Each time a recording is stored in the Kerberos Vault, the `data-filtering` pod will receive a notification and execute the specified model (YOLOv8 by default). Based on the defined conditions, the `data-filtering` pod may forward the recording to a remote Kerberos Vault, trigger alerts, or send notifications.
 
+Ensure that the `data-filtering` workload is actively running, receiving messages from the integration, and performing the necessary processing tasks.
+
+```bash
+kubectl get po -w -A
+kubectl logs -f data...
+```
+
 ### Add forwarding integration
 
 We'll need to access the UI again to add the integration
