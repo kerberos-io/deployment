@@ -1,5 +1,7 @@
 # Edge deployment on microk8s
 
+⏱️ Estimated installation time 25min
+
 MicroK8s is a lightweight, fast, and secure Kubernetes distribution designed for developers and edge computing use cases. Developed by Canonical, MicroK8s is a minimalistic version of Kubernetes that can be installed with a single command and runs on various platforms, including Linux, macOS, and Windows. It is ideal for local development, CI/CD pipelines, IoT, and edge deployments due to its small footprint and ease of use. MicroK8s includes essential Kubernetes components and add-ons, such as DNS, storage, and the Kubernetes dashboard, making it a convenient choice for both beginners and experienced Kubernetes users.
 
 In this tutorial, we will guide you through the installation of the Kerberos.io edge stack, which includes the Kerberos Agent, Kerberos Vault, and the Data Filtering Service. This setup enables the storage of recordings from multiple cameras at the edge, facilitating local data processing and ensuring secure and efficient management of video streams.
@@ -128,7 +130,7 @@ kubectl get po -w -A
 You should see the `myminio` tenant being created
 
 ```bash
-minio-tenant             myminio-pool-0-0                                              2/2     Running   0          60s
+minio-tenant   myminio-pool-0-0       2/2     Running   0       60s
 ```
 
 We create a bucket in the minio tenant
