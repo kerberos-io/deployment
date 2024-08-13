@@ -343,7 +343,17 @@ To validate the Kerberos Vault and review any stored recordings, access the user
 
 Once your Kerberos Agents are properly connected and all recordings are stored in the Kerberos Vault, you may encounter additional challenges such as bandwidth limitations, storage constraints, and the need to efficiently locate relevant data. To accomplish this, we can configure an integration to filter the recordings, ensuring that only the relevant ones are retained.
 
-Assuming all configurations are correctly set and all Kubernetes deployments are operational, you can apply the `data-filtering-deployment.yaml` deployment. This deployment will schedule a pod that listens to the configured integration in Kerberos Vault and runs a YOLOv8 model to evaluate the recordings and match them against specified conditions. Please note that if you do not have a GPU on the device, you will need to disable the resource limit of the nvidia/gpu. Once done the filtering will run on the CPU.
+Assuming all configurations are correctly set and all Kubernetes deployments are operational, you can apply the `data-filtering-deployment.yaml` deployment. This deployment will schedule a pod that listens to the configured integration in Kerberos Vault and runs a YOLOv8 model to evaluate the recordings and match them against specified conditions.
+
+Please note that if you do not have a GPU on the device, you will need to disable the resource limit of the nvidia/gpu. Once done the filtering will run on the CPU.
+
+```bash
+sed -e '/resources/ s/^#*/#/' -i ./data-filtering-deployment.yaml
+sed -e '/limits/ s/^#*/#/' -i ./data-filtering-deployment.yaml
+sed -e '/nvidia/ s/^#*/#/' -i ./data-filtering-deployment.yaml
+```
+
+Let's deploy the data filtering pod (with or without GPU support).
 
 ```bash
 kubectl apply -f data-filtering-deployment.yaml
