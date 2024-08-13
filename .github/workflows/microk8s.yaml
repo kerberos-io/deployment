@@ -1,0 +1,18 @@
+name: Test Microk8s
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: A job to install MicroK8s
+    steps:
+      - uses: balchua/microk8s-actions@v0.3.2
+        with:
+          channel: "1.26/stable"
+          addons: '["dns", "rbac", "hostpath-storage", "registry"]'
+      - name: Test MicroK8s
+        id: myactions
+        run: |
+          kubectl get no
+          kubectl get pods -A -o wide
