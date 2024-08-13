@@ -239,11 +239,7 @@ kubectl get po -w -A
 
 ### Kerberos Vault
 
-#### Config Map
-
-Kerberos Vault requires a configuration to connect to the MongoDB instance. To handle this `configmap` map is created in the `./mongodb/mongodb.config.yaml` file. However you might also use the environment variables within the `./kerberos-vault/deployment.yaml` file to configure the mongodb connection.
-
-Modify the MongoDB credentials in the `./mongodb/mongodb.config.yaml`, and make sure they match the credentials of your MongoDB instance, as described above. There are two ways of configuring the mongodb connection, either you provide a `MONGODB_URI` or you specify the individual variables `MONGODB_USERNAME`, `MONGODB_PASSWORD`, etc.
+Kerberos Vault requires a configuration to connect to the MongoDB instance. To handle this a `configmap` is defined in the `./kerberos-vault-deployment.yaml` file. Modify the MongoDB credentials in the `./kerberos-vault-deployment.yaml` file, and make sure they match the credentials of your MongoDB instance, as described above. There are two ways of configuring the MongoDB connection, either you provide a `MONGODB_URI` or you specify the individual variables `MONGODB_USERNAME`, `MONGODB_PASSWORD`, etc.
 
 As mentioned above a managed MongoDB is easier to setup and manage, for example for MongoDB Atlas, you will get a MongoDB URI in the form of `"mongodb+srv://xx:xx@kerberos-hub.xxx.mongodb.net/?retryWrites=true&w=majority&appName=xxx"`. By applying this value into the `MONGODB_URI` field, you will have setup your MongoDB connection successfully.
 
@@ -261,21 +257,13 @@ Once you applied this value, the other values like `MONGODB_USERNAME`, `MONGODB_
 ->    value: "yourmongodbpassword"
 ```
 
-Create the config map in the `kerberos-vault` namespace.
+Create the `kerberos-vault` namespace.
 
 ```bash
 kubectl create namespace kerberos-vault
 ```
 
-Apply the mongodb configuration file, so the Kerberos Vault application knows how to connect to the MongoDB.
-
-```bash
-kubectl apply -f ./mongodb-config.yaml -n kerberos-vault
-```
-
-#### Deployment
-
-To install the Kerberos Vault web app inside your cluster, simply execute below `kubectl` command. This will create the deployment for us with the necessary configurations, and exposed it on internal/external IP address, thanks to our `LoadBalancer` MetalLB or cloud provider.
+Apply the deploymentfile, so the Kerberos Vault application is deployed and knows how to connect to the MongoDB.
 
 ```bash
 kubectl apply -f ./kerberos-vault-deployment.yaml -n kerberos-vault
