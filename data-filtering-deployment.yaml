@@ -39,9 +39,9 @@ spec:
             - name: STORAGE_URI
               value: "http://vault-lb.kerberos-vault/api"
             - name: STORAGE_ACCESS_KEY
-              value: "52gyELgxutOXUWhF"
+              value: "XJoi2@bgSOvOYBy#"
             - name: STORAGE_SECRET_KEY
-              value: "k8DrcB@hQ5XfxDENzDKcnkxBHx"
+              value: "OGGqat4lXRpL@9XBYc8FUaId@5"
 
             - name: LOGGING
               value: "True"

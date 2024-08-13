@@ -71,7 +71,7 @@ One of the key advantages of MicroK8s is its out-of-the-box addons, which can be
 ```bash
 microk8s enable dns
 microk8s enable dashboard
-microk8s enable gpu
+microk8s enable nvidia
 microk8s enable hostpath-storage
 ```
 
@@ -87,6 +87,15 @@ Or view the pod status with:
 kubectl get po -w -A
 ```
 
+### Clone repository
+
+Next, we will clone this repository to our local environment. This will allow us to execute the necessary configuration files for installing the Minio operator, MongoDB Helm chart, and other required components.
+
+```bash
+git clone https://github.com/kerberos-io/deployment
+cd deployment
+```
+
 ### Object storage: MinIO
 
 MinIO is a high-performance, distributed object storage system that is compatible with Amazon S3 cloud storage service. It is designed to handle large-scale data storage and retrieval, making it an ideal choice for modern cloud-native applications.
@@ -94,11 +103,13 @@ MinIO is a high-performance, distributed object storage system that is compatibl
 In the context of the Kerberos.io stack, MinIO will be used to store recordings from the Kerberos Agents. These recordings are crucial for surveillance and monitoring purposes, and having a reliable storage solution like MinIO ensures that the data is stored securely and can be accessed efficiently.
 
 ```bash
-kubectl create namespace minio-tenant
+git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl apply -k operator/
 ```
 
+View the minio operator status with:
+
 ```bash
-kubectl apply -k github.com/minio/operator\?ref=v6.0.1
+kubectl get po -w -A
 ```
 
 Next we'll create a tenant
@@ -108,11 +119,19 @@ sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./minio-tenant-base.yaml
 kubectl apply -f minio-tenant-base.yaml
 ```
 
-We create a bucket in the minio tenant
+View the minio tenant status with:
 
 ```bash
-kubectl port-forward svc/myminio-hl 9000 -n minio-tenant
+kubectl get po -w -A
 ```
+
+You should see the `myminio` tenant being created
+
+```bash
+minio-tenant             myminio-pool-0-0                                              2/2     Running   0          60s
+```
+
+We create a bucket in the minio tenant
 
 You might need to install the minio client if not yet available.
 
@@ -125,9 +144,25 @@ chmod +x $HOME/minio-binaries/mc
 export PATH=$PATH:$HOME/minio-binaries/
 ```
 
+Expose the minio service so we can reach it from our local station.
+
+```bash
+kubectl port-forward svc/myminio-hl 9000 -n minio-tenant &
+```
+
+Create the `mybucket` bucket in the `myminio` tenant.
+
 ```bash
 mc alias set myminio http://localhost:9000 minio minio123 --insecure
 mc mb myminio/mybucket --insecure
+```
+
+The expected output should resemble the following:
+
+```bash
+root@microk8s:~/deployment# mc mb myminio/mybucket --insecure
+Handling connection for 9000
+Bucket created successfully `myminio/mybucket`.
 ```
 
 or if not possible we will access the minio console using a reverse tunnel.
@@ -147,36 +182,47 @@ Have a look into the `./mongodb-values.yaml` file, you will find plenty of confi
 
 Next to that you might also consider a SaaS MongoDB deployment using MongoDB Atlas or using a managed cloud like AWS, GCP, Azure or Alibaba cloud. A managed service takes away a lot of management and maintenance from your side (backups, security, sharing, etc). If you do want to install MongoDB in your own cluster then please continue with this tutorial.
 
-    helm repo add bitnami https://charts.bitnami.com/bitnami
-    kubectl create namespace mongodb
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
+kubectl create namespace mongodb
+```
 
 Note: If you are installing a self-hosted Kubernetes cluster, we recommend using `openebs`. Therefore make sure to uncomment the `global`.`storageClass` attribute, and make sure it's using `microk8s-hostpath` instead.
 
-    sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./mongodb-values.yaml
-    helm install mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
+```bash
+sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./mongodb-values.yaml
+helm install mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
+```
 
 Or after updating the `./mongodb-values.yaml` file again
 
-    helm upgrade mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
+```bash
+helm upgrade mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
+```
+
+View the MongoDB status and wait until it's properly running
+
+```bash
+kubectl get po -w -A
+```
 
 ### Message broker: RabbitMQ
 
+Now we can store recordings in `MinIO` and metadata in `MongoDB`. The remaining task is to store events in a message broker such as `RabbitMQ`. This setup enables an asynchronous event-driven approach, allowing you to receive real-time event each time a recording is uploaded. By doing so, you can develop custom logic and abstract the camera network from your machine learning models or computer vision algorithms. The primary focus is on the recordings, not the complex camera infrastructure.
+
 ```bash
- kubectl create namespace rabbitmq
+kubectl create namespace rabbitmq
 ```
 
 ```bash
 sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./rabbitmq-values.yaml
 helm install rabbitmq bitnami/rabbitmq -n rabbitmq -f rabbitmq-values.yaml
-kubectl get po -A -w
 ```
 
-```bash
-helm upgrade rabbitmq bitnami/rabbitmq -n rabbitmq -f rabbitmq-values.yaml
-```
+View the RabbitMQ status and wait until it's properly running
 
 ```bash
-helm del rabbitmq -n rabbitmq
+kubectl get po -w -A
 ```
 
 ### Kerberos Vault
@@ -258,7 +304,7 @@ With the Kerberos Vault installed, we can proceed to configure the various compo
     - Enabled: true
     - Integration name: rabbitmq
     - Broker: rabbitmq.rabbitmq:5672
-    - Exchange:
+    - Exchange: <empty>
     - Queue: data-filtering
     - Username: yourusername
     - Password: yourpassword
@@ -271,12 +317,12 @@ With the Kerberos Vault installed, we can proceed to configure the various compo
   - Day limit: 30
   - Integration: rabbitmq
   - Directory: \*
-  - Access key: XJoi2@bgSOvOYBy#
-  - Secret key: OGGqat4lXRpL@9XBYc8FUaId@5
+  - Access key: XJoi2@bgSOvOYBy# (or generate new keys, but don't forget to update them in the next steps)
+  - Secret key: OGGqat4lXRpL@9XBYc8FUaId@5 (or generate new keys, but don't forget to update them in the next steps)
 
 ### Create a Kerberos Agent
 
-After deploying the Kerberos Vault and configuring the necessary services for storage, database, and integration, you can proceed to deploy the Kerberos Agent with the appropriate configuration. Review the `kerberos-agent-deployment.yaml` file and adjust the relevant settings, such as the RTSP URL, to ensure proper functionality. Please note that you can allow opt for the [Kerberos Factory](https://github.com/kerberos-io/factory/tree/master/kubernetes) which gives you a UI to manage the creation of Kerberos Agents.
+After deploying the Kerberos Vault and configuring the necessary services for storage, database, and integration, you can proceed to deploy the Kerberos Agent with the appropriate configuration. Review the `kerberos-agent-deployment.yaml` file and adjust the relevant settings, such as the RTSP URL, to ensure proper functionality. Please note that you can allow opt for the [Kerberos Factory](https://github.com/kerberos-io/factory/tree/master/kubernetes) which gives you a UI to manage the creation of Kerberos Agents. Also please note if you generated new the keys in the previous Kerberos Vault account creation, you need to update those in the Kerberos Agent deployment.
 
 ```bash
 kubectl apply -f kerberos-agent-deployment.yaml
@@ -295,7 +341,7 @@ To validate the Kerberos Vault and review any stored recordings, access the user
 
 Once your Kerberos Agents are properly connected and all recordings are stored in the Kerberos Vault, you may encounter additional challenges such as bandwidth limitations, storage constraints, and the need to efficiently locate relevant data. To accomplish this, we can configure an integration to filter the recordings, ensuring that only the relevant ones are retained.
 
-Assuming all configurations are correctly set and all Kubernetes deployments are operational, you can apply the `data-filtering-deployment.yaml` deployment. This deployment will schedule a pod that listens to the configured integration in Kerberos Vault and runs a YOLOv8 model to evaluate the recordings and match them against specified conditions.
+Assuming all configurations are correctly set and all Kubernetes deployments are operational, you can apply the `data-filtering-deployment.yaml` deployment. This deployment will schedule a pod that listens to the configured integration in Kerberos Vault and runs a YOLOv8 model to evaluate the recordings and match them against specified conditions. Please note that if you do not have a GPU on the device, you will need to disable the resource limit of the nvidia/gpu. Once done the filtering will run on the CPU.
 
 ```bash
 kubectl apply -f data-filtering-deployment.yaml
@@ -330,3 +376,24 @@ Go to the Kerberos Vault application in your browser and open the integration se
     - Queue: data-filtering
     - Username: yourusername
     - Password: yourpassword
+
+## Cleanup
+
+If you consider to remove the Kerberos.io stack you might just disable the microk8s installation
+
+```bash
+microk8s reset
+sudo snap remove microk8s
+```
+
+or if you want to keep the microk8s installation you can also delete the individual deployments.
+
+```bash
+kubectl delete -f data-filtering-deployment.yaml
+kubectl delete -f kerberos-agent-deployment.yaml
+kubectl delete -f ./kerberos-vault-deployment.yaml -n kerberos-vault
+kubectl delete -f ./mongodb-config.yaml -n kerberos-vault
+helm del rabbitmq -n rabbitmq
+helm del mongodb -n mongodb
+git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl delete -k operator/
+```
