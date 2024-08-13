@@ -1,0 +1,3 @@
+# Self-hosted with Docker Compose
+
+....

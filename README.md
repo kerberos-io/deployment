@@ -16,7 +16,9 @@ Self-hosted deployments are typically used for camera processing and edge storag
 
 ![Self-hosted deployment](./assets/images/deployment-self-hosted.svg)
 
-Follow the deployment guides for each Kubernetes distro:
+A key aspect of this deployment is the scaling of Kerberos Agents. Each camera is assigned a dedicated Kerberos Agent container, which is linked to a central Kerberos Vault. The Kerberos Vault stores metadata in MongoDB, recordings in Minio (or another S3-compliant object storage), and can generate events in a message broker like RabbitMQ. This approach enables you to develop custom applications/logic that can respond to the creation of new recordings.
+
+Based on your technology experience and preferences, you can choose from the following deployment guides:
 
 - [Install Kerberos.io on Microk8s](/README.microk8s.md)
 - [Install Kerberos.io on Kubernetes](/README.k8s.md)
