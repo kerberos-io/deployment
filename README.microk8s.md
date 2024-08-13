@@ -2,7 +2,7 @@
 
 ⏱️ **Time:** installation within 25min
 
-💻 **Environment:** deployment tested on Ubuntu 22.04.4 LTS
+💻 **Environment:** deployment tested on Ubuntu 22.04 LTS, 24.04 LTS
 
 ---
 
