@@ -287,6 +287,8 @@ ssh -L 8080:localhost:30080 user@server-ip -p 22
 
 With the Kerberos Vault installed, we can proceed to configure the various components. Currently, this must be done through the Kerberos Vault UI, but we plan to make it configurable via environment variables, eliminating the need for manual UI configurations.
 
+![Configure Vault](./assets/images/configure-vault.gif)
+
 - Navigate to the `Storage Providers` menu and select the (+ Add Storage Provider) button. A modal will appear where you can input the required details. After entering the information, click the "Verify" button to ensure the configuration is valid. Once you receive a "Configuration is valid and working" message, click the "Add Storage Provider" button to complete the process.
 
   - Minio
