@@ -356,15 +356,39 @@ kubectl get po -w -A
 kubectl logs -f data...
 ```
 
+You might see something like below, whereas the `data-filtering` pod is iterating over recordings and frames, looking for a person. Once it finds the person it will try to `forward` the recording to a remote Kerberos Vault.
+
+```bash
+Persons: 0, Cars: 0, Trucks: 0
+Condition not met, not forwarding video to remote vault
+Persons: 0, Cars: 0, Trucks: 0
+Condition not met, not forwarding video to remote vault
+Persons: 1, Cars: 0, Trucks: 0
+Condition met, forwarding video to remote vault
+Condition met, stopping the video loop, and forwarding video to remote vault
+Something went wrong while forwarding media
+Delete media from http://vault-lb.kerberos-vault/api
+	 - Classification took: 22.4 seconds, @ 3 fps.
+		 - 0.15s for preprocessing and initialisation
+		 - 22.25s for processing of which:
+			 - 0.99s for class prediction
+			 - 21.26s for other processing
+		 - 0s for postprocessing
+	 - Original video: 31.5 seconds, @ 30.0 fps @ 1920x1080. File size of 2.1 MB
+8) Releasing video writer and closing video capture
+```
+
+As indicated by the logs `Something went wrong while forwarding media`, the forwarding process failed due to the absence of an integration between the two `Kerberos Vaults`. Currently, only one `Kerberos Vault` is available. To enable this feature, you will need to [install a second `Kerberos Vault` in the cloud](./README.k8s-managed.md) with access to cloud storage.
+
 ### Add forwarding integration
 
-We'll need to access the UI again to add the integration
+If you have setup a secondary Kerberos Vault in the cloud, attached cloud Object storage to it, we can continue and add an additional integration through the UI.
 
 ```bash
 ssh -L 8080:localhost:30080 user@server-ip -p 22
 ```
 
-Go to the Kerberos Vault application in your browser and open the integration section, add a new integration.
+Navigate to the `Kerberos Vault` application in your browser, access the `Integration` section, and add a new integration. This integration will connect your local Kerberos Vault to the remote Kerberos Vault, and will tell the system to set recordings in a `forwarding state`.
 
 - Add an integration
 
@@ -376,6 +400,8 @@ Go to the Kerberos Vault application in your browser and open the integration se
     - Queue: data-filtering
     - Username: yourusername
     - Password: yourpassword
+
+If the integration is functioning correctly, you should observe that recordings are initially marked in gray as "To be forwarded." After a short period, some recordings will be updated to green, indicating they have been "Forwarded by."
 
 ## Cleanup
 
