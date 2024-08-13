@@ -423,3 +423,9 @@ helm del rabbitmq -n rabbitmq
 helm del mongodb -n mongodb
 git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl delete -k operator/
 ```
+
+You can confirm all the workloads were removed from your system.
+
+```bash
+kubectl get po -w -A
+```
