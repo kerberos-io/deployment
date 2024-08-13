@@ -1,4 +1,4 @@
-# Edge deployment on k8s, microk8s, k3s
+# Self-hosted deployment on Kubernetes
 
 Within this tutorial we will install the Kerberos.io edge stack (Kerberos Agent, Kerberos Vault and the Data filtering service). This will allow us to store recordings from multiple cameras at the edge
 
