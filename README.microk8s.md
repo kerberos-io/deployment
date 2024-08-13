@@ -394,12 +394,12 @@ Navigate to the `Kerberos Vault` application in your browser, access the `Integr
 
   - Kerberos Vault
     - Enabled: true
-    - Integration name: rabbitmq
-    - Broker: rabbitmq.rabbitmq:5672
-    - Exchange:
-    - Queue: data-filtering
-    - Username: yourusername
-    - Password: yourpassword
+    - Integration name: remote-vault
+    - Forwarding mode: continuous
+    - Url: http(s)://yourvault.com/api
+    - Provider: The name of the remote storage provider
+    - Access Key: The access key of the account you have created on the remote Kerberos Vault
+    - Secret Access Key: The secret access key of the account you have created on the remote Kerberos Vault
 
 If the integration is functioning correctly, you should observe that recordings are initially marked in gray as "To be forwarded." After a short period, some recordings will be updated to green, indicating they have been "Forwarded by."
 
