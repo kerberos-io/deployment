@@ -1,6 +1,7 @@
 # Edge deployment on microk8s
 
-⏱️ **Estimated installation time 25min**
+⏱️ **Time:** installation within 25min
+💻 **Environment:** deployment tested on Ubuntu 22.04.4 LTS
 
 ---
 
@@ -159,6 +160,12 @@ Create the `mybucket` bucket in the `myminio` tenant.
 ```bash
 mc alias set myminio http://localhost:9000 minio minio123 --insecure
 mc mb myminio/mybucket --insecure
+```
+
+Close the port-forward
+
+```bash
+pkill -f "port-forward"
 ```
 
 The expected output should resemble the following:
