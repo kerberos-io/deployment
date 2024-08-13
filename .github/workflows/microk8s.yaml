@@ -7,9 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Install MicroK8s
     steps:
-      - uses: balchua/microk8s-actions@v0.3.2
+      - uses: balchua/microk8s-actions@v0.4.3
         with:
-          channel: "1.30/stable"
+          channel: "1.26/stable"
           addons: '["dns", "dashboard", "hostpath-storage", "nvidia"]'
       - name: Test MicroK8s
         id: list-pods
