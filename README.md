@@ -26,4 +26,18 @@ Based on your technology experience and preferences, you can choose from the fol
 
 ## Managed deployment
 
+Managed deployments are typically executed on cloud platforms such as Azure, Google Cloud Platform (GCP), Amazon Web Services (AWS), among others. The advantage of a managed deployment is that many foundational components are pre-configured and readily available, which is not the case for a self-hosted deployment. For example:
+
+- Object storage: AWS has S3, GCP has Cloud Storage, Azure has Blob Storage.
+- Load Balancers: Automatic traffic distribution for high availability.
+- Encryption: Built-in data encryption at rest and in transit.
+- High availability and scaling: can allocate new compute and storage on the fly.
+- etc.
+
+As previously discussed, a managed deployment enhances resilience and high availability by leveraging the cloud provider's existing services as the backbone for your Kubernetes cluster. For example, when deploying a Kubernetes cluster on:
+
+- **AWS**: EKS (Elastic Kubernetes Service) integrates with services like S3 for object storage, EC2 for compute instances, IAM for access management, CloudWatch for monitoring, and RDS for managed databases.
+- **GCP**: GKE (Google Kubernetes Engine) utilizes Google Cloud Storage for object storage, Compute Engine for virtual machines, IAM for access control, Stackdriver for monitoring and logging, and Cloud SQL for managed databases.
+- **Azure**: AKS (Azure Kubernetes Service) works with Azure Blob Storage for object storage, Virtual Machines for compute resources, Azure Active Directory for identity management, Azure Monitor for monitoring and diagnostics, and Azure SQL Database for managed relational databases.
+
 ![Managed deployment](./assets/images/deployment-managed.svg)
