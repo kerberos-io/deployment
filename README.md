@@ -20,9 +20,9 @@ A key aspect of this deployment is the scaling of Kerberos Agents. Each camera i
 
 Based on your technology experience and preferences, you can choose from the following deployment guides:
 
-- [Install Kerberos.io on Microk8s](/README.microk8s.md)
-- [Install Kerberos.io on Kubernetes](/README.k8s.md)
-- [Install Kerberos.io on Docker](/README.docker.md)
+- [[Easy] Install Kerberos.io on Docker](/README.docker.md)
+- [[Medium] Install Kerberos.io on Microk8s](/README.microk8s.md)
+- [[Advanced] Install Kerberos.io on Kubernetes](/README.k8s.md)
 
 ## Managed deployment
 
