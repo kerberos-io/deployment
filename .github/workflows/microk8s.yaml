@@ -22,6 +22,7 @@ jobs:
         id: install-minio
         run: |
           git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl apply -k operator/
-          sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./minio-tenant-ba
+          sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./minio-tenant-base.yaml
+          kubectl apply -f minio-tenant-base.yaml
           echo "Sleeping for 10 seconds, give time for the operator/tenant to create the CRDs" && sleep 10
           kubectl get po -A -o wide
