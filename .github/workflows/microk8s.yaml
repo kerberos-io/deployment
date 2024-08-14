@@ -27,9 +27,9 @@ jobs:
           git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl apply -k operator/
           sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./minio-tenant-base.yaml
           kubectl apply -f minio-tenant-base.yaml
-          echo "Sleeping for 30 seconds, give time for the operator/tenant to create the CRDs" && sleep 30
+          echo "Sleeping for 45 seconds, give time for the operator/tenant to create the CRDs" && sleep 45
           kubectl get po -A -o wide
-          kubectl get po -A -o wide | grep myminio-pool-0-0 | awk '{print $3}' | grep -q '2/2' && echo "minio-tenant pod is running with status 1/1" || (echo "minio-tenant pod is not running with status 1/1" && exit 1)
+          kubectl get po -A -o wide | grep myminio-pool-0-0 | awk '{print $3}' | grep -q '2/2' && echo "myminio-pool-0-0 pod is running with status 2/2" || (echo myminio-pool-0-0 pod is not running with status 2/2" && exit 1)
       - name: Install MongoDB
         id: install-mongodb
         run: |
