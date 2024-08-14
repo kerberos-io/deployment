@@ -11,6 +11,9 @@ jobs:
         with:
           channel: "1.30/stable"
           addons: '["dns", "dashboard", "hostpath-storage", "nvidia"]'
+      - name: Set permissions
+        run: |
+          sudo chown -f -R $USER $HOME/.kube $HOME/.config
       - name: Test MicroK8s
         id: list-pods
         run: |
