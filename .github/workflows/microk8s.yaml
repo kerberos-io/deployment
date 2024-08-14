@@ -54,13 +54,13 @@ jobs:
           kubectl apply -f ./kerberos-vault-deployment.yaml -n kerberos-vault
 
           echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
-          kubectl get po -w -A
+          kubectl get pods -A -o wide
       - name: Install Kerberos Agent
         id: install-kerberos-agent
         run: |
           kubectl apply -f ./kerberos-agent-deployment.yaml -n kerberos-agent
           echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
-          kubectl get po -w -A
+          kubectl get pods -A -o wide
       - name: Install Data filtering
         id: install-data-filtering
         run: |
@@ -69,4 +69,4 @@ jobs:
           sed -e '/nvidia/ s/^#*/#/' -i ./data-filtering-deployment.yaml
           kubectl apply -f data-filtering-deployment.yaml
           echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
-          kubectl get po -w -A
+          kubectl get pods -A -o wide
