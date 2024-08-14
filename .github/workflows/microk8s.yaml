@@ -29,6 +29,7 @@ jobs:
           kubectl apply -f minio-tenant-base.yaml
           echo "Sleeping for 30 seconds, give time for the operator/tenant to create the CRDs" && sleep 30
           kubectl get po -A -o wide
+          kubeclt get po -A -o wide | grep myminio-pool-0-0 | awk '{print $4}' | grep -q '2/2' && echo "minio-tenant pod is running with status 1/1" || (echo "minio-tenant pod is not running with status 1/1" && exit 1)
       - name: Install MongoDB
         id: install-mongodb
         run: |
@@ -53,6 +54,7 @@ jobs:
           kubectl create namespace kerberos-vault
           kubectl apply -f ./kerberos-vault-deployment.yaml -n kerberos-vault
           echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
+          kubectl get pods -A -o wide 
           kubectl get pods -A -o wide | grep kerberos-vault | awk '{print $4}' | grep -q '1/1' && echo "kerberos-vault pod is running with status 1/1" || (echo "kerberos-vault pod is not running with status 1/1" && exit 1)
       - name: Install Kerberos Agent
         id: install-kerberos-agent
