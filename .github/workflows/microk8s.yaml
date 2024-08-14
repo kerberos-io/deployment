@@ -37,4 +37,13 @@ jobs:
           sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./mongodb-values.yaml
           helm install mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
           echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
-          kubectl get po -w -A
+          kubectl get pods -A -o wide
+      - name: Install RabbitMQ
+        id: install-rabbitmq
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          kubectl create namespace rabbitmq
+          sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./rabbitmq-values.yaml
+          helm install rabbitmq -n rabbitmq bitnami/rabbitmq --values ./rabbitmq-values.yaml
+          echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
+          kubectl get pods -A -o wide
