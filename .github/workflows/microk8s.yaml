@@ -58,7 +58,7 @@ jobs:
       - name: Install Kerberos Agent
         id: install-kerberos-agent
         run: |
-          kubectl apply -f ./kerberos-agent-deployment.yaml -n kerberos-agent
+          kubectl apply -f ./kerberos-agent-deployment.yaml
           echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
           kubectl get pods -A -o wide
       - name: Install Data filtering
