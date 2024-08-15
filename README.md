@@ -16,9 +16,9 @@ It is important to note that the ease of installation may vary depending on the 
 
 Given these differences, we have created specific architectural frameworks for self-hosted and cloud-based deployments. This approach ensures that each deployment is optimized for its environment, using the unique benefits and services of each platform. In the next section we discuss the different deployment strategies and installation processes.
 
-## Self-hosted deployment
+## Edge (self-hosted) deployment
 
-Self-hosted deployments are typically used for camera processing and edge storage. In this setup, Kerberos Agents are deployed and connected to cameras, with recordings stored in the Kerberos Vault. Additionally, you may want to create integrations, such as [data filtering](https://github.com/uug-ai/data-filtering), to ensure only relevant recordings are retained, or set up custom notifications to your first or third-party platforms. In this edge scenario, hardware is being deployed in the local network to handle the workloads; for example AMD64 or ARM64 processors.
+Edge (self-hosted) deployments are typically used for camera processing and edge storage. In this setup, Kerberos Agents are deployed and connected to cameras, with recordings stored in the Kerberos Vault. Additionally, you may want to create integrations, such as [data filtering](https://github.com/uug-ai/data-filtering), to ensure only relevant recordings are retained, or set up custom notifications to your first or third-party platforms. In this edge scenario, hardware is being deployed in the local network to handle the workloads; for example AMD64 or ARM64 processors.
 
 ![Edge - self-hosted deployment](./assets/images/deployment-self-hosted.svg)
 
