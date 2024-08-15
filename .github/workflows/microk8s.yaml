@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, ubuntu-24.04]
+        os: [ubuntu-20.04, ubuntu-22.04, ubuntu-24.04]
     name: MicroK8s
     steps:
       - uses: balchua/microk8s-actions@v0.4.3
