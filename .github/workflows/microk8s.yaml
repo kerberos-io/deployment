@@ -1,11 +1,14 @@
-name: Test Microk8s
+name: Deploy on Microk8s
 on:
   workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Install MicroK8s
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, ubuntu-24.04]
+    name: MicroK8s
     steps:
       - uses: balchua/microk8s-actions@v0.4.3
         with:
@@ -27,7 +30,7 @@ jobs:
           git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl apply -k operator/
           sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./minio-tenant-base.yaml
           kubectl apply -f minio-tenant-base.yaml
-          echo "Sleeping for 45 seconds, give time for the operator/tenant to create the CRDs" && sleep 45
+          echo "Sleeping for 60 seconds, give time for the operator/tenant to create the CRDs" && sleep 60
           kubectl get po -A -o wide
           kubectl get po -A -o wide | grep myminio-pool-0-0 | awk '{print $3}' | grep -q '2/2' && echo "myminio-pool-0-0 pod is running with status 2/2" || (echo "myminio-pool-0-0 pod is not running with status 2/2" && exit 1)
       - name: Install MongoDB
@@ -37,8 +40,9 @@ jobs:
           kubectl create namespace mongodb
           sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./mongodb-values.yaml
           helm install mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
-          echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
+          echo "Sleeping for 60 seconds, give time for the helm chart to create the pods" && sleep 60
           kubectl get pods -A -o wide
+          kubectl get pods -A -o wide | grep mongodb | awk '{print $3}' | grep -q '1/1' && echo "mongodb pod is running with status 1/1" || (echo "mongodb pod is not running with status 1/1" && exit 1)
       - name: Install RabbitMQ
         id: install-rabbitmq
         run: |
@@ -46,8 +50,9 @@ jobs:
           kubectl create namespace rabbitmq
           sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./rabbitmq-values.yaml
           helm install rabbitmq -n rabbitmq bitnami/rabbitmq --values ./rabbitmq-values.yaml
-          echo "Sleeping for 45 seconds, give time for the helm chart to create the pods" && sleep 45
+          echo "Sleeping for 60 seconds, give time for the helm chart to create the pods" && sleep 60
           kubectl get pods -A -o wide
+          kubectl get pods -A -o wide | grep rabbitmq | awk '{print $3}' | grep -q '1/1' && echo "rabbitmq pod is running with status 1/1" || (echo "rabbitmq pod is not running with status 1/1" && exit 1)
       - name: Install Kerberos Vault
         id: install-kerberos-vault
         run: |
@@ -62,6 +67,7 @@ jobs:
           kubectl apply -f ./kerberos-agent-deployment.yaml
           echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
           kubectl get pods -A -o wide
+          kubectl get pods -A -o wide | grep agent | awk '{print $3}' | grep -q '1/1' && echo "kerberos-agent pod is running with status 1/1" || (echo "kerberos-agent pod is not running with status 1/1" && exit 1)
       - name: Install Data filtering
         id: install-data-filtering
         run: |
@@ -71,3 +77,4 @@ jobs:
           kubectl apply -f data-filtering-deployment.yaml
           echo "Sleeping for 120 seconds, give time for the helm chart to create the pods" && sleep 120
           kubectl get pods -A -o wide
+          kubectl get pods -A -o wide | grep data-filtering | awk '{print $3}' | grep -q '1/1' && echo "data-filtering pod is running with status 1/1" || (echo "data-filtering pod is not running with status 1/1" && exit 1)
