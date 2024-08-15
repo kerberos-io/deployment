@@ -5,7 +5,7 @@ on:
     - cron: "0 0 * * *" # This will run the workflow every day at midnight UTC
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, ubuntu-24.04]
