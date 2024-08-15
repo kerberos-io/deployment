@@ -4,7 +4,7 @@ Deploying the Kerberos.io stack may initially appear to be a complex task due to
 
 ## Continiuous deployment
 
-<img src="https://github.com/kerberos-io/deployment/workflows/Deploy%20on%20Microk8s/badge.svg"/>
+[<img src="https://github.com/kerberos-io/deployment/workflows/Deploy%20on%20Microk8s/badge.svg"/>](https://github.com/kerberos-io/deployment/actions/workflows/microk8s.yaml)
 
 This repository continuously tests the Kerberos.io deployment using GitHub Actions across various platforms. Refer to the badges for an overview of the operating systems and Kubernetes distributions we are deploying to. We welcome suggestions for additional automations to consider.
 
