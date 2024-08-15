@@ -20,7 +20,7 @@ Given these differences, we have created specific architectural frameworks for s
 
 Self-hosted deployments are typically used for camera processing and edge storage. In this setup, Kerberos Agents are deployed and connected to cameras, with recordings stored in the Kerberos Vault. Additionally, you may want to create integrations, such as [data filtering](https://github.com/uug-ai/data-filtering), to ensure only relevant recordings are retained, or set up custom notifications to your first or third-party platforms. In this edge scenario, hardware is being deployed in the local network to handle the workloads; for example AMD64 or ARM64 processors.
 
-![Self-hosted deployment](./assets/images/deployment-self-hosted.svg)
+![Edge - self-hosted deployment](./assets/images/deployment-self-hosted.svg)
 
 A key aspect of this deployment is the scaling of Kerberos Agents. Each camera is assigned a dedicated Kerberos Agent container, which is linked to a central Kerberos Vault. The Kerberos Vault stores metadata in MongoDB, recordings in Minio (or another S3-compliant object storage), and can generate events in a message broker like RabbitMQ. This approach enables you to develop custom applications/logic that can respond to the creation of new recordings.
 
@@ -45,6 +45,10 @@ As previously discussed, a managed deployment enhances resilience and high avail
 - AWS provides EKS (Elastic Kubernetes Service) which integrates with services like S3 for object storage, EC2 for compute instances, IAM for access management, CloudWatch for monitoring, and RDS for managed databases.
 - GCP provides GKE (Google Kubernetes Engine) which utilizes Google Cloud Storage for object storage, Compute Engine for virtual machines, IAM for access control, Stackdriver for monitoring and logging, and Cloud SQL for managed databases.
 - Azure provides AKS (Azure Kubernetes Service) which works with Azure Blob Storage for object storage, Virtual Machines for compute resources, Azure Active Directory for identity management, Azure Monitor for monitoring and diagnostics, and Azure SQL Database for managed relational databases.
+
+### Purpose of a Managed Deployment
+
+The primary objective of maintaining a managed, public-facing deployment is to centralize multiple edge deployments through a unified interface. Typically, edge deployments are distributed across various environments such as hospitals, retail stores, and factories. These edge deployments are inherently secure and non-public facing, preventing direct internet access to these environments. To address this challenge, we operate a managed, public-facing environment that consolidates all recordings, live camera views, and permissions into a single, cohesive platform.
 
 ![Managed deployment](./assets/images/deployment-managed.svg)
 
