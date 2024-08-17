@@ -2,7 +2,16 @@
 
 Deploying the Kerberos.io stack may initially appear to be a complex task due to its design for scalability from the outset. This entails the integration of several scalable components within a distributed deployment architecture. To streamline the installation process, we have established this repository to offer comprehensive guidance. Our objective is to incorporate as much automation as possible within this repository, thereby ensuring that the installation process is straightforward and user-friendly. At the same time, we remain committed to delivering a scalable and highly available video surveillance system.
 
-## Continiuous deployment
+![How it works](./assets/images/how-it-works.svg)
+
+The Kerberos.io stack offers flexible installation options, supporting deployment in hybrid environments, fully in the cloud, or entirely at the edge. This deployment guide covers the installation of various Kerberos.io components. For detailed information on each component, please refer to their respective repositories.
+
+- [Kerberos Agent](https://github.com/kerberos-io/agent)
+- [Kerberos Factory](https://github.com/kerberos-io/factory)
+- [Kerberos Vault](https://github.com/kerberos-io/vault)
+- [Kerberos Hub](https://github.com/kerberos-io/hub)
+
+## Continuous deployment
 
 [<img src="https://github.com/kerberos-io/deployment/workflows/Deploy%20on%20Microk8s/badge.svg"/>](https://github.com/kerberos-io/deployment/actions/workflows/microk8s.yaml)
 
