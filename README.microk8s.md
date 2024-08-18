@@ -2,7 +2,7 @@
 
 ⏱️ **Time:** installation within 25min
 
-💻 **Environment:** tested on Ubuntu 29.04 LTS, 22.04 LTS, 24.04 LTS
+💻 **Environment:** tested on Ubuntu 20.04 LTS, 22.04 LTS, 24.04 LTS
 
 [<img src="https://github.com/kerberos-io/deployment/workflows/Deploy%20on%20Microk8s/badge.svg"/>](https://github.com/kerberos-io/deployment/actions/workflows/microk8s.yaml)
 
