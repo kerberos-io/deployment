@@ -48,7 +48,7 @@ apt-get install containerd -y
 Now we have everything installed let's go ahead and create the cluster using `kubeadm`.
 
 ```bash
-kubeadm init
+kubeadm init --pod-network-cidr=192.168.0.0/16
 ```
 
 Once completed you will see something similar.
@@ -76,7 +76,7 @@ kubeadm join 209.38.97.191:6443 --token dd9jhg.t734mc1dkr2qhcir \
 	--discovery-token-ca-cert-hash sha256:dcea694458128b8cad4315dbbdab11796cd2bef03d08a3ce2caed3fc1837d63b
 ```
 
-Save the `.kube/config` so you can use `kubectl` to interact with the cluster.
+Save the `.kube/config` file to enable the use of `kubectl` for interacting with the Kubernetes cluster.
 
 ```bash
 mkdir -p $HOME/.kube
@@ -84,10 +84,27 @@ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
 
+Install `Calico` as the networking solution for your Kubernetes cluster. Calico provides a robust and scalable networking layer, enabling secure and efficient communication between your pods. To deploy Calico, apply the following manifest:
+
+````bash
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+
+```bash
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.1/manifests/tigera-operator.yaml
+kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.1/manifests/custom-resources.yaml
+watch kubectl get pods -n calico-system
+````
+
+Remove the taint to allow scheduling of pods on the master node, as this is a single-node cluster.
+
+```bash
+kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+```
+
 Verify the instalation
 
 ```bash
-kubectl get nodes
+kubectl get nodes -o wide
 kubectl get pods -A
 ```
 
