@@ -98,12 +98,17 @@ Remove the taint to allow scheduling of pods on the master node, as this is a si
 kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 ```
 
-Verify the instalation
+Verify the installation by checking the status of the nodes and pods. Wait for all components to be in the `Running` state.
 
 ```bash
-kubectl get nodes -o wide
-kubectl get pods -A
+# Check the status of the nodes
+kubectl get nodes
+
+# Check the status of the pods in the kube-system namespace
+kubectl get pods -n kube-system
 ```
+
+Ensure that all nodes are in the Ready state and all pods are in the Running state before proceeding with further configurations or deployments.
 
 ## Dependencies
 
