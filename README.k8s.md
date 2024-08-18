@@ -86,14 +86,11 @@ sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 Install `Calico` as the networking solution for your Kubernetes cluster. Calico provides a robust and scalable networking layer, enabling secure and efficient communication between your pods. To deploy Calico, apply the following manifest:
 
-````bash
-kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
-
 ```bash
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.1/manifests/tigera-operator.yaml
 kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.28.1/manifests/custom-resources.yaml
 watch kubectl get pods -n calico-system
-````
+```
 
 Remove the taint to allow scheduling of pods on the master node, as this is a single-node cluster.
 
@@ -120,6 +117,10 @@ Next, we will clone this repository to our local environment. This will allow us
 git clone https://github.com/kerberos-io/deployment
 cd deployment
 ```
+
+### OpenEBS
+
+When you create a Kubernetes cluster using `kubeadm` on a bare metal machine
 
 ### Object storage: MinIO
 
