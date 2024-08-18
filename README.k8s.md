@@ -12,88 +12,88 @@ Kubernetes is an open-source platform for automating the deployment, scaling, an
 
 In this tutorial, we will guide you through the installation of the Kerberos.io edge stack, which includes the Kerberos Agent, Kerberos Vault, and the Data Filtering Service. This setup enables the storage of recordings from multiple cameras at the edge, facilitating local data processing and ensuring secure and efficient management of video streams.
 
-## Install Microk8s
+## Install Kubernetes on Ubuntu with kubeadm
 
-To install MicroK8s on your system, follow these steps. First, ensure that you have `snapd` installed on your machine. If not, you can install it using the following command:
+Kubernetes can be installed on various Linux distributions. This tutorial specifically focuses on the installation process for Ubuntu using the `kubeadm` method. For the most up-to-date installation guide, we recommend referring to [the official Kubernetes documentation](https://kubernetes.io/docs/setup/production-environment/) and [`kubeadm` documentation](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/).
 
-To install MicroK8s on your system, follow these steps.
+Let's prepare the system and install the relevant packages.
 
-1. **Ensure that you have `snapd` installed on your machine.**
-   If not, you can install it using the following command:
-
-   ```bash
-   sudo apt update
-   sudo apt install snapd
-   ```
-
-2. Install MicroK8s. Once snapd is installed, you can install MicroK8s with:
-
-   ```bash
-   sudo snap install microk8s --classic
-   ```
-
-3. Add your user to the microk8s group. This step is necessary to avoid using sudo for MicroK8s commands:
-
-   ```bash
-   sudo usermod -a -G microk8s $USER
-   sudo chown -f -R $USER ~/.kube
-
-   ```
-
-4. Apply the new group membership. You need to re-enter your session for the group change to take effect:
-
-   ```bash
-   su - $USER
-   ```
-
-5. Check the status of MicroK8s. Ensure that MicroK8s is running correctly:
-
-   ```bash
-   microk8s status --wait-ready
-   ```
-
-6. Add an alias for kubectl as microk8s:
-
-To simplify the usage of `kubectl` with MicroK8s, you can create an alias. This allows you to use the `kubectl` command without needing to prefix it with `microk8s.` every time. Add the following line to your shell configuration file (e.g., `.bashrc`, `.zshrc`):
-
-```sh
-alias kubectl='microk8s kubectl'
-alias helm='microk8s helm'
+```bash
+apt-get update -y
+apt-get install -y apt-transport-https ca-certificates curl gpg
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+apt-get update
+apt-get install -y kubelet kubeadm kubectl
+apt-mark hold kubelet kubeadm kubectl
+systemctl enable --now kubelet
 ```
 
-or use the `snap` command:
+Enable ip forwarding.
 
-```sh
-sudo snap alias microk8s.kubectl kubectl
-sudo snap alias microk8s.helm helm
+```bash
+# sysctl params required by setup, params persist across reboots
+cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+net.ipv4.ip_forward = 1
+EOF
+sudo sysctl --system
 ```
 
-For more detailed instructions and troubleshooting, please refer to the official MicroK8s documentation.
+Install containerd runtime
+
+```bash
+apt-get install containerd -y
+```
+
+Now we have everything installed let's go ahead and create the cluster using `kubeadm`.
+
+```bash
+kubeadm init
+```
+
+Once completed you will see something similar.
+
+```bash
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 209.38.97.191:6443 --token dd9jhg.t734mc1dkr2qhcir \
+	--discovery-token-ca-cert-hash sha256:dcea694458128b8cad4315dbbdab11796cd2bef03d08a3ce2caed3fc1837d63b
+```
+
+Save the `.kube/config` so you can use `kubectl` to interact with the cluster.
+
+```bash
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+```
+
+Verify the instalation
+
+```bash
+kubectl get nodes
+kubectl get pods -A
+```
 
 ## Dependencies
 
 When installing the Kerberos.io stack, several dependencies are required for storage, such as a database (e.g., MongoDB) and a message broker (e.g., RabbitMQ) for asynchronous behavior. We will install these components before setting up the Kerberos Agents and Kerberos Vault.
-
-One of the key advantages of MicroK8s is its out-of-the-box addons, which can be enabled with a single command. This eliminates the need for complex Helm charts or operators, simplifying the setup process. We will enable some common services, such as DNS, GPU support, and storage, to streamline the installation.
-
-```bash
-microk8s enable dns
-microk8s enable dashboard
-microk8s enable nvidia
-microk8s enable hostpath-storage
-```
-
-You can verify the status of the enabled addons by running the following command:
-
-```sh
-microk8s.status
-```
-
-Or view the pod status with:
-
-```bash
-kubectl get po -w -A
-```
 
 ### Clone repository
 
