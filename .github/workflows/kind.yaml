@@ -1,35 +1,41 @@
-name: Deploy on Microk8s
+name: Deploy on Kubernetes
+
 on:
   workflow_dispatch:
   schedule:
     - cron: "0 0 * * *" # This will run the workflow every day at midnight UTC
+
 jobs:
-  deploy-microk8s:
-    runs-on: ${{ matrix.os }}
+  deploy-kind:
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-22.04, ubuntu-24.04]
-    name: MicroK8s
+        kind: [v0.21.0, v0.22.0, v0.23.0, v0.24.0]
     steps:
-      - uses: balchua/microk8s-actions@v0.4.3
+      - name: Create k8s Kind Cluster
+        uses: helm/kind-action@v1
         with:
-          channel: "1.30/stable"
-          addons: '["dns", "dashboard", "hostpath-storage", "nvidia"]'
-      - name: Set permissions
+          version: ${{ matrix.kind }}
+      - name: Print Kubernetes Version
         run: |
-          sudo chown -f -R $USER $HOME/.kube $HOME/.config
-      - name: Test MicroK8s
-        id: list-pods
+          kubectl version
+      - name: Test Kubernetes Cluster
         run: |
           kubectl get no
           kubectl get pods -A -o wide
+          kubectl get sc
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Install OpenEBS
+        run: |
+          kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml
+          echo "Sleeping for 60 seconds, give time for the operator to create the CRDs" && sleep 60
+          kubectl get sc
+          kubectl get po -A -o wide
       - name: Install Minio
         id: install-minio
         run: |
           git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl apply -k operator/
-          sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./minio-tenant-base.yaml
           kubectl apply -f minio-tenant-base.yaml
           echo "Sleeping for 60 seconds, give time for the operator/tenant to create the CRDs" && sleep 60
           kubectl get po -A -o wide
@@ -39,7 +45,6 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           kubectl create namespace mongodb
-          sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./mongodb-values.yaml
           helm install mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
           echo "Sleeping for 60 seconds, give time for the helm chart to create the pods" && sleep 60
           kubectl get pods -A -o wide
@@ -49,7 +54,6 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           kubectl create namespace rabbitmq
-          sed -i 's/openebs-hostpath/microk8s-hostpath/g' ./rabbitmq-values.yaml
           helm install rabbitmq -n rabbitmq bitnami/rabbitmq --values ./rabbitmq-values.yaml
           echo "Sleeping for 60 seconds, give time for the helm chart to create the pods" && sleep 60
           kubectl get pods -A -o wide
