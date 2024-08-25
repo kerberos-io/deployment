@@ -63,4 +63,4 @@ The primary objective of maintaining a managed, public-facing deployment is to c
 
 Based on your technology experience and preferences, you can choose from the following deployment guides:
 
-- [[Medium] Install Kerberos.io on Kubernetes](/README.k8s-managed.md)
+- [[Medium] Install Kerberos.io on Kubernetes (AWS, GCP, Azure, etc.)](/README.k8s-managed.md)
