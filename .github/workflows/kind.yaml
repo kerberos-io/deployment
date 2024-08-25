@@ -46,7 +46,7 @@ jobs:
           helm repo add bitnami https://charts.bitnami.com/bitnami
           kubectl create namespace mongodb
           helm install mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
-          echo "Sleeping for 90 seconds, give time for the helm chart to create the pods" && sleep 90
+          echo "Sleeping for 120 seconds, give time for the helm chart to create the pods" && sleep 120
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep mongodb | awk '{print $3}' | grep -q '1/1' && echo "mongodb pod is running with status 1/1" || (echo "mongodb pod is not running with status 1/1" && exit 1)
       - name: Install RabbitMQ
