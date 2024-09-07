@@ -73,20 +73,30 @@ jobs:
       #     echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
       #     kubectl get pods -A -o wide
       #     kubectl get pods -A -o wide | grep agent | awk '{print $3}' | grep -q '1/1' && echo "kerberos-agent pod is running with status 1/1" || (echo "kerberos-agent pod is not running with status 1/1" && exit 1)
-      - name: Install prometheus operator
+      - name: Install Prometheus operator
         id: install-prometheus-operator
         run: |
           kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.48.1/bundle.yaml
           echo "Sleeping for 60 seconds, give time for the operator to create the CRDs" && sleep 60
           kubectl get crd
           kubectl get po -A -o wide
+      - name: Install Vernemq (MQTT Broker)
+        id: install-vernemq
+        run: |
+          helm repo add vernemq https://vernemq.github.io/charts
+          kubectl create namespace vernemq
+          helm install vernemq vernemq/vernemq --values ./vernemq-values.yaml -n vernemq
+          echo "Sleeping for 60 seconds, give time for the helm chart to create the pods" && sleep 60
+          kubectl get pods -A -o wide
+          kubectl get pods -A -o wide | grep vernemq-0 | awk '{print $3}' | grep -q '1/1' && echo "vernemq pod is running with status 1/1" || (echo "vernemq pod is not running with status 1/1" && exit 1)
+          kubectl exec --namespace vernemq vernemq-0 /vernemq/bin/vmq-admin cluster show
       - name: Install Kerberos Hub helm chart
         id: install-kerberos-hub
         run: |
           helm repo add kerberos https://charts.kerberos.io
           helm repo update
           kubectl create namespace kerberos-hub
-          helm install hub kerberos/hub --values kerberos-hub-helm.yaml -n kerberos-hub --create-namespace
+          helm install hub kerberos/hub --values kerberos-hub-values.yaml -n kerberos-hub --create-namespace
           echo "Sleeping for 300 seconds, give time for the helm chart to create the pods" && sleep 300
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep kerberos-hub | awk '{print $3}' | grep -q '1/1' && echo "kerberos-hub pod is running with status 1/1" || (echo "kerberos-hub pod is not running with status 1/1" && exit 1)
