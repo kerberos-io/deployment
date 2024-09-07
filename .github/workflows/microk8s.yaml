@@ -1,4 +1,4 @@
-name: Deploy on Microk8s
+name: Deploy on Microk8s (Edge)
 on:
   workflow_dispatch:
   schedule:

@@ -1,4 +1,4 @@
-name: Deploy on Kubernetes
+name: Deploy on Kubernetes (Edge)
 
 on:
   workflow_dispatch:
