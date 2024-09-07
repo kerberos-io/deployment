@@ -49,17 +49,6 @@ jobs:
           echo "Sleeping for 120 seconds, give time for the helm chart to create the pods" && sleep 120
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep mongodb | awk '{print $3}' | grep -q '1/1' && echo "mongodb pod is running with status 1/1" || (echo "mongodb pod is not running with status 1/1" && exit 1)
-      - name: Create MongoDB database and collections
-        id: create-mongodb-database-and-collections
-        run: |
-          export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace mongodb mongodb -o jsonpath="{.data.mongodb-root-password}" | base64 -d)
-          kubectl run --namespace mongodb mongodb-client --rm --tty -i --restart='Never' --env="MONGODB_ROOT_PASSWORD=$MONGODB_ROOT_PASSWORD" --image docker.io/bitnami/mongodb:7.0.5-debian-12-r5 --command -- bash
-          mongosh admin --host "mongodb" --authenticationDatabase admin -u $MONGODB_ROOT_USER -p $MONGODB_ROOT_PASSWORD
-          use Kerberos
-          db.createCollection("users")
-          db.createCollection("settings")
-          db.createCollection("subscriptions")
-          exit
       - name: Install RabbitMQ
         id: install-rabbitmq
         run: |
