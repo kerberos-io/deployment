@@ -41,7 +41,7 @@ mongodb:
   # Self-hosted mongodb, you could also use the uri property above.
   host: mongodb.mongodb
   adminDatabase: admin
-  username: yourusername
+  username: "root"
   password: "yourpassword"
 
 # A MQTT broker (vernemq or other like mosquitto) is used to have a bi-directional
