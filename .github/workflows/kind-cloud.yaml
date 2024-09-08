@@ -77,7 +77,7 @@ jobs:
         id: install-prometheus-operator
         run: |
           kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.48.1/bundle.yaml
-          echo "Sleeping for 60 seconds, give time for the operator to create the CRDs" && sleep 60
+          echo "Sleeping for 120 seconds, give time for the operator to create the CRDs" && sleep 120
           kubectl get crd
           kubectl get po -A -o wide
       - name: Install Vernemq (MQTT Broker)
