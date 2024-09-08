@@ -97,10 +97,10 @@ openai:
 # recordings. Kerberos vault is queried to retrieve the recordings
 # from the appropriate provider.
 kerberosvault:
-  uri: "https://api.vault.yourdomain.com" # this needs to be a public accessible DNS name.
-  provider: "a-provider"
-  accesskey: "xxx"
-  secretkey: "xxx"
+  uri: "http://vault-lb.kerberos-vault" # this needs to be a public accessible DNS name.
+  provider: "mybucket"
+  accesskey: "XJoi2@bgSOvOYBy#"
+  secretkey: " OGGqat4lXRpL@9XBYc8FUaId@5"
 
   # Archiving is used when creating a task. The underlying recording of the task will be copied from its
   # existing provider to the below archived provider. Seperate credentials are used, as it makes possible to
@@ -155,7 +155,7 @@ kerberoshub:
     pullPolicy: IfNotPresent
     tag: "1.0.1384326925"
     replicas: 2
-    jwtSecret: "this-is-a-secret-please-change-to-random-string" # change to a random value, this is for generating JWT tokens.
+    jwtSecret: "I1JcwzW3A0tWJK9jnPkipbnVTpf0efMy" # change to a random value, this is for generating JWT tokens.
     schema: "https"
     url: "api.yourdomain.com"
     resources:
@@ -180,7 +180,7 @@ kerberoshub:
 
     # Admin API's are made available for automation of Kerberos Hub.
     # To access those API's (e.g. creation of owner users), an API key needs to be provided.
-    apiKey: "a-random-admin-api-key"
+    apiKey: "Z6GPfDdYj8mxLyy6iUJVf9yBlri9lhsW"
 
     ## Certificates
     tls:

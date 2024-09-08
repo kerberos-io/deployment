@@ -32,6 +32,15 @@ jobs:
           echo "Sleeping for 60 seconds, give time for the operator to create the CRDs" && sleep 60
           kubectl get sc
           kubectl get po -A -o wide
+      - name: Install MongoDB
+        id: install-mongodb
+        run: |
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          kubectl create namespace mongodb
+          helm install mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
+          echo "Sleeping for 120 seconds, give time for the helm chart to create the pods" && sleep 120
+          kubectl get pods -A -o wide
+          kubectl get pods -A -o wide | grep mongodb | awk '{print $3}' | grep -q '1/1' && echo "mongodb pod is running with status 1/1" || (echo "mongodb pod is not running with status 1/1" && exit 1)
       - name: Install Minio
         id: install-minio
         run: |
@@ -48,15 +57,6 @@ jobs:
           echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep kerberos-vault | awk '{print $3}' | grep -q '1/1' && echo "kerberos-vault pod is running with status 1/1" || (echo "kerberos-vault pod is not running with status 1/1" && exit 1)
-      - name: Install MongoDB
-        id: install-mongodb
-        run: |
-          helm repo add bitnami https://charts.bitnami.com/bitnami
-          kubectl create namespace mongodb
-          helm install mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
-          echo "Sleeping for 120 seconds, give time for the helm chart to create the pods" && sleep 120
-          kubectl get pods -A -o wide
-          kubectl get pods -A -o wide | grep mongodb | awk '{print $3}' | grep -q '1/1' && echo "mongodb pod is running with status 1/1" || (echo "mongodb pod is not running with status 1/1" && exit 1)
       - name: Install RabbitMQ
         id: install-rabbitmq
         run: |
