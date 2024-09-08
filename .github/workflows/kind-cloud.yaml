@@ -32,14 +32,22 @@ jobs:
           echo "Sleeping for 60 seconds, give time for the operator to create the CRDs" && sleep 60
           kubectl get sc
           kubectl get po -A -o wide
-      # - name: Install Minio
-      #   id: install-minio
-      #   run: |
-      #     git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl apply -k operator/
-      #     kubectl apply -f minio-tenant-base.yaml
-      #     echo "Sleeping for 60 seconds, give time for the operator/tenant to create the CRDs" && sleep 60
-      #     kubectl get po -A -o wide
-      #     kubectl get po -A -o wide | grep myminio-pool-0-0 | awk '{print $3}' | grep -q '2/2' && echo "myminio-pool-0-0 pod is running with status 2/2" || (echo "myminio-pool-0-0 pod is not running with status 2/2" && exit 1)
+      - name: Install Minio
+        id: install-minio
+        run: |
+          git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl apply -k operator/
+          kubectl apply -f minio-tenant-base.yaml
+          echo "Sleeping for 60 seconds, give time for the operator/tenant to create the CRDs" && sleep 60
+          kubectl get po -A -o wide
+          kubectl get po -A -o wide | grep myminio-pool-0-0 | awk '{print $3}' | grep -q '2/2' && echo "myminio-pool-0-0 pod is running with status 2/2" || (echo "myminio-pool-0-0 pod is not running with status 2/2" && exit 1)
+      - name: Install Kerberos Vault
+        id: install-kerberos-vault
+        run: |
+          kubectl create namespace kerberos-vault
+          kubectl apply -f ./kerberos-vault-deployment.yaml -n kerberos-vault
+          echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
+          kubectl get pods -A -o wide
+          kubectl get pods -A -o wide | grep kerberos-vault | awk '{print $3}' | grep -q '1/1' && echo "kerberos-vault pod is running with status 1/1" || (echo "kerberos-vault pod is not running with status 1/1" && exit 1)
       - name: Install MongoDB
         id: install-mongodb
         run: |
@@ -58,21 +66,6 @@ jobs:
           echo "Sleeping for 60 seconds, give time for the helm chart to create the pods" && sleep 60
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep rabbitmq | awk '{print $3}' | grep -q '1/1' && echo "rabbitmq pod is running with status 1/1" || (echo "rabbitmq pod is not running with status 1/1" && exit 1)
-      # - name: Install Kerberos Vault
-      #   id: install-kerberos-vault
-      #   run: |
-      #     kubectl create namespace kerberos-vault
-      #     kubectl apply -f ./kerberos-vault-deployment.yaml -n kerberos-vault
-      #     echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
-      #     kubectl get pods -A -o wide
-      #     kubectl get pods -A -o wide | grep kerberos-vault | awk '{print $3}' | grep -q '1/1' && echo "kerberos-vault pod is running with status 1/1" || (echo "kerberos-vault pod is not running with status 1/1" && exit 1)
-      # - name: Install Kerberos Agent
-      #   id: install-kerberos-agent
-      #   run: |
-      #     kubectl apply -f ./kerberos-agent-deployment.yaml
-      #     echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
-      #     kubectl get pods -A -o wide
-      #     kubectl get pods -A -o wide | grep agent | awk '{print $3}' | grep -q '1/1' && echo "kerberos-agent pod is running with status 1/1" || (echo "kerberos-agent pod is not running with status 1/1" && exit 1)
       - name: Install Prometheus operator
         id: install-prometheus-operator
         run: |
@@ -99,3 +92,10 @@ jobs:
           echo "Sleeping for 300 seconds, give time for the helm chart to create the pods" && sleep 300
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep kerberos-hub | awk '{print $3}' | grep -q '1/1' && echo "kerberos-hub pod is running with status 1/1" || (echo "kerberos-hub pod is not running with status 1/1" && exit 1)
+      # - name: Install Kerberos Agent
+      #   id: install-kerberos-agent
+      #   run: |
+      #     kubectl apply -f ./kerberos-agent-deployment.yaml
+      #     echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
+      #     kubectl get pods -A -o wide
+      #     kubectl get pods -A -o wide | grep agent | awk '{print $3}' | grep -q '1/1' && echo "kerberos-agent pod is running with status 1/1" || (echo "kerberos-agent pod is not running with status 1/1" && exit 1)
