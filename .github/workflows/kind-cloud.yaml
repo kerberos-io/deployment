@@ -84,6 +84,7 @@ jobs:
         id: install-vernemq
         run: |
           kubectl create namespace vernemq
+          helm repo add vernemq https://vernemq.github.io/docker-vernemq
           helm install vernemq vernemq/vernemq --values ./vernemq-values.yaml -n vernemq --create-namespace
           echo "Sleeping for 60 seconds, give time for the helm chart to create the pods" && sleep 60
           kubectl get pods -A -o wide
@@ -93,7 +94,6 @@ jobs:
         id: install-kerberos-hub
         run: |
           helm repo add kerberos https://charts.kerberos.io
-          helm repo update
           kubectl create namespace kerberos-hub
           helm install hub kerberos/hub --values kerberos-hub-values.yaml -n kerberos-hub --create-namespace
           echo "Sleeping for 300 seconds, give time for the helm chart to create the pods" && sleep 300
