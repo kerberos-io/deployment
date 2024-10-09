@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: vault
-          image: uugai/vault:v1.0.3
+          image: uugai/vault:v1.0.4
           #imagePullPolicy: Always
           resources:
             limits:
@@ -43,11 +43,6 @@ spec:
               value: "root"
             - name: KERBEROS_LOGIN_PASSWORD
               value: "kerberos"
-            # Mongodb configuration (if you are not using the configmap)
-            # This is the mongodb database where data will be stored, you might use a different name if you want.
-            #- name: MONGODB_DATABASE_STORAGE
-            #  value : "KerberosStorage"
-
             # MongoDB URI (for example for a SaaS service like MongoDB Atlas)
             # If uri is set, the below properties are not used (host, adminDatabase, username, password)
             #MONGODB_URI: "mongodb+srv://xx:xx@kerberos-hub.xxx.mongodb.net/?retryWrites=true&w=majority&appName=xxx"
@@ -64,6 +59,11 @@ spec:
 
             # MQTT broker to be used for on-demand forwarding.
             - name: MQTTURI
+              # Mongodb configuration (if you are not using the configmap)
+              # This is the mongodb database where data will be stored, you might use a different name if you want.
+              #- name: MONGODB_DATABASE_STORAGE
+              #  value : "KerberosStorage"
+
               value: "tcp://mqtt.kerberos.io:1883"
             - name: MQTT_USERNAME
               value: ""
