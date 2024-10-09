@@ -217,7 +217,7 @@ kerberoshub:
   frontend:
     repository: uugai/hub-frontend
     pullPolicy: IfNotPresent
-    tag: "v1.0.15"
+    tag: "v1.0.16"
     replicas: 2
     schema: "https"
     url: "yourdomain.com"
