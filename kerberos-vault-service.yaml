@@ -1,0 +1,34 @@
+# You might use a LoadBalancer service instead of a NodePort service.
+# If so uncomment the LoadBalancer service below and comment the NodePort service.
+apiVersion: v1
+kind: Service
+metadata:
+  name: vault-nodeport
+  labels:
+    app: vault
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080 # You can specify a port in the range 30000-32767 or let Kubernetes assign one automatically
+      name: frontend
+      protocol: TCP
+  selector:
+    app: vault
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: vault-lb
+#   labels:
+#     app: vault
+# spec:
+#   type: LoadBalancer
+#   ports:
+#   - port: 80
+#     targetPort: 80
+#     name: frontend
+#     protocol: TCP
+#   selector:
+#     app: vault

@@ -291,7 +291,9 @@ kubectl create namespace kerberos-vault
 Apply the deploymentfile, so the Kerberos Vault application is deployed and knows how to connect to the MongoDB.
 
 ```bash
+kubectl apply -f ./kerberos-vault-configmap.yaml -n kerberos-vault
 kubectl apply -f ./kerberos-vault-deployment.yaml -n kerberos-vault
+kubectl apply -f ./kerberos-vault-service.yaml -n kerberos-vault
 ```
 
 Verify if the pod is running
