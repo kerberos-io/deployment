@@ -12,7 +12,6 @@ license: "L/+FAwEBB2xpY2Vuc2UB/4YAAQIBB1BheWxvYWQBCgABCVNpZ25hdHVyZQEKAAAA/gMv/4
 licenseServer:
   url: "https://license.kerberos.io/verify"
   token: "214%ˆ#ddfsf@#3rfdsgl_)23sffeqasSwefDSFNBM" # do not change otherwise Kerberos Hub will not work.
-
 # Private Docker Registry: The registry secret is required if you have your Docker images behind a private registry.
 # By default it will pull from Docker hub (https://hub.docker.com/r/kerberos).
 #imagePullSecrets:
@@ -21,17 +20,13 @@ licenseServer:
 # Environment: set to 'production', 'develop', 'demo', 'staging' or 'acceptance'.
 # Set to 'true' if this is a private deployment.
 environment: "production"
-
 # Set to 'true' if this is a private deployment.
 isPrivate: true
-
 # If you plan a migration or doing maintenance, you can enable readonly.
 # This will stop any write process to mongodb or any processing done in the Kerberos Hub pipeline.
 readOnly: false
-
 # Which network ingress you are using in your Kubernetes Cluster
 ingress: "nginx" # or "traefik"
-
 # A mongodb instance is required to store all the relevant metadata (this can be standalone or in a cluster).
 mongodb:
   # MongoDB URI (for example for a SaaS service like MongoDB Atlas)
@@ -43,7 +38,6 @@ mongodb:
   adminDatabase: admin
   username: "root"
   password: "yourpassword"
-
 # A MQTT broker (vernemq or other like mosquitto) is used to have a bi-directional
 # communication between Kerberos Agents and Kerberos Hub.
 # we recommend to use vernemq (as part of this installation), but a stand-alone mosquitto broker is also possible.
@@ -56,12 +50,10 @@ mqtt:
   legacy:
     host: ""
     port: ""
-
 # We are using a pipeline that is orchestrated through Kafka topics or RabbitMQ queues
 # Events are send back and forth until the processing is done.
 queueProvider: "RABBITMQ" # or "KAFKA"
 queueName: "kcloud-event-queue" # This is the topic to which all events are send.
-
 # RabbitMQ can be installed in the same cluster using a helm chart, or you can
 # use a service on  cloud provider like AWS, GCP, Azure, etc.
 rabbitmq:
@@ -70,7 +62,6 @@ rabbitmq:
   username: "yourusername"
   password: "yourpassword"
   exchange: ""
-
 # If you already have a Kafka cluster you might use this instead of RabbitMQ.
 kafka:
   broker: "kafka1.yourdomain.com:9094" # can be internal dns name or external
@@ -78,7 +69,6 @@ kafka:
   password: "yourpassword"
   mechanism: "PLAIN"
   security: "SASL_PLAINTEXT"
-
 # For allowing WEBRTC a STUN and TURN server is required.
 # You might want to install coturn in a seperate VM.
 # -> https://help.hcltechsw.com/sametime/11.6/admin/turnserver_ubuntu.html
@@ -86,13 +76,11 @@ turn:
   host: "turn:turn.yourdomain.com:8443" # this needs to be a public accessible DNS name.
   username: "username1"
   password: "password1"
-
 # (optional) OpenAI integration, used for semantic search
 # Langchain is used to translate text to a filter on the media page
 openai:
   enabled: false
   apikey: "xxx"
-
 # We have a kerberos vault component installed which contains all the
 # recordings. Kerberos vault is queried to retrieve the recordings
 # from the appropriate provider.
@@ -101,7 +89,6 @@ kerberosvault:
   provider: "mybucket"
   accesskey: "XJoi2@bgSOvOYBy#"
   secretkey: " OGGqat4lXRpL@9XBYc8FUaId@5"
-
   # Archiving is used when creating a task. The underlying recording of the task will be copied from its
   # existing provider to the below archived provider. Seperate credentials are used, as it makes possible to
   # specify another retention period.
@@ -117,7 +104,6 @@ kerberosvault:
     provider: "a-sprite-provider"
     accessKey: "xxx"
     secretKey: "xxx"
-
 email:
   provider: "mailgun"
   from: "support@yourdomain.com"
@@ -145,15 +131,13 @@ email:
     device: "device"
     alertTitle: "[Alert] Kerberos Hub detected something an event"
     deviceTitle: "[Device] A Kerberos Agent's status has been changed"
-
 # Following are all the different deployments needed to make
 # Kerberos hub properly working.
-
 kerberoshub:
   api:
-    repository: kerberos/hub-api
+    repository: uugai/hub-api
     pullPolicy: IfNotPresent
-    tag: "1.0.1384326925"
+    tag: "v1.0.4"
     replicas: 2
     jwtSecret: "I1JcwzW3A0tWJK9jnPkipbnVTpf0efMy" # change to a random value, this is for generating JWT tokens.
     schema: "https"
@@ -162,7 +146,6 @@ kerberoshub:
       requests:
         memory: 100Mi
         cpu: 250m
-
     # E-mail templates
     #volumeMounts:
     #  - name: custom-email-templates
@@ -177,11 +160,9 @@ kerberoshub:
 
     # MFA issuer name
     mfaIssuer: "Kerberos.io"
-
     # Admin API's are made available for automation of Kerberos Hub.
     # To access those API's (e.g. creation of owner users), an API key needs to be provided.
     apiKey: "Z6GPfDdYj8mxLyy6iUJVf9yBlri9lhsW"
-
     ## Certificates
     tls:
       - hosts:
@@ -234,9 +215,9 @@ kerberoshub:
         clientSecret: "xxx"
         clientVerificationId: "" # This is only required for SSO chaining.
   frontend:
-    repository: kerberos/hub-frontend
+    repository: uugai/hub-frontend
     pullPolicy: IfNotPresent
-    tag: "1.0.1384325093"
+    tag: "v1.0.15"
     replicas: 2
     schema: "https"
     url: "yourdomain.com"
@@ -244,12 +225,10 @@ kerberoshub:
       requests:
         memory: 50Mi
         cpu: 50m
-
     # The front-end but in read-only mode
     #demoUrl: "demo.yourdomain.com"
     # When migrating to another url, this might help migrating.
     #legacyUrl: "legacy.yourdomain.com"
-
     tls:
       - hosts:
           - "yourdomain.com"
@@ -274,11 +253,9 @@ kerberoshub:
     posthog: # Posthog is used for auditing and user interaction logging
       key: "xxx"
       url: "https://posthog.domain.com"
-
     # You can disable the Kerberos agent buttons, this make sense
     # in a white-label setup, or where you are managing the Kerberos Agents for your customers.
     hideAddAgent: "false"
-
     # Multi tenancy (domains)
     # By default the Kerberos Hub allows multi-tenancy through the concept
     # of accounts and subaccounts. However through the concept of domains, you
@@ -288,7 +265,6 @@ kerberoshub:
 
     # Page title (browser)
     title: "Kerberos Hub - Video surveillance as it should be"
-
     # You can style Kerberos hub as you wish.
     # 1. we do the styling on our side and bake it in the Docker image (change the logo attribute to your company name)
     # 2. you bring your own logo (set logo to 'custom'), and mount the css file and favicons.
@@ -332,7 +308,6 @@ kerberoshub:
     framesPerSecondDescription: ""
     mlaUtilizationDescription: ""
     objectsDetectedDescription: ""
-
     # You can add custom links to the navigation bar.
     navigationLinkTitle1: ""
     navigationLinkUrl1: ""
@@ -344,7 +319,6 @@ kerberoshub:
     navigationLinkUrl4: ""
     navigationLinkTitle5: ""
     navigationLinkUrl5: ""
-
   cleanup:
     repository: kerberos/hub-cleanup
     pullPolicy: IfNotPresent
@@ -361,14 +335,14 @@ kerberoshub:
       requests:
         memory: 10Mi
         cpu: 10m
-    # E-mail templates
-    #volumeMounts:
-    #  - name: custom-email-templates
-    #    mountPath: /mail
-    #volumes:
-    #  - name: custom-email-templates
-    #    persistentVolumeClaim:
-    #      claimName: custom-layout-claim
+        # E-mail templates
+        #volumeMounts:
+        #  - name: custom-email-templates
+        #    mountPath: /mail
+        #volumes:
+        #  - name: custom-email-templates
+        #    persistentVolumeClaim:
+        #      claimName: custom-layout-claim
   reactivate:
     repository: kerberos/hub-reactivate
     pullPolicy: IfNotPresent
@@ -395,7 +369,6 @@ kerberoshub:
       requests:
         memory: 10Mi
         cpu: 10m
-
 kerberospipeline:
   event:
     repository: kerberos/pipe-event
@@ -436,20 +409,20 @@ kerberospipeline:
   notify:
     repository: kerberos/pipe-notify
     pullPolicy: IfNotPresent
-    tag: "1.0.7225931612"
+    tag: "1.0.7688338979"
     replicas: 1
     resources:
       requests:
         memory: 10Mi
         cpu: 10m
-    # E-mail templates
-    #volumeMounts:
-    #  - name: custom-email-templates
-    #    mountPath: /mail
-    #volumes:
-    #  - name: custom-email-templates
-    #    persistentVolumeClaim:
-    #      claimName: custom-layout-claim
+        # E-mail templates
+        #volumeMounts:
+        #  - name: custom-email-templates
+        #    mountPath: /mail
+        #volumes:
+        #  - name: custom-email-templates
+        #    persistentVolumeClaim:
+        #      claimName: custom-layout-claim
   notifyTest:
     repository: kerberos/pipe-notify-test
     pullPolicy: IfNotPresent
@@ -459,14 +432,14 @@ kerberospipeline:
       requests:
         memory: 10Mi
         cpu: 10m
-    # E-mail templates
-    #volumeMounts:
-    #  - name: custom-email-templates
-    #    mountPath: /mail
-    #volumes:
-    #  - name: custom-email-templates
-    #    persistentVolumeClaim:
-    #      claimName: custom-layout-claim
+        # E-mail templates
+        #volumeMounts:
+        #  - name: custom-email-templates
+        #    mountPath: /mail
+        #volumes:
+        #  - name: custom-email-templates
+        #    persistentVolumeClaim:
+        #      claimName: custom-layout-claim
   analysis:
     repository: kerberos/pipe-analysis
     pullPolicy: IfNotPresent
