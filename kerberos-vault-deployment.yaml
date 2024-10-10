@@ -43,10 +43,6 @@ spec:
               value: "root"
             - name: KERBEROS_LOGIN_PASSWORD
               value: "kerberos"
-            # MongoDB URI (for example for a SaaS service like MongoDB Atlas)
-            # If uri is set, the below properties are not used (host, adminDatabase, username, password)
-            #MONGODB_URI: "mongodb+srv://xx:xx@kerberos-hub.xxx.mongodb.net/?retryWrites=true&w=majority&appName=xxx"
-
             # If you do not wish to use the URI, you can specify the individual values.
             #- name: MONGODB_HOST
             #  value: "mongodb.mongodb"
@@ -63,6 +59,10 @@ spec:
               # This is the mongodb database where data will be stored, you might use a different name if you want.
               #- name: MONGODB_DATABASE_STORAGE
               #  value : "KerberosStorage"
+
+              # MongoDB URI (for example for a SaaS service like MongoDB Atlas)
+              # If uri is set, the below properties are not used (host, adminDatabase, username, password)
+              #MONGODB_URI: "mongodb+srv://xx:xx@kerberos-hub.xxx.mongodb.net/?retryWrites=true&w=majority&appName=xxx"
 
               value: "tcp://mqtt.kerberos.io:1883"
             - name: MQTT_USERNAME
