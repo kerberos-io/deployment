@@ -241,7 +241,7 @@ kubectl get po -w -A
 
 ### Kerberos Vault
 
-Kerberos Vault requires a configuration to connect to the MongoDB instance. To handle this a `configmap` is defined in the `./kerberos-vault-deployment.yaml` file. Modify the MongoDB credentials in the `./kerberos-vault-deployment.yaml` file, and make sure they match the credentials of your MongoDB instance, as described above. There are two ways of configuring the MongoDB connection, either you provide a `MONGODB_URI` or you specify the individual variables `MONGODB_USERNAME`, `MONGODB_PASSWORD`, etc.
+Kerberos Vault requires a configuration to connect to the MongoDB instance. To handle this a `configmap` is defined in the `./mongodb-configmap.yaml` file. Modify the MongoDB credentials in the `./mongodb-configmap.yaml` file, and make sure they match the credentials of your MongoDB instance, as described above. There are two ways of configuring the MongoDB connection, either you provide a `MONGODB_URI` or you specify the individual variables `MONGODB_USERNAME`, `MONGODB_PASSWORD`, etc.
 
 As mentioned above a managed MongoDB is easier to setup and manage, for example for MongoDB Atlas, you will get a MongoDB URI in the form of `"mongodb+srv://xx:xx@kerberos-hub.xxx.mongodb.net/?retryWrites=true&w=majority&appName=xxx"`. By applying this value into the `MONGODB_URI` field, you will have setup your MongoDB connection successfully.
 
@@ -265,10 +265,10 @@ Create the `kerberos-vault` namespace.
 kubectl create namespace kerberos-vault
 ```
 
-Apply the deployment file, so the Kerberos Vault application is deployed and knows how to connect to the MongoDB.
+Apply the manifest, so the Kerberos Vault application is deployed and knows how to connect to the MongoDB.
 
 ```bash
-kubectl apply -f ./kerberos-vault-configmap.yaml -n kerberos-vault
+kubectl apply -f ./mongodb-configmap.yaml -n kerberos-vault
 kubectl apply -f ./kerberos-vault-deployment.yaml -n kerberos-vault
 kubectl apply -f ./kerberos-vault-service.yaml -n kerberos-vault
 ```
@@ -349,6 +349,38 @@ kubectl logs -f kerberos-agent...
 ```
 
 To validate the Kerberos Vault and review any stored recordings, access the user interface at `http://localhost:30080` (after establishing the reverse tunnel).
+
+### Create Kerberos Agents through Kerberos Factory
+
+Managing Kerberos Agents through seperate configuration files might feel cumbersome, especially for non-technical users. This is where Kerberos Factory comes into the picture. Kerberos Factory provides a visual view that allows you to rapidly connect cameras through a user interface, which allows users without any technical background about cameras and kubernetes create Kerberos Agents.
+
+Kerberos Factory also requires a mongodb, just like Kerberos Vault. Luckily you can reuse the mongodb installation we have deployed earlier, the only thing we'll need to do is to create another `configmap.yaml` in the `kerberos-factory` namespace.
+
+Create the `kerberos-factory` namespace.
+
+```bash
+kubectl create namespace kerberos-factory
+```
+
+Apply the manifests, so the Kerberos Factory application is deployed and knows how to connect to the MongoDB.
+
+```bash
+kubectl apply -f ./mongodb-configmap.yaml -n kerberos-factory
+kubectl apply -f ./kerberos-factory-deployment.yaml -n kerberos-factory
+kubectl apply -f ./kerberos-factory-service.yaml -n kerberos-factory
+```
+
+To allow our Kerberos Factory to create Kubernetes resources we will need to apply an additional cluster role. This will allow our Kerberos Factory deployment to read and write resources to our Kubernetes cluster.
+
+```bash
+kubectl apply -f ./kerberos-factory-clusterrole.yaml -n kerberos-factory
+```
+
+Verify if the pod is running
+
+```bash
+kubectl get po -w -A
+```
 
 ### Optimized Data Filtering for Enhanced Bandwidth Efficiency and Relevance
 
