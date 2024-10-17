@@ -287,6 +287,13 @@ If you have opted for the `NodePort` configuration, you can access the Kerberos 
 ssh -L 8080:localhost:30080 user@server-ip -p 22
 ```
 
+#### Login to Kerberos Vault
+
+Once you have access to the Kerberos Vault UI, you should be able to login with a username and password. You will [find the username and password here](https://github.com/kerberos-io/deployment/blob/main/kerberos-vault-deployment.yaml#L36-L39).
+
+- Username: [**view username**](https://github.com/kerberos-io/deployment/blob/main/kerberos-vault-deployment.yaml#L36-L37)
+- Password: [**view password**](https://github.com/kerberos-io/deployment/blob/main/kerberos-vault-deployment.yaml#L38-L39)
+
 #### Configure the Kerberos Vault
 
 With the Kerberos Vault installed, we can proceed to configure the various components. Currently, this must be done through the Kerberos Vault UI, but we plan to make it configurable via environment variables, eliminating the need for manual UI configurations.
