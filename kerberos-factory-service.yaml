@@ -11,7 +11,7 @@ spec:
   ports:
     - port: 80
       targetPort: 80
-      nodePort: 30081 # You can specify a port in the range 30000-32767 or let Kubernetes assign one automatically
+      nodePort: 30079 # You can specify a port in the range 30000-32767 or let Kubernetes assign one automatically
       name: frontend
       protocol: TCP
   selector:
