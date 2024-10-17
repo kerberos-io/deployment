@@ -300,7 +300,7 @@ With the Kerberos Vault installed, we can proceed to configure the various compo
 
 ![Configure Vault](./assets/images/configure-vault.gif)
 
-- Navigate to the `Storage Providers` menu and select the (+ Add Storage Provider) button. A modal will appear where you can input the required details. After entering the information, click the "Verify" button to ensure the configuration is valid. Once you receive a "Configuration is valid and working" message, click the "Add Storage Provider" button to complete the process.
+- Navigate to the `Storage Providers` menu and select the (+ Add Storage Provider) button. A modal will appear where you can input the required details. After entering the information, click the "Verify" button to ensure the configuration is valid. Once you receive a "Configuration is valid and working" message, click the "Add Storage Provider" button to complete the process. **_(!You are advised to generate more complex access and secret key for Minio, this is just for demo purposes, do not use this in production)_**
 
   - Minio
     - Enabled: true
@@ -311,7 +311,7 @@ With the Kerberos Vault installed, we can proceed to configure the various compo
     - Access key: minio
     - Secret key: minio123
 
-- Navigate to the `Integrations` menu and select the (+ Add Integration) button. A modal will appear where you can input the required details. After entering the information, click the "Verify" button to ensure the configuration is valid. Once you receive a "Configuration is valid and working" message, click the "Add Integration" button to complete the process.
+- Navigate to the `Integrations` menu and select the (+ Add Integration) button. A modal will appear where you can input the required details. After entering the information, click the "Verify" button to ensure the configuration is valid. Once you receive a "Configuration is valid and working" message, click the "Add Integration" button to complete the process. **_(!You are advised to generate more complex username and password for RabbitMQ, this is just for demo purposes, do not use this in production)_**
 
   - RabbitMQ
     - Enabled: true

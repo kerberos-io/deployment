@@ -39,7 +39,8 @@ spec:
             - name: AGENT_CLOUD	
               value: kstorage
             - name: AGENT_KERBEROSVAULT_URI	
-              value: http://vault-lb.kerberos-vault/api
+              #value: http://vault-lb.kerberos-vault/api
+              value: http://vault-nodeport.kerberos-vault:80/api
             - name: AGENT_KERBEROSVAULT_ACCESS_KEY	
               value: XJoi2@bgSOvOYBy#
             - name: AGENT_KERBEROSVAULT_SECRET_KEY		
