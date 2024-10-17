@@ -20,9 +20,11 @@ spec:
     spec:
       containers:
       - name: factory
-        image: "kerberos/factory:1.0.1049084302" # or you can use "kerberos/factory:latest"
-        #imagePullPolicy: Always
+        image: "uugai/factory:v1.0.0"
         resources:
+          requests:
+            memory: 256Mi
+            cpu: 500m
           limits:
             memory: 256Mi
             cpu: 500m
@@ -31,15 +33,6 @@ spec:
         envFrom:
           - configMapRef:
               name: mongodb
-
-        # Injecting the ca-certificates inside the container.
-        #volumeMounts:
-        #- name: rootcerts
-        #  mountPath: /etc/ssl/certs/ca-certificates.crt
-        #  subPath: ca-certificates.crt
-        #- name: custom-layout
-        #  mountPath: /home/factory/www/assets/custom
-
         env:
         - name: GIN_MODE
           value: release
@@ -61,16 +54,3 @@ spec:
         - name: K8S_PROXY
           value: http://localhost:80
 
-        # Additional certificates can be injected into the Kerberos Agents, through the creation of a configmap. 
-        # A certificate "ca-certificates.crt" is expected in the configmap, and will be added to
-        # the Kerberos Agent in following directory: /etc/ssl/certs/
-        #- name: CERTIFICATES_CONFIGMAP
-        #  value: "rootcerts" 
-
-      #volumes:
-      #- name: rootcerts
-      #  configMap:
-      #    name: rootcerts
-      #- name: custom-layout
-      #  persistentVolumeClaim:
-      #    claimName: custom-layout-claim
