@@ -37,7 +37,8 @@ spec:
               value: yourpassword
 
             - name: STORAGE_URI
-              value: "http://vault-lb.kerberos-vault/api"
+              #value: http://vault-lb.kerberos-vault/api
+              value: http://vault-nodeport.kerberos-vault:80/api
             - name: STORAGE_ACCESS_KEY
               value: "XJoi2@bgSOvOYBy#"
             - name: STORAGE_SECRET_KEY
