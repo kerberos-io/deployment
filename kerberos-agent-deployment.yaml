@@ -46,7 +46,7 @@ spec:
             - name: AGENT_KERBEROSVAULT_SECRET_KEY		
               value: OGGqat4lXRpL@9XBYc8FUaId@5
             - name: AGENT_KERBEROSVAULT_PROVIDER		
-              value: mybucket
+              value: minio
             - name: AGENT_KERBEROSVAULT_DIRECTORY		
               value: myhubaccount
             - name: AGENT_CAPTURE_CONTINUOUS
