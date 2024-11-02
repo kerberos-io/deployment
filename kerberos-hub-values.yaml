@@ -137,7 +137,7 @@ kerberoshub:
   api:
     repository: uugai/hub-api
     pullPolicy: IfNotPresent
-    tag: "v1.0.4"
+    tag: "v1.0.5"
     replicas: 2
     jwtSecret: "I1JcwzW3A0tWJK9jnPkipbnVTpf0efMy" # change to a random value, this is for generating JWT tokens.
     schema: "https"
