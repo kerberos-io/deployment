@@ -62,7 +62,7 @@ jobs:
         id: install-kerberos-vault
         run: |
           kubectl create namespace kerberos-vault
-          kubectl apply -f ./kerberos-vault-configmap.yaml -n kerberos-vault
+          kubectl apply -f ./mongodb-configmap.yaml -n kerberos-vault
           kubectl apply -f ./kerberos-vault-deployment.yaml -n kerberos-vault
           kubectl apply -f ./kerberos-vault-service.yaml -n kerberos-vault
           echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
