@@ -22,6 +22,9 @@ spec:
         - name: vault
           image: uugai/vault:v1.0.7
           resources:
+            requests:
+              memory: 512Mi
+              cpu: 256m
             limits:
               memory: 512Mi
               cpu: 256m
