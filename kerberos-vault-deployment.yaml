@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: vault
-          image: uugai/vault:v1.0.7
+          image: uugai/vault:v1.0.5
           resources:
             requests:
               memory: 512Mi
