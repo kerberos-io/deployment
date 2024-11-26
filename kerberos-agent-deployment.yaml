@@ -52,11 +52,11 @@ spec:
             - name: AGENT_CAPTURE_CONTINUOUS
               value: "true"
             - name: AGENT_HUB_URI	
-              value: https://api.cloud.kerberos.io # or your own hub installation
+              value: http://localhost:32081 # or your own hub installation
             - name: AGENT_HUB_KEY
-              value: xxx
+              value: AKIAxxxxxxG5Q
             - name: AGENT_HUB_PRIVATE_KEY
-              value: xxx
+              value: K6rRLBI1xxxCk3C1H
             # find full list of environment variables here: https://github.com/kerberos-io/agent#override-with-environment-variables
 #---
 #apiVersion: v1
