@@ -5,6 +5,19 @@ metadata:
 spec:
   template:
     spec:
+      initContainers:
+      - name: copy-config
+        image: busybox
+        command: ['sh', '-c', 'echo "$KERBEROS_HUB_NOSQL" > /data/kerberos-hub.nosql']
+        env:
+        - name: KERBEROS_HUB_NOSQL
+          valueFrom:
+            configMapKeyRef:
+              name: kerberos-hub-configmap
+              key: kerberos-hub.nosql
+        volumeMounts:
+        - name: kerberos-hub-file
+          mountPath: /data
       containers:
       - name: init-container
         image: mongo:latest
@@ -15,8 +28,7 @@ spec:
       restartPolicy: Never
       volumes:
       - name: kerberos-hub-file
-        configMap:
-          name: kerberos-hub-configmap
+        emptyDir: {}
   backoffLimit: 4
 ---
 apiVersion: v1
