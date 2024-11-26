@@ -52,7 +52,7 @@ spec:
             - name: AGENT_CAPTURE_CONTINUOUS
               value: "true"
             - name: AGENT_HUB_URI	
-              value: http://kerberos-hub.hub-api-svc # or your own hub installation
+              value: http://hub-api-svc.kerberos-hub:8081 # or your own hub installation
             - name: AGENT_HUB_KEY
               value: AKIAxxxxxxG5Q
             - name: AGENT_HUB_PRIVATE_KEY
