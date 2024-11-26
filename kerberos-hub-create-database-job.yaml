@@ -21,7 +21,7 @@ spec:
       containers:
       - name: init-container
         image: mongo:latest
-        command: ["sh", "-c", "mongo --host mongodb.mongodb --username root --password yourpassword --authenticationDatabase admin --eval 'use Kerberos' && mongoimport --host mongodb.mongodb --username root --password yourpassword --authenticationDatabase admin --db Kerberos --file /data/kerberos-hub.nosql"]
+        command: ["sh", "-c", "mongosh --host mongodb.mongodb --username root --password yourpassword --authenticationDatabase admin --eval 'use Kerberos' && mongoimport --host mongodb.mongodb --username root --password yourpassword --authenticationDatabase admin --db Kerberos --file /data/kerberos-hub.nosql"]
         volumeMounts:
         - name: kerberos-hub-file
           mountPath: /data
