@@ -219,7 +219,7 @@ kerberoshub:
     pullPolicy: IfNotPresent
     tag: "v1.0.17"
     replicas: 2
-    schema: "https"
+    schema: "http"
     url: "yourdomain.com"
     resources:
       requests:
