@@ -26,7 +26,8 @@ isPrivate: true
 # This will stop any write process to mongodb or any processing done in the Kerberos Hub pipeline.
 readOnly: false
 # Which network ingress you are using in your Kubernetes Cluster
-ingress: "nginx" # or "traefik"
+# Leaving the ingress empty will disable the ingress.
+ingress: "" # or "traefik" / "nginx"
 # A mongodb instance is required to store all the relevant metadata (this can be standalone or in a cluster).
 mongodb:
   # MongoDB URI (for example for a SaaS service like MongoDB Atlas)
@@ -94,17 +95,17 @@ kerberosvault:
   # existing provider to the below archived provider. Seperate credentials are used, as it makes possible to
   # specify another retention period.
   archive:
-    provider: "an-archive-provider"
-    accesskey: "xxx"
-    secretkey: "xxx"
+    provider: "mybucket"
+    accesskey: "XJoi2@bgSOvOYBy#"
+    secretkey: " OGGqat4lXRpL@9XBYc8FUaId@5"
   thumbnail:
-    provider: "a-thumbnail-provider"
-    accessKey: "xxx"
-    secretKey: "xxx"
+    provider: "mybucket"
+    accessKey: "XJoi2@bgSOvOYBy#"
+    secretKey: " OGGqat4lXRpL@9XBYc8FUaId@5"
   sprite:
-    provider: "a-sprite-provider"
-    accessKey: "xxx"
-    secretKey: "xxx"
+    provider: "mybucket"
+    accessKey: "XJoi2@bgSOvOYBy#"
+    secretKey: " OGGqat4lXRpL@9XBYc8FUaId@5"
 email:
   provider: "mailgun"
   from: "support@yourdomain.com"
@@ -274,18 +275,18 @@ kerberoshub:
     # Custom layout: override css
     # By providing a style.css file in the custom folder
     # this file will override any css styling.
-    #volumeMounts:
-    #  - name: custom-layout
-    #    mountPath: /usr/share/nginx/html/assets/custom
-    #  - name: custom-favicon
-    #    mountPath: /usr/share/nginx/html/assets/favicon
-    #volumes:
-    #  - name: custom-layout
-    #    persistentVolumeClaim:
-    #      claimName: custom-layout-claim
-    #  - name: custom-favicon
-    #    persistentVolumeClaim:
-    #      claimName: custom-favicon-claim
+    volumeMounts:
+      - name: custom-layout
+        mountPath: /usr/share/nginx/html/assets/custom
+      - name: custom-favicon
+        mountPath: /usr/share/nginx/html/assets/favicon
+    volumes:
+      - name: custom-layout
+        persistentVolumeClaim:
+          claimName: custom-layout-claim
+      - name: custom-favicon
+        persistentVolumeClaim:
+          claimName: custom-favicon-claim
 
     # By specifying the below environments variables, you can tweak the
     # headings and paragraphs of Kerberos Hub front-end.
@@ -320,6 +321,16 @@ kerberoshub:
     navigationLinkUrl4: ""
     navigationLinkTitle5: ""
     navigationLinkUrl5: ""
+  support:
+    enabled: false
+  oauth2Proxy:
+    enabled: false
+    github:
+      clientId: "github-client-id"
+      clientSecret: "github-client-secret"
+      cookieSecret: "generate-a-random-cookie-secret"
+      organization: "github-organization"
+      team: "github-team"
   cleanup:
     repository: kerberos/hub-cleanup
     pullPolicy: IfNotPresent
@@ -471,7 +482,7 @@ kerberospipeline:
     width: "600"
     height: "-1"
     kerberosvault:
-      enabled: false # If you want to use Kerberos Vault to store the thumbnails
+      enabled: true # If you want to use Kerberos Vault to store the thumbnails
     resources:
       requests:
         memory: 512Mi
@@ -489,11 +500,11 @@ kerberospipeline:
         memory: 10Mi
         cpu: 10m
   sprite:
-    enabled: false # Enable or disable the sprite generation 'true' or 'false
+    enabled: true # Enable or disable the sprite generation 'true' or 'false
     repository: kerberos/pipe-sprite
     pullPolicy: IfNotPresent
     tag: "1.0.7190736361"
-    replicas: 5
+    replicas: 2
     interval: "1" # Number of secondes between each thumbnail in the sprite
     width: "240" # Should not be changed for the moment (hard coded in UI)
     height: "135" # Should not be changed for the moment (hard coded in UI)
