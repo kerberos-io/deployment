@@ -90,7 +90,7 @@ kerberosvault:
   uri: http://vault-nodeport.kerberos-vault:80
   provider: "minio"
   accesskey: "XJoi2@bgSOvOYBy#"
-  secretkey: " OGGqat4lXRpL@9XBYc8FUaId@5"
+  secretkey: "OGGqat4lXRpL@9XBYc8FUaId@5"
   # Archiving is used when creating a task. The underlying recording of the task will be copied from its
   # existing provider to the below archived provider. Seperate credentials are used, as it makes possible to
   # specify another retention period.
