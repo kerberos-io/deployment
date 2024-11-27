@@ -87,7 +87,7 @@ openai:
 # from the appropriate provider.
 kerberosvault:
   #uri: "http://vault-lb.kerberos-vault" # this needs to be a public accessible DNS name.
-  uri: http://vault-nodeport.kerberos-vault:80
+  uri: http://vault-nodeport.kerberos-vault:80/api
   provider: "minio"
   accesskey: "XJoi2@bgSOvOYBy#"
   secretkey: "OGGqat4lXRpL@9XBYc8FUaId@5"
