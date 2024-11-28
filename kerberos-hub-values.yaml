@@ -469,10 +469,10 @@ kerberospipeline:
     resources:
       requests:
         memory: 512Mi
-        cpu: 500m
+        cpu: 250m
       limits:
-        memory: 2Gi
-        cpu: 1000m
+        memory: 512Mi
+        cpu: 250m
   thumbnail:
     repository: kerberos/pipe-thumbnail
     pullPolicy: IfNotPresent
@@ -486,10 +486,10 @@ kerberospipeline:
     resources:
       requests:
         memory: 512Mi
-        cpu: 500m
+        cpu: 250m
       limits:
-        memory: 2Gi
-        cpu: 1000m
+        memory: 512Mi
+        cpu: 250m
   counting:
     repository: kerberos/pipe-counting
     pullPolicy: IfNotPresent
@@ -511,10 +511,10 @@ kerberospipeline:
     resources:
       requests:
         memory: 512Mi
-        cpu: 500m
+        cpu: 250m
       limits:
-        memory: 2Gi
-        cpu: 1000m
+        memory: 512Mi
+        cpu: 250m
   export:
     repository: kerberos/pipe-export
     pullPolicy: IfNotPresent
