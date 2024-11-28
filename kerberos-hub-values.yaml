@@ -142,8 +142,8 @@ kerberoshub:
     tag: "v1.0.7"
     replicas: 1
     jwtSecret: "I1JcwzW3A0t_THIS-IS_NOT_A_SECRET_WJK9jnPkipbnVTpf0efMy" # change to a random value, this is for generating JWT tokens.
-    schema: "https"
-    url: "api.yourdomain.com"
+    schema: "http"
+    url: "ip-address:32081"
     resources:
       requests:
         memory: 100Mi
@@ -235,9 +235,9 @@ kerberoshub:
     #  - hosts:
     #      - "yourdomain.com"
     #    secretName: kerberoshub
-        #- hosts:
-        #    - "legacy.yourdomain.com"
-        #  secretName: kerberoshub-legacy
+    #  - hosts:
+    #      - "legacy.yourdomain.com"
+    #    secretName: kerberoshub-legacy
     #demoTls:
     #  - hosts:
     #      - "demo.yourdomain.com"
