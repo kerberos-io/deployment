@@ -166,16 +166,16 @@ kerberoshub:
     # To access those API's (e.g. creation of owner users), an API key needs to be provided.
     apiKey: "Z6GPfDdYj8mxLyy6iUJVf9yBlri9lhsW"
     ## Certificates
-    tls:
-      - hosts:
-          - "api.yourdomain.com"
-        secretName: kerberoshub-api
+    #tls:
+    #  - hosts:
+    #      - "api.yourdomain.com"
+    #    secretName: kerberoshub-api
       #- hosts:
       #    - "api.legacy.yourdomain.com"
       #  secretName: kerberoshub-api-legacy
-      - hosts:
-          - "admin.api.yourdomain.com"
-        secretName: kerberoshub-admin
+    #  - hosts:
+    #      - "admin.api.yourdomain.com"
+    #    secretName: kerberoshub-admin
     language: "english"
     fallbackLanguage: "english"
     # Legacy (reseller) it is possible to link to AWS S3 and IAM (however Kerberos Vault is now the recommended option).
@@ -199,23 +199,23 @@ kerberoshub:
       index: "kerberos-cloud"
       username: ""
       password: ""
-    sso: # OIDC settings for allowing SSO.
-      - domain: "uug.ai"
-        redirectUrl: "https://api.cloud.kerberos.io/sso/callback/uug.ai"
-        forceSSO: "false"
-        issuer: "https://xxx.eu.auth0.com/"
-        claimId: "email" # claim which is used to identify the user
-        clientId: "xxx"
-        clientSecret: "xxx"
-        clientVerificationId: "" # This is only required for SSO chaining.
-      - domain: "kerberos.io"
-        redirectUrl: "https://api.cloud.kerberos.io/sso/callback/kerberos.io"
-        forceSSO: "false"
-        issuer: "https://accounts.google.com"
-        claimId: "email" # claim which is used to identify the user
-        clientId: "xxx"
-        clientSecret: "xxx"
-        clientVerificationId: "" # This is only required for SSO chaining.
+    #sso: # OIDC settings for allowing SSO.
+    #  - domain: "uug.ai"
+    #    redirectUrl: "https://api.cloud.kerberos.io/sso/callback/uug.ai"
+    #    forceSSO: "false"
+    #    issuer: "https://xxx.eu.auth0.com/"
+    #    claimId: "email" # claim which is used to identify the user
+    #    clientId: "xxx"
+    #    clientSecret: "xxx"
+    #    clientVerificationId: "" # This is only required for SSO chaining.
+    #  - domain: "kerberos.io"
+    #    redirectUrl: "https://api.cloud.kerberos.io/sso/callback/kerberos.io"
+    #    forceSSO: "false"
+    #    issuer: "https://accounts.google.com"
+    #    claimId: "email" # claim which is used to identify the user
+    #    clientId: "xxx"
+    #    clientSecret: "xxx"
+    #    clientVerificationId: "" # This is only required for SSO chaining.
   frontend:
     repository: uugai/hub-frontend
     pullPolicy: IfNotPresent
@@ -231,10 +231,10 @@ kerberoshub:
     #demoUrl: "demo.yourdomain.com"
     # When migrating to another url, this might help migrating.
     #legacyUrl: "legacy.yourdomain.com"
-    tls:
-      - hosts:
-          - "yourdomain.com"
-        secretName: kerberoshub
+    #tls:
+    #  - hosts:
+    #      - "yourdomain.com"
+    #    secretName: kerberoshub
         #- hosts:
         #    - "legacy.yourdomain.com"
         #  secretName: kerberoshub-legacy

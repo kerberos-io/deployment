@@ -1,4 +1,4 @@
-# Edge deployment on microk8s
+# Deployment on microk8s
 
 ⏱️ **Time:** installation within 25min
 
@@ -37,7 +37,6 @@ To install MicroK8s on your system, follow these steps.
    ```bash
    sudo usermod -a -G microk8s $USER
    sudo chown -f -R $USER ~/.kube
-
    ```
 
 4. Apply the new group membership. You need to re-enter your session for the group change to take effect:
@@ -382,81 +381,30 @@ Verify if the pod is running
 kubectl get po -w -A
 ```
 
-### Optimized Data Filtering for Enhanced Bandwidth Efficiency and Relevance
+### Kerberos Hub
 
-Once your Kerberos Agents are properly connected and all recordings are stored in the Kerberos Vault, you may encounter additional challenges such as bandwidth limitations, storage constraints, and the need to efficiently locate relevant data. To accomplish this, we can configure an integration to filter the recordings, ensuring that only the relevant ones are retained.
-
-Assuming all configurations are correctly set and all Kubernetes deployments are operational, you can apply the `data-filtering-deployment.yaml` deployment. This deployment will schedule a pod that listens to the configured integration in Kerberos Vault and runs a YOLOv8 model to evaluate the recordings and match them against specified conditions.
-
-Please note that if you do not have a GPU on the device, you will need to disable the resource limit of the nvidia/gpu. Once done the filtering will run on the CPU.
+Now we have setup the most important building blocks in terms of video surveillance: Kerberos Agents or Kerberos Factory and Kerberos Vault, we can start consolidating our cameras and recorded videos into a single pane of glass also known as Kerberos Hub.
 
 ```bash
-sed -e '/resources/ s/^#*/#/' -i ./data-filtering-deployment.yaml
-sed -e '/limits/ s/^#*/#/' -i ./data-filtering-deployment.yaml
-sed -e '/nvidia/ s/^#*/#/' -i ./data-filtering-deployment.yaml
+helm repo add kerberos https://charts.kerberos.io
+kubectl create namespace kerberos-hub
 ```
-
-Let's deploy the data filtering pod (with or without GPU support).
 
 ```bash
-kubectl apply -f data-filtering-deployment.yaml
+kubectl create -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/bundle.yaml
 ```
-
-Each time a recording is stored in the Kerberos Vault, the `data-filtering` pod will receive a notification and execute the specified model (YOLOv8 by default). Based on the defined conditions, the `data-filtering` pod may forward the recording to a remote Kerberos Vault, trigger alerts, or send notifications.
-
-Ensure that the `data-filtering` workload is actively running, receiving messages from the integration, and performing the necessary processing tasks.
 
 ```bash
-kubectl get po -w -A
-kubectl logs -f data...
+helm install hub kerberos/hub -n kerberos-hub -f kerberos-hub-values.yaml
 ```
-
-You might see something like below, whereas the `data-filtering` pod is iterating over recordings and frames, looking for a person. Once it finds the person it will try to `forward` the recording to a remote Kerberos Vault.
 
 ```bash
-Persons: 0, Cars: 0, Trucks: 0
-Condition not met, not forwarding video to remote vault
-Persons: 0, Cars: 0, Trucks: 0
-Condition not met, not forwarding video to remote vault
-Persons: 1, Cars: 0, Trucks: 0
-Condition met, forwarding video to remote vault
-Condition met, stopping the video loop, and forwarding video to remote vault
-Something went wrong while forwarding media
-Delete media from http://vault-lb.kerberos-vault/api
-	 - Classification took: 22.4 seconds, @ 3 fps.
-		 - 0.15s for preprocessing and initialisation
-		 - 22.25s for processing of which:
-			 - 0.99s for class prediction
-			 - 21.26s for other processing
-		 - 0s for postprocessing
-	 - Original video: 31.5 seconds, @ 30.0 fps @ 1920x1080. File size of 2.1 MB
-8) Releasing video writer and closing video capture
+helm upgrade hub kerberos/hub -n kerberos-hub -f kerberos-hub-values.yaml
 ```
-
-As indicated by the logs `Something went wrong while forwarding media`, the forwarding process failed due to the absence of an integration between the two `Kerberos Vaults`. Currently, only one `Kerberos Vault` is available. To enable this feature, you will need to [install a second `Kerberos Vault` in the cloud](./README.k8s-managed.md) with access to cloud storage.
-
-### Add forwarding integration
-
-If you have setup a secondary Kerberos Vault in the cloud, attached cloud Object storage to it, we can continue and add an additional integration through the UI.
 
 ```bash
-ssh -L 8080:localhost:30080 user@server-ip -p 22
+kubectl apply -f kerberos-hub-nodeports.yaml  -n kerberos-hub
 ```
-
-Navigate to the `Kerberos Vault` application in your browser, access the `Integration` section, and add a new integration. This integration will connect your local Kerberos Vault to the remote Kerberos Vault, and will tell the system to set recordings in a `forwarding state`.
-
-- Add an integration
-
-  - Kerberos Vault
-    - Enabled: true
-    - Integration name: remote-vault
-    - Forwarding mode: continuous
-    - Url: http(s)://yourvault.com/api
-    - Provider: The name of the remote storage provider
-    - Access Key: The access key of the account you have created on the remote Kerberos Vault
-    - Secret Access Key: The secret access key of the account you have created on the remote Kerberos Vault
-
-If the integration is functioning correctly, you should observe that recordings are initially marked in gray as "To be forwarded." After a short period, some recordings will be updated to green, indicating they have been "Forwarded by."
 
 ## Cleanup
 
