@@ -140,7 +140,7 @@ kerberoshub:
     repository: uugai/hub-api
     pullPolicy: IfNotPresent
     tag: "v1.0.7"
-    replicas: 2
+    replicas: 1
     jwtSecret: "I1JcwzW3A0t_THIS-IS_NOT_A_SECRET_WJK9jnPkipbnVTpf0efMy" # change to a random value, this is for generating JWT tokens.
     schema: "https"
     url: "api.yourdomain.com"
@@ -220,7 +220,7 @@ kerberoshub:
     repository: uugai/hub-frontend
     pullPolicy: IfNotPresent
     tag: "v1.0.17"
-    replicas: 2
+    replicas: 1
     schema: "http"
     url: "yourdomain.com"
     resources:
@@ -465,7 +465,7 @@ kerberospipeline:
     repository: kerberos/pipe-dominantcolor
     pullPolicy: IfNotPresent
     tag: "1.0.6971463620"
-    replicas: 3
+    replicas: 1
     resources:
       requests:
         memory: 512Mi
@@ -477,7 +477,7 @@ kerberospipeline:
     repository: kerberos/pipe-thumbnail
     pullPolicy: IfNotPresent
     tag: "1.0.6962799851"
-    replicas: 2
+    replicas: 1
     quality: "1" # 1 (best) - 31 (worst)
     width: "600"
     height: "-1"
@@ -504,7 +504,7 @@ kerberospipeline:
     repository: kerberos/pipe-sprite
     pullPolicy: IfNotPresent
     tag: "1.0.7190736361"
-    replicas: 2
+    replicas: 1
     interval: "1" # Number of secondes between each thumbnail in the sprite
     width: "240" # Should not be changed for the moment (hard coded in UI)
     height: "135" # Should not be changed for the moment (hard coded in UI)
@@ -519,7 +519,7 @@ kerberospipeline:
     repository: kerberos/pipe-export
     pullPolicy: IfNotPresent
     tag: "1.0.6437127898"
-    replicas: 2
+    replicas: 1
     resources:
       requests:
         memory: 10Mi
