@@ -1,42 +1,42 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: kerberos-hub-create-database-job
+  name: hub-create-database-job
 spec:
   template:
     spec:
       initContainers:
       - name: copy-config
         image: busybox
-        command: ['sh', '-c', 'echo '$KERBEROS_HUB_NOSQL' > /data/kerberos-hub.nosql']
+        command: ['sh', '-c', 'echo "$IMPORT_FILE" > /data/hub-import.js']
         env:
-        - name: KERBEROS_HUB_NOSQL
+        - name: IMPORT_FILE
           valueFrom:
             configMapKeyRef:
-              name: kerberos-hub-configmap
-              key: kerberos-hub.nosql
+              name: hub-import-configmap
+              key: hub-import.js
         volumeMounts:
-        - name: kerberos-hub-file
+        - name: hub-import
           mountPath: /data
       containers:
       - name: init-container
         image: mongo:latest
-        command: ['sh', '-c', 'mongosh --host mongodb.mongodb --username root --password yourpassword --authenticationDatabase admin --eval 'use Kerberos' && mongosh --host mongodb.mongodb --username root --password yourpassword --authenticationDatabase admin --db Kerberos --file /data/kerberos-hub.nosql']
+        command: ['sh', '-c', 'mongosh --host mongodb.mongodb --username root --password yourpassword --authenticationDatabase admin --db Kerberos --file /data/hub-import.js']
         volumeMounts:
-        - name: kerberos-hub-file
+        - name: hub-import
           mountPath: /data
       restartPolicy: Never
       volumes:
-      - name: kerberos-hub-file
+      - name: hub-import
         emptyDir: {}
   backoffLimit: 4
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: kerberos-hub-configmap
+  name: hub-import-configmap
 data:
-    kerberos-hub.nosql: |
+    hub-import.js: |
       conn = db.getMongo();
       db = conn.getDB('Kerberos');
       db.subscriptions.insertMany([{
