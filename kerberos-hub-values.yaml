@@ -17,6 +17,10 @@ licenseServer:
 #imagePullSecrets:
 #  - name: regcred
 
+# When using a private registry, you can specify the registry here.
+global:
+  imageRegistry: "docker.io/"
+
 # Environment: set to 'production', 'develop', 'demo', 'staging' or 'acceptance'.
 # Set to 'true' if this is a private deployment.
 environment: "production"
@@ -33,7 +37,6 @@ mongodb:
   # MongoDB URI (for example for a SaaS service like MongoDB Atlas)
   # If uri is set, the below properties are not used (host, adminDatabase, username, password)
   #uri: "mongodb+srv://xx:xx@kerberos-hub.xxx.mongodb.net/?retryWrites=true&w=majority&appName=xxx"
-
   # Self-hosted mongodb, you could also use the uri property above.
   host: mongodb.mongodb
   adminDatabase: admin
@@ -63,6 +66,7 @@ rabbitmq:
   username: "yourusername"
   password: "yourpassword"
   exchange: ""
+
 # If you already have a Kafka cluster you might use this instead of RabbitMQ.
 kafka:
   broker: "kafka1.yourdomain.com:9094" # can be internal dns name or external
@@ -73,10 +77,12 @@ kafka:
 # For allowing WEBRTC a STUN and TURN server is required.
 # You might want to install coturn in a seperate VM.
 # -> https://help.hcltechsw.com/sametime/11.6/admin/turnserver_ubuntu.html
+
 turn:
   host: "turn:turn.yourdomain.com:8443" # this needs to be a public accessible DNS name.
   username: "username1"
   password: "password1"
+
 # (optional) OpenAI integration, used for semantic search
 # Langchain is used to translate text to a filter on the media page
 openai:
@@ -85,6 +91,7 @@ openai:
 # We have a kerberos vault component installed which contains all the
 # recordings. Kerberos vault is queried to retrieve the recordings
 # from the appropriate provider.
+
 kerberosvault:
   #uri: "http://vault-lb.kerberos-vault" # this needs to be a public accessible DNS name.
   uri: http://vault-nodeport.kerberos-vault:80/api
@@ -106,6 +113,7 @@ kerberosvault:
     provider: "minio"
     accessKey: "XJoi2@bgSOvOYBy#"
     secretKey: " OGGqat4lXRpL@9XBYc8FUaId@5"
+
 email:
   provider: "mailgun"
   from: "support@yourdomain.com"
@@ -147,7 +155,10 @@ kerberoshub:
     resources:
       requests:
         memory: 100Mi
-        cpu: 250m
+        cpu: 100m
+      limits:
+        memory: 100Mi
+        cpu: 100m
     # E-mail templates
     #volumeMounts:
     #  - name: custom-email-templates
@@ -225,8 +236,11 @@ kerberoshub:
     url: "yourdomain.com"
     resources:
       requests:
-        memory: 50Mi
-        cpu: 50m
+        memory: 100Mi
+        cpu: 100m
+      limits:
+        memory: 100Mi
+        cpu: 100m
     # The front-end but in read-only mode
     #demoUrl: "demo.yourdomain.com"
     # When migrating to another url, this might help migrating.
@@ -345,8 +359,11 @@ kerberoshub:
     tag: "1.0.6256190978"
     resources:
       requests:
-        memory: 10Mi
-        cpu: 10m
+        memory: 100Mi
+        cpu: 100m
+      limits:
+        memory: 100Mi
+        cpu: 100m
         # E-mail templates
         #volumeMounts:
         #  - name: custom-email-templates
@@ -361,8 +378,11 @@ kerberoshub:
     tag: "1.0.6256184527"
     resources:
       requests:
-        memory: 10Mi
-        cpu: 10m
+        memory: 100Mi
+        cpu: 100m
+      limits:
+        memory: 100Mi
+        cpu: 100m
   forwarder:
     enabled: false
     #repository: kerberos/vault-forwarder
@@ -379,8 +399,11 @@ kerberoshub:
     tag: "1.0.2733724812"
     resources:
       requests:
-        memory: 10Mi
-        cpu: 10m
+        memory: 100Mi
+        cpu: 100m
+      limits:
+        memory: 100Mi
+        cpu: 100m
 kerberospipeline:
   event:
     repository: kerberos/pipe-event
@@ -389,8 +412,11 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 10Mi
-        cpu: 10m
+        memory: 100Mi
+        cpu: 100m
+      limits:
+        memory: 100Mi
+        cpu: 100m
   monitor:
     repository: kerberos/pipe-monitor
     pullPolicy: IfNotPresent
@@ -398,8 +424,11 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 10Mi
-        cpu: 10m
+        memory: 100Mi
+        cpu: 100m
+      limits:
+        memory: 100Mi
+        cpu: 100m
   sequence:
     repository: kerberos/pipe-sequence
     pullPolicy: IfNotPresent
@@ -407,8 +436,11 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 10Mi
-        cpu: 10m
+        memory: 100Mi
+        cpu: 100m
+      limits:
+        memory: 100Mi
+        cpu: 100m
   throttler:
     repository: kerberos/pipe-throttler
     pullPolicy: IfNotPresent
@@ -416,8 +448,11 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 10Mi
-        cpu: 10m
+        memory: 100Mi
+        cpu: 100m
+      limits:
+        memory: 100Mi
+        cpu: 100m
   notify:
     repository: uugai/hub-pipeline-notification
     pullPolicy: IfNotPresent
@@ -425,8 +460,11 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 10Mi
-        cpu: 10m
+        memory: 100Mi
+        cpu: 100m
+      limits:
+        memory: 100Mi
+        cpu: 100m
         # E-mail templates
         #volumeMounts:
         #  - name: custom-email-templates
@@ -442,8 +480,11 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 10Mi
-        cpu: 10m
+        memory: 100Mi
+        cpu: 100m
+      limits:
+        memory: 100Mi
+        cpu: 100m
         # E-mail templates
         #volumeMounts:
         #  - name: custom-email-templates
@@ -459,8 +500,11 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 10Mi
-        cpu: 10m
+        memory: 100Mi
+        cpu: 100m
+      limits:
+        memory: 100Mi
+        cpu: 100m
   dominantColor:
     repository: kerberos/pipe-dominantcolor
     pullPolicy: IfNotPresent
@@ -522,5 +566,5 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 10Mi
-        cpu: 10m
+        memory: 256Mi
+        cpu: 100m
