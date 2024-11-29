@@ -1,0 +1,22 @@
+metadata:
+  name: standalone
+resources:
+  - ../../base
+namePrefix: standalone-
+patches:
+  - target:
+      kind: Ingress
+      name: hub-api-ingress
+    patch: |-
+      - op: replace
+        path: /spec/tls/0/secretName
+        value: pr54-api
+      - op: replace
+        path: /spec/tls/0/hosts/0
+        value: pr54.api.kerberos.lol
+      - op: replace
+        path: /spec/rules/0/host
+        value: pr54.api.kerberos.lol
+      - op: replace
+        path: /spec/rules/0/http/paths/0/backend/service/name
+        value: pr54-hub-api-svc

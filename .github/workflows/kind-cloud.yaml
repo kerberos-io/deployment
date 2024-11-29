@@ -37,7 +37,7 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           kubectl create namespace mongodb
-          helm install mongodb -n mongodb bitnami/mongodb --values ./mongodb-values.yaml
+          helm install mongodb -n mongodb bitnami/mongodb --values ./base/mongodb-values.yaml
           echo "Sleeping for 250 seconds, give time for the helm chart to create the pods" && sleep 250
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep mongodb | awk '{print $3}' | grep -q '1/1' && echo "mongodb pod is running with status 1/1" || (echo "mongodb pod is not running with status 1/1" && exit 1)
@@ -53,9 +53,9 @@ jobs:
         id: install-kerberos-vault
         run: |
           kubectl create namespace kerberos-vault
-          kubectl apply -f ./mongodb-configmap.yaml -n kerberos-vault
-          kubectl apply -f ./kerberos-vault-deployment.yaml -n kerberos-vault
-          kubectl apply -f ./kerberos-vault-service.yaml -n kerberos-vault
+          kubectl apply -f ./base/mongodb-configmap.yaml -n kerberos-vault
+          kubectl apply -f ./base/vault/kerberos-vault-deployment.yaml -n kerberos-vault
+          kubectl apply -f ./base/vault/kerberos-vault-service.yaml -n kerberos-vault
           echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep kerberos-vault | awk '{print $3}' | grep -q '1/1' && echo "kerberos-vault pod is running with status 1/1" || (echo "kerberos-vault pod is not running with status 1/1" && exit 1)
@@ -80,7 +80,7 @@ jobs:
         run: |
           kubectl create namespace vernemq
           helm repo add vernemq https://vernemq.github.io/docker-vernemq
-          helm install vernemq vernemq/vernemq --values ./vernemq-values.yaml -n vernemq --create-namespace
+          helm install vernemq vernemq/vernemq --values ./base/vernemq-values.yaml -n vernemq --create-namespace
           echo "Sleeping for 120 seconds, give time for the helm chart to create the pods" && sleep 120
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep vernemq-0 | awk '{print $3}' | grep -q '1/1' && echo "vernemq pod is running with status 1/1" || (echo "vernemq pod is not running with status 1/1" && exit 1)
@@ -90,7 +90,7 @@ jobs:
         run: |
           helm repo add kerberos https://charts.kerberos.io
           kubectl create namespace kerberos-hub
-          helm install hub kerberos/hub --values kerberos-hub-values.yaml -n kerberos-hub --create-namespace
+          helm install hub kerberos/hub --values base/hub/kerberos-hub-values.yaml -n kerberos-hub --create-namespace
           echo "Sleeping for 300 seconds, give time for the helm chart to create the pods" && sleep 300
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep kerberos-hub | awk '{print $3}' | grep -q '1/1' && echo "kerberos-hub pod is running with status 1/1" || (echo "kerberos-hub pod is not running with status 1/1" && exit 1)
