@@ -1,7 +1,13 @@
 resources:
 - mongodb-configmap.yaml
-- kerberos-factory-deployment.yaml
-- kerberos-factory-service.yaml
-- kerberos-factory-clusterrole.yaml
-- kerberos-vault-deployment.yaml
-- kerberos-vault-service.yaml
+- factory/kerberos-factory-deployment.yaml
+- factory/kerberos-factory-service.yaml
+- factory/kerberos-factory-clusterrole.yaml
+- vault/kerberos-vault-deployment.yaml
+- vault/kerberos-vault-service.yaml
+
+helmCharts:
+  - name: mongodb
+    releaseName: mongodb  
+    repo: https://charts.bitnami.com/bitnami
+    valuesFile: mongodb-values.yaml

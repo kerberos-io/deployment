@@ -1,15 +1,14 @@
-name: Deploy on Microk8s (Edge)
+name: Deploy on microk8s
 on:
   workflow_dispatch:
   schedule:
     - cron: "0 0 * * *" # This will run the workflow every day at midnight UTC
 jobs:
-  deploy-microk8s:
+  deploy:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-20.04, ubuntu-22.04, ubuntu-24.04]
-    name: MicroK8s
     steps:
       - uses: balchua/microk8s-actions@v0.4.3
         with:
@@ -18,7 +17,7 @@ jobs:
       - name: Set permissions
         run: |
           sudo chown -f -R $USER $HOME/.kube $HOME/.config
-      - name: Test MicroK8s
+      - name: Test microk8s
         id: list-pods
         run: |
           kubectl get no
@@ -84,3 +83,12 @@ jobs:
           echo "Sleeping for 250 seconds, give time for the helm chart to create the pods" && sleep 250
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep data-filtering | awk '{print $3}' | grep -q '1/1' && echo "data-filtering pod is running with status 1/1" || (echo "data-filtering pod is not running with status 1/1" && exit 1)
+      - name: Install Kerberos Hub helm chart
+        id: install-kerberos-hub
+        run: |
+          helm repo add kerberos https://charts.kerberos.io
+          kubectl create namespace kerberos-hub
+          helm install hub kerberos/hub --values ./base/hub/kerberos-hub-values.yaml -n kerberos-hub --create-namespace
+          echo "Sleeping for 300 seconds, give time for the helm chart to create the pods" && sleep 300
+          kubectl get pods -A -o wide
+          kubectl get pods -A -o wide | grep kerberos-hub | awk '{print $3}' | grep -q '1/1' && echo "kerberos-hub pod is running with status 1/1" || (echo "kerberos-hub pod is not running with status 1/1" && exit 1)
