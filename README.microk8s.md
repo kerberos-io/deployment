@@ -406,6 +406,10 @@ helm upgrade hub kerberos/hub -n kerberos-hub -f kerberos-hub-values.yaml
 kubectl apply -f kerberos-hub-nodeports.yaml  -n kerberos-hub
 ```
 
+```bash
+kubectl apply -f kerberos-hub-create-database-job.yaml  -n kerberos-hub
+```
+
 ## Cleanup
 
 If you consider to remove the Kerberos.io stack you might just disable the microk8s installation
