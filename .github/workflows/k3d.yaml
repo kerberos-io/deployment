@@ -1,4 +1,4 @@
-name: Deploy on kind
+name: Deploy on k3d
 
 on:
   workflow_dispatch:
@@ -10,12 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        kind: [v0.21.0, v0.22.0, v0.23.0, v0.24.0]
+        k3d: [5.2.2]
     steps:
-      - name: Create kind
-        uses: helm/kind-action@v1
+      - name: "Create single cluster"
+        uses: AbsaOSS/k3d-action@v2
         with:
-          version: ${{ matrix.kind }}
+          k3d-version: ${{ matrix.k3d }}
+          cluster-name: "k3d-cluster"
       - name: Print Kubernetes Version
         run: |
           kubectl version
