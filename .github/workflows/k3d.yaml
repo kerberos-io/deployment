@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        k3d: [5.2.2]
+        k3d: [v5.2.2]
     steps:
       - name: "Create single cluster"
         uses: AbsaOSS/k3d-action@v2
