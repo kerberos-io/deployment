@@ -9,10 +9,11 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-20.04, ubuntu-22.04, ubuntu-24.04]
+        microk8s: [1.29/stable, 1.30/stable, 1.31/stable]
     steps:
       - uses: balchua/microk8s-actions@v0.4.3
         with:
-          channel: "1.30/stable"
+          channel: ${{ matrix.microk8s }}
           addons: '["dns", "dashboard", "hostpath-storage", "nvidia"]'
       - name: Set permissions
         run: |
