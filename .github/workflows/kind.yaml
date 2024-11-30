@@ -36,7 +36,7 @@ jobs:
         id: install-minio
         run: |
           git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl apply -k operator/
-          kubectl apply -f ./base/minio-tenant-base.yaml
+          kubectl apply -f ./base/minio/minio-tenant-base.yaml
           echo "Sleeping for 60 seconds, give time for the operator/tenant to create the CRDs" && sleep 60
           kubectl get po -A -o wide
           kubectl get po -A -o wide | grep myminio-pool-0-0 | awk '{print $3}' | grep -q '2/2' && echo "myminio-pool-0-0 pod is running with status 2/2" || (echo "myminio-pool-0-0 pod is not running with status 2/2" && exit 1)
@@ -45,7 +45,7 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           kubectl create namespace mongodb
-          helm install mongodb -n mongodb bitnami/mongodb --values ./base/mongodb-values.yaml
+          helm install mongodb -n mongodb bitnami/mongodb --values ./base/mongodb/mongodb-values.yaml
           echo "Sleeping for 250 seconds, give time for the helm chart to create the pods" && sleep 250
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep mongodb | awk '{print $3}' | grep -q '1/1' && echo "mongodb pod is running with status 1/1" || (echo "mongodb pod is not running with status 1/1" && exit 1)
@@ -54,15 +54,25 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           kubectl create namespace rabbitmq
-          helm install rabbitmq -n rabbitmq bitnami/rabbitmq --values ./base/rabbitmq-values.yaml
+          helm install rabbitmq -n rabbitmq bitnami/rabbitmq --values ./base/rabbitmq/rabbitmq-values.yaml
           echo "Sleeping for 60 seconds, give time for the helm chart to create the pods" && sleep 60
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep rabbitmq | awk '{print $3}' | grep -q '1/1' && echo "rabbitmq pod is running with status 1/1" || (echo "rabbitmq pod is not running with status 1/1" && exit 1)
+      - name: Install Vernemq (MQTT Broker)
+        id: install-vernemq
+        run: |
+          kubectl create namespace vernemq
+          helm repo add vernemq https://vernemq.github.io/docker-vernemq
+          helm install vernemq vernemq/vernemq --values ./base/vernemq/vernemq-values.yaml -n vernemq --create-namespace
+          echo "Sleeping for 120 seconds, give time for the helm chart to create the pods" && sleep 120
+          kubectl get pods -A -o wide
+          kubectl get pods -A -o wide | grep vernemq-0 | awk '{print $3}' | grep -q '1/1' && echo "vernemq pod is running with status 1/1" || (echo "vernemq pod is not running with status 1/1" && exit 1)
+          kubectl exec --namespace vernemq vernemq-0 /vernemq/bin/vmq-admin cluster show
       - name: Install Kerberos Vault
         id: install-kerberos-vault
         run: |
           kubectl create namespace kerberos-vault
-          kubectl apply -f ./base/mongodb-configmap.yaml -n kerberos-vault
+          kubectl apply -f ./base/mongodb/mongodb-configmap.yaml -n kerberos-vault
           kubectl apply -f ./base/vault/kerberos-vault-deployment.yaml -n kerberos-vault
           kubectl apply -f ./base/vault/kerberos-vault-service.yaml -n kerberos-vault
           echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
