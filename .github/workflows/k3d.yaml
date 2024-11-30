@@ -22,6 +22,7 @@ jobs:
           kubectl version
       - name: Test kind
         run: |
+          echo "Sleeping for 120 seconds, give time for the cluster to be ready" && sleep 120
           kubectl get no
           kubectl get pods -A -o wide
           kubectl get sc
