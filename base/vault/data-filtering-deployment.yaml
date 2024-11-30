@@ -21,11 +21,11 @@ spec:
             requests:
               cpu: 100m
               memory: 512Mi
-              nvidia.com/gpu: "1" 
+              nvidia.com/gpu: 1
             limits:
               cpu: 100m
               memory: 512Mi
-              nvidia.com/gpu: "1"  # requesting a single GPU
+              nvidia.com/gpu: 1  # requesting a single GPU
           env:
             - name: MODEL_NAME
               value: "yolov8n.pt"

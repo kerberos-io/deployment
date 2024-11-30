@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        k3d: [v5.2.2]
+        k3d: [v5.7.5]
     steps:
       - name: "Create single cluster"
         uses: AbsaOSS/k3d-action@v2
@@ -20,7 +20,7 @@ jobs:
       - name: Print Kubernetes Version
         run: |
           kubectl version
-      - name: Test kind
+      - name: Test k3d
         run: |
           echo "Sleeping for 120 seconds, give time for the cluster to be ready" && sleep 120
           kubectl get no
