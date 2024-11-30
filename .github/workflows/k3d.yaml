@@ -91,8 +91,6 @@ jobs:
       - name: Install Data filtering
         id: install-data-filtering
         run: |
-          sed -e '/resources/ s/^#*/#/' -i ./base/vault/data-filtering-deployment.yaml
-          sed -e '/limits/ s/^#*/#/' -i ./base/vault/data-filtering-deployment.yaml
           sed -e '/nvidia/ s/^#*/#/' -i ./base/vault/data-filtering-deployment.yaml
           kubectl apply -f ./base/vault/data-filtering-deployment.yaml
           echo "Sleeping for 250 seconds, give time for the helm chart to create the pods" && sleep 250
