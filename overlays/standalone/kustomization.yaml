@@ -2,7 +2,6 @@ metadata:
   name: standalone
 resources:
   - ../../base
-namePrefix: standalone-
 patches:
   - target:
       kind: Ingress
