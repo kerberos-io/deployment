@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: factory
-        image: "uugai/factory:v1.0.4"
+        image: "uugai/factory:v1.0.5"
         resources:
           requests:
             memory: 256Mi
