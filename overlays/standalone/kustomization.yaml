@@ -24,3 +24,6 @@ helmCharts:
     namespace: kerberos-hub
     repo: https://charts.kerberos.io
     valuesFile: ../../base/hub/kerberos-hub-values.yaml
+    valuesInline:
+        kerberoshub:
+          url: "localhost:32081"
