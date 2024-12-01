@@ -26,4 +26,5 @@ helmCharts:
     valuesFile: ../../base/hub/kerberos-hub-values.yaml
     valuesInline:
         kerberoshub:
-          url: "localhost:32081"
+          api:
+            url: "localhost:32081"
