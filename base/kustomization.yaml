@@ -1,13 +1,3 @@
-resources:
-- namespaces.yaml
-- prometheus/base.yaml
-- mongodb/mongodb-configmap.yaml
-- factory/kerberos-factory-deployment.yaml
-- factory/kerberos-factory-service.yaml
-- factory/kerberos-factory-clusterrole.yaml
-- vault/kerberos-vault-deployment.yaml
-- vault/kerberos-vault-service.yaml
-
 helmCharts:
   - name: openebs
     releaseName: openebs
@@ -32,3 +22,15 @@ helmCharts:
     namespace: kerberos-hub
     repo: https://charts.kerberos.io
     valuesFile: hub/kerberos-hub-values.yaml
+
+resources:
+  - namespaces.yaml
+  - prometheus/base.yaml
+  - mongodb/mongodb-configmap.yaml
+  - factory/kerberos-factory-deployment.yaml
+  - factory/kerberos-factory-service.yaml
+  - factory/kerberos-factory-clusterrole.yaml
+  - vault/kerberos-vault-deployment.yaml
+  - vault/kerberos-vault-service.yaml
+  - hub/kerberos-hub-nodeports.yaml
+  - hub/kerberos-hub-import-database-job.yaml
