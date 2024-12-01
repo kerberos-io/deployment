@@ -4,6 +4,15 @@ resources:
   - ../../base
 
 helmCharts:
+  - name: hub
+    releaseName: hub
+    namespace: kerberos-hub
+    repo: https://charts.kerberos.io
+    valuesFile: ../../base/hub/kerberos-hub-values.yaml
+    valuesInline:
+        kerberoshub:
+          api:
+            url: "localhost:32081"
   - name: openebs
     releaseName: openebs
     repo: https://openebs.github.io/charts
@@ -22,12 +31,3 @@ helmCharts:
     namespace: vernemq
     repo: https://vernemq.github.io/docker-vernemq
     valuesFile: ../../base/vernemq/vernemq-values.yaml
-  - name: hub
-    releaseName: hub
-    namespace: kerberos-hub
-    repo: https://charts.kerberos.io
-    valuesFile: ../../base/hub/kerberos-hub-values.yaml
-    valuesInline:
-        kerberoshub:
-          api:
-            url: "localhost:32081"

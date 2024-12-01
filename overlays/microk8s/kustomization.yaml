@@ -1,9 +1,18 @@
 metadata:
-  name: standalone
+  name: microk8s
 resources:
   - ../../base
 
 helmCharts:
+  - name: hub
+    releaseName: hub
+    namespace: kerberos-hub
+    repo: https://charts.kerberos.io
+    valuesFile: ../../base/hub/kerberos-hub-values.yaml
+    valuesInline:
+        kerberoshub:
+          api:
+            url: "localhost:32081"
   - name: mongodb
     releaseName: mongodb
     namespace: mongodb
@@ -25,12 +34,3 @@ helmCharts:
     namespace: vernemq
     repo: https://vernemq.github.io/docker-vernemq
     valuesFile: ../../base/vernemq/vernemq-values.yaml
-  - name: hub
-    releaseName: hub
-    namespace: kerberos-hub
-    repo: https://charts.kerberos.io
-    valuesFile: ../../base/hub/kerberos-hub-values.yaml
-    valuesInline:
-        kerberoshub:
-          api:
-            url: "localhost:32081"
