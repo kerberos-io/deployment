@@ -1,5 +1,6 @@
 apiVersion: batch/v1
 kind: Job
+namespace: kerberos-hub
 metadata:
   name: hub-import-database-job
 spec:
