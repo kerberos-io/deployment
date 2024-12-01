@@ -3,11 +3,13 @@ kind: Job
 metadata:
   name: hub-import-database-job
 spec:
-  backoffLimit: 4 # Number of retries before considering a Job as failed
   ttlSecondsAfterFinished: 60  # Job will be deleted 60 seconds after completion
   template:
     spec:
       initContainers:
+      - name: wait-for-mongodb-before-starup
+        image: busybox
+        command:  ["sh", "-c", "until nc -z mongodb.mongodb 27017 > /dev/null; do echo Waiting for master.; sleep 2; done;"]
       - name: copy-config
         image: busybox
         command: ['sh', '-c', 'echo "$IMPORT_FILE" > /data/hub-import.js']
