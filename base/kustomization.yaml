@@ -1,5 +1,7 @@
 resources:
-- mongodb-configmap.yaml
+- namespaces.yaml
+- prometheus/base.yaml
+- mongodb/mongodb-configmap.yaml
 - factory/kerberos-factory-deployment.yaml
 - factory/kerberos-factory-service.yaml
 - factory/kerberos-factory-clusterrole.yaml
@@ -7,7 +9,27 @@ resources:
 - vault/kerberos-vault-service.yaml
 
 helmCharts:
+  - name: openebs
+    releaseName: openebs
+    namespace: openebs
+    repo: https://openebs.github.io/charts
   - name: mongodb
-    releaseName: mongodb  
-    repo: https://charts.bitnami.com/bitnami
-    valuesFile: mongodb-values.yaml
+    releaseName: mongodb
+    namespace: mongodb
+    repo: oci://registry-1.docker.io/bitnamicharts
+    valuesFile: mongodb/mongodb-values.yaml
+  - name: rabbitmq
+    releaseName: rabbitmq
+    namespace: rabbitmq
+    repo: oci://registry-1.docker.io/bitnamicharts
+    valuesFile: rabbitmq/rabbitmq-values.yaml
+  - name: vernemq
+    releaseName: vernemq
+    namespace: vernemq
+    repo: https://vernemq.github.io/docker-vernemq
+    valuesFile: vernemq/vernemq-values.yaml
+  - name: hub
+    releaseName: hub
+    namespace: kerberos-hub
+    repo: https://charts.kerberos.io
+    valuesFile: hub/kerberos-hub-values.yaml
