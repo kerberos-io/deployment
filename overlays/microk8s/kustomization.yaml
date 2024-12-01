@@ -2,20 +2,35 @@ metadata:
   name: standalone
 resources:
   - ../../base
-patches:
-  - target:
-      kind: Ingress
-      name: hub-api-ingress
-    patch: |-
-      - op: replace
-        path: /spec/tls/0/secretName
-        value: pr54-api
-      - op: replace
-        path: /spec/tls/0/hosts/0
-        value: pr54.api.kerberos.lol
-      - op: replace
-        path: /spec/rules/0/host
-        value: pr54.api.kerberos.lol
-      - op: replace
-        path: /spec/rules/0/http/paths/0/backend/service/name
-        value: pr54-hub-api-svc
+
+helmCharts:
+  - name: mongodb
+    releaseName: mongodb
+    namespace: mongodb
+    repo: oci://registry-1.docker.io/bitnamicharts
+    valuesFile: ../../base/mongodb/mongodb-values.yaml
+    valuesInline:
+      global:
+        storageClass: "microk8s-hostpath"
+  - name: rabbitmq
+    releaseName: rabbitmq
+    namespace: rabbitmq
+    repo: oci://registry-1.docker.io/bitnamicharts
+    valuesFile: ../../base/rabbitmq/rabbitmq-values.yaml
+    valuesInline:
+      global:
+        storageClass: "microk8s-hostpath"
+  - name: vernemq
+    releaseName: vernemq
+    namespace: vernemq
+    repo: https://vernemq.github.io/docker-vernemq
+    valuesFile: ../../base/vernemq/vernemq-values.yaml
+  - name: hub
+    releaseName: hub
+    namespace: kerberos-hub
+    repo: https://charts.kerberos.io
+    valuesFile: ../../base/hub/kerberos-hub-values.yaml
+    valuesInline:
+        kerberoshub:
+          api:
+            url: "localhost:32081"

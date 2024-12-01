@@ -4,6 +4,9 @@ resources:
   - ../../base
 
 helmCharts:
+  - name: openebs
+    releaseName: openebs
+    repo: https://openebs.github.io/charts
   - name: mongodb
     releaseName: mongodb
     namespace: mongodb

@@ -1,8 +1,3 @@
-helmCharts:
-  - name: openebs
-    releaseName: openebs
-    repo: https://openebs.github.io/charts
-
 resources:
   - namespaces.yaml
   - prometheus/base.yaml
