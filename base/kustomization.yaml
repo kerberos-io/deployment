@@ -1,11 +1,7 @@
 resources:
   - namespaces.yaml
   - prometheus/base.yaml
-  - mongodb/mongodb-configmap.yaml
-  - factory/kerberos-factory-deployment.yaml
-  - factory/kerberos-factory-service.yaml
-  - factory/kerberos-factory-clusterrole.yaml
-  - vault/kerberos-vault-deployment.yaml
-  - vault/kerberos-vault-service.yaml
-  - hub/kerberos-hub-nodeports.yaml
-  - hub/kerberos-hub-import-database-job.yaml
+  - agent
+  - factory
+  - vault
+  - hub

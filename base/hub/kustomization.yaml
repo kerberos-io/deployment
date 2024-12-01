@@ -1,0 +1,4 @@
+namespace: kerberos-hub
+resources:
+  - kerberos-hub-nodeports.yaml
+  - kerberos-hub-import-database-job.yaml

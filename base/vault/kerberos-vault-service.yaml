@@ -2,7 +2,6 @@
 # If so uncomment the LoadBalancer service below and comment the NodePort service.
 apiVersion: v1
 kind: Service
-namespace: kerberos-vault
 metadata:
   name: vault-nodeport
   labels:

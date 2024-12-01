@@ -1,0 +1,5 @@
+namespace: kerberos-vault
+resources:
+  - ../mongodb/mongodb-configmap.yaml
+  - kerberos-vault-deployment.yaml
+  - kerberos-vault-service.yaml
