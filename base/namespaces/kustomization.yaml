@@ -1,0 +1,8 @@
+resources:
+  - kerberos-agent.yaml
+  - kerberos-factory.yaml
+  - kerberos-vault.yaml
+  - kerberos-hub.yaml
+  - mongodb.yaml
+  - rabbitmq.yaml
+  - vernemq.yaml
