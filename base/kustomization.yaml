@@ -1,5 +1,4 @@
 resources:
-  - namespaces.yaml
   - prometheus/base.yaml
   - agent
   - factory
