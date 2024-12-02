@@ -9,6 +9,7 @@ helmCharts:
     namespace: kerberos-hub
     repo: https://charts.kerberos.io
     valuesFile: ../../base/hub/kerberos-hub-values.yaml
+    version: 0.75.0
     valuesInline:
         kerberoshub:
           api:
