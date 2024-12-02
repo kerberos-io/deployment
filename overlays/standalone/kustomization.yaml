@@ -8,8 +8,8 @@ helmCharts:
     releaseName: hub
     namespace: kerberos-hub
     repo: https://charts.kerberos.io
-    valuesFile: ../../base/hub/kerberos-hub-values.yaml
     version: 0.75.0
+    valuesFile: ../../base/hub/kerberos-hub-values.yaml
     valuesInline:
         kerberoshub:
           api:
