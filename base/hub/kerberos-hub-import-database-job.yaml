@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: hub-import-database-job
 spec:
-  ttlSecondsAfterFinished: 60  # Job will be deleted 60 seconds after completion
+  #ttlSecondsAfterFinished: 60  # Job will be deleted 60 seconds after completion
   template:
     spec:
       initContainers:
