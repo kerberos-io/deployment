@@ -21,11 +21,17 @@ helmCharts:
     namespace: mongodb
     repo: oci://registry-1.docker.io/bitnamicharts
     valuesFile: ../../base/mongodb/mongodb-values.yaml
+    valuesInline:
+      global:
+        storageClass: "local-hostpath"
   - name: rabbitmq
     releaseName: rabbitmq
     namespace: rabbitmq
     repo: oci://registry-1.docker.io/bitnamicharts
     valuesFile: ../../base/rabbitmq/rabbitmq-values.yaml
+    valuesInline:
+      global:
+        storageClass: "local-hostpath"
   - name: vernemq
     releaseName: vernemq
     namespace: vernemq
