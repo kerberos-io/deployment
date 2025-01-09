@@ -48,7 +48,7 @@ spec:
             - name: AGENT_KERBEROSVAULT_PROVIDER		
               value: minio
             - name: AGENT_KERBEROSVAULT_DIRECTORY		
-              value: myhubaccount
+              value: youruser
             - name: AGENT_CAPTURE_CONTINUOUS
               value: "true"
             - name: AGENT_HUB_URI	
