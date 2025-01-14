@@ -29,7 +29,7 @@ To install MicroK8s on your system, follow these steps.
 2. Install MicroK8s. Once snapd is installed, you can install MicroK8s with:
 
    ```bash
-   sudo snap install microk8s --classic
+   sudo snap install microk8s --classic --channel=1.32/stable
    ```
 
 3. Add your user to the microk8s group. This step is necessary to avoid using sudo for MicroK8s commands:
