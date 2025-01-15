@@ -9,7 +9,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-20.04, ubuntu-22.04, ubuntu-24.04]
-        microk8s: [1.29/stable, 1.30/stable, 1.31/stable]
+        #microk8s: [1.29/stable, 1.30/stable, 1.31/stable, 1.32/stable]
+        microk8s: [1.32/stable]
     steps:
       - uses: balchua/microk8s-actions@v0.4.3
         with:
@@ -78,7 +79,7 @@ jobs:
         id: install-kerberos-vault
         run: |
           kubectl create namespace kerberos-vault
-          kubectl apply -f ./base/mongodb/mongodb-configmap.yaml -n kerberos-vault
+          kubectl apply -f ./base/vault/mongodb-configmap.yaml -n kerberos-vault
           kubectl apply -f ./base/vault/kerberos-vault-deployment.yaml -n kerberos-vault
           kubectl apply -f ./base/vault/kerberos-vault-service.yaml -n kerberos-vault
           echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
