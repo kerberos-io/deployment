@@ -1,5 +1,6 @@
 metadata:
   name: microk8s
+  
 resources:
   - ../../base
 
@@ -33,6 +34,6 @@ helmCharts:
         storageClass: "microk8s-hostpath"
   - name: vernemq
     releaseName: vernemq
-    namespace: vernemq
+    #namespace: vernemq
     repo: https://vernemq.github.io/docker-vernemq
     valuesFile: ../../base/vernemq/vernemq-values.yaml
