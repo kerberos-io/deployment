@@ -47,7 +47,7 @@ mongodb:
 # we recommend to use vernemq (as part of this installation), but a stand-alone mosquitto broker is also possible.
 mqtt:
   host: "mqtt.yourdomain.com" # this needs to be a public accessible DNS name (it's used to communicate between Kerberos Agents and Kerberos Hub)
-  port: "8443"
+  port: "31443"
   protocol: "wss"
   username: "yourusername"
   password: "yourpassword"
