@@ -41,22 +41,22 @@ service:
     enabled: false
     port: 8883
     # This is the port used by nodes to expose the service
-    nodePort: 38883
+    nodePort: 31884
   ws:
     enabled: true
     port: 8080
     # This is the port used by nodes to expose the service
-    nodePort: 38080
+    nodePort: 31080
   wss:
     enabled: false
     port: 8443
     # This is the port used by nodes to expose the service
-    nodePort: 38443
+    nodePort: 31443
   api:
     enabled: false
     type: NodePort
     port: 8888
-    nodePort: 38888
+    nodePort: 31888
     annotations: {}
   annotations: {}
   labels: {}
