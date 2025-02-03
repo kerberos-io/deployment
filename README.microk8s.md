@@ -1,4 +1,4 @@
-# Deployment on microk8s
+# Deployment on Microk8s
 
 ⏱️ **Time:** installation within 25min
 
@@ -10,7 +10,7 @@
 
 MicroK8s is a lightweight, fast, and secure Kubernetes distribution designed for developers and edge computing use cases. Developed by Canonical, MicroK8s is a minimalistic version of Kubernetes that can be installed with a single command and runs on various platforms, including Linux, macOS, and Windows. It is ideal for local development, CI/CD pipelines, IoT, and edge deployments due to its small footprint and ease of use. MicroK8s includes essential Kubernetes components and add-ons, such as DNS, storage, and the Kubernetes dashboard, making it a convenient choice for both beginners and experienced Kubernetes users.
 
-In this tutorial, we will guide you through the installation of the Kerberos.io edge stack, which includes the Kerberos Agent, Kerberos Vault, and the Data Filtering Service. This setup enables the storage of recordings from multiple cameras at the edge, facilitating local data processing and ensuring secure and efficient management of video streams.
+In this tutorial, we will guide you through the installation of the complete stack, which includes the Agent, Factory, Vault, and Hub. This setup enables the storage of recordings from multiple cameras at the edge, facilitating local data processing and ensuring secure and efficient management of video streams.
 
 ## Install Microk8s
 
@@ -71,7 +71,7 @@ For more detailed instructions and troubleshooting, please refer to the official
 
 ## Dependencies
 
-When installing the Kerberos.io stack, several dependencies are required for storage, such as a database (e.g., MongoDB) and a message broker (e.g., RabbitMQ) for asynchronous behavior. We will install these components before setting up the Kerberos Agents and Kerberos Vault.
+Before installing, several dependencies are required for storage, such as a database (e.g., MongoDB) and a message broker (e.g., RabbitMQ) for asynchronous behavior. We will install these components before setting up the Kerberos Agents and Kerberos Vault.
 
 One of the key advantages of MicroK8s is its out-of-the-box addons, which can be enabled with a single command. This eliminates the need for complex Helm charts or operators, simplifying the setup process. We will enable some common services, such as DNS, GPU support, and storage, to streamline the installation.
 
@@ -107,7 +107,7 @@ cd deployment
 
 MinIO is a high-performance, distributed object storage system that is compatible with Amazon S3 cloud storage service. It is designed to handle large-scale data storage and retrieval, making it an ideal choice for modern cloud-native applications.
 
-In the context of the Kerberos.io stack, MinIO will be used to store recordings from the Kerberos Agents. These recordings are crucial for surveillance and monitoring purposes, and having a reliable storage solution like MinIO ensures that the data is stored securely and can be accessed efficiently.
+MinIO will be used to store recordings from the Agents. These recordings are crucial for surveillance and monitoring purposes, and having a reliable storage solution like MinIO ensures that the data is stored securely and can be accessed efficiently.
 
 ```bash
 git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl apply -k operator/
@@ -189,7 +189,7 @@ To access the application, open your browser and navigate to `localhost:8080`. U
 
 ### Database: MongoDB
 
-When using Kerberos Vault, it will persist references to the recordings stored in your storage provider in a MongoDB database. As used before, we are using `helm` to install MongoDB in our Kubernetes cluster. Within the Kerberos Vault project we are using the latest official mongodb driver, so we support all major MongoDB versions (4.x, 5.x, 6.x, 7.x).
+When using Vault, it will persist references to the recordings stored in your storage provider in a MongoDB database. As used before, we are using `helm` to install MongoDB in our Kubernetes cluster. Within the Kerberos Vault project we are using the latest official mongodb driver, so we support all major MongoDB versions (4.x, 5.x, 6.x, 7.x).
 
 Have a look into the `./mongodb-values.yaml` file, you will find plenty of configurations for the MongoDB helm chart. To change the username and password of the MongoDB instance, go ahead and [find the attribute where](https://github.com/kerberos-io/vault/blob/master/kubernetes/mongodb/values.yaml#L148) you can change the root password. Please note that we are using the official [Bitnami Mongodb helm chart](https://github.com/bitnami/charts/tree/main/bitnami/mongodb), so please use their repository for more indepth configuration.
 
@@ -238,9 +238,9 @@ View the RabbitMQ status and wait until it's properly running
 kubectl get po -w -A
 ```
 
-### Kerberos Vault
+### Vault
 
-Kerberos Vault requires a configuration to connect to the MongoDB instance. To handle this a `configmap` is defined in the `./mongodb-configmap.yaml` file. Modify the MongoDB credentials in the `./mongodb-configmap.yaml` file, and make sure they match the credentials of your MongoDB instance, as described above. There are two ways of configuring the MongoDB connection, either you provide a `MONGODB_URI` or you specify the individual variables `MONGODB_USERNAME`, `MONGODB_PASSWORD`, etc.
+Vault requires a configuration to connect to the MongoDB instance. To handle this a `configmap` is defined in the `./mongodb-configmap.yaml` file. Modify the MongoDB credentials in the `./mongodb-configmap.yaml` file, and make sure they match the credentials of your MongoDB instance, as described above. There are two ways of configuring the MongoDB connection, either you provide a `MONGODB_URI` or you specify the individual variables `MONGODB_USERNAME`, `MONGODB_PASSWORD`, etc.
 
 As mentioned above a managed MongoDB is easier to setup and manage, for example for MongoDB Atlas, you will get a MongoDB URI in the form of `"mongodb+srv://xx:xx@kerberos-hub.xxx.mongodb.net/?retryWrites=true&w=majority&appName=xxx"`. By applying this value into the `MONGODB_URI` field, you will have setup your MongoDB connection successfully.
 
@@ -264,7 +264,7 @@ Create the `kerberos-vault` namespace.
 kubectl create namespace kerberos-vault
 ```
 
-Apply the manifest, so the Kerberos Vault application is deployed and knows how to connect to the MongoDB.
+Apply the manifest, so the Vault application is deployed and knows how to connect to the MongoDB.
 
 ```bash
 kubectl apply -f ./mongodb-configmap.yaml -n kerberos-vault
@@ -280,22 +280,22 @@ kubectl get po -w -A
 
 #### Access the UI
 
-If you have opted for the `NodePort` configuration, you can access the Kerberos Vault via the `http://localhost:30080` endpoint in your browser. For server installations without a GUI, consider setting up a reverse proxy to enable browser access from your local machine. Alternatively, you may utilize a `LoadBalancer` if one is available or if you are deploying on a managed Kubernetes service.
+If you have opted for the `NodePort` configuration, you can access the Vault via the `http://localhost:30080` endpoint in your browser. For server installations without a GUI, consider setting up a reverse proxy to enable browser access from your local machine. Alternatively, you may utilize a `LoadBalancer` if one is available or if you are deploying on a managed Kubernetes service.
 
 ```bash
 ssh -L 8080:localhost:30080 user@server-ip -p 22
 ```
 
-#### Login to Kerberos Vault
+#### Login to Vault
 
-Once you have access to the Kerberos Vault UI, you should be able to login with a username and password. You will [find the username and password here](https://github.com/kerberos-io/deployment/blob/main/kerberos-vault-deployment.yaml#L36-L39).
+Once you have access to the Vault user interface, you should be able to login with a username and password. You will [find the username and password here](https://github.com/kerberos-io/deployment/blob/main/kerberos-vault-deployment.yaml#L36-L39).
 
 - Username: [**view username**](https://github.com/kerberos-io/deployment/blob/main/kerberos-vault-deployment.yaml#L36-L37)
 - Password: [**view password**](https://github.com/kerberos-io/deployment/blob/main/kerberos-vault-deployment.yaml#L38-L39)
 
-#### Configure the Kerberos Vault
+#### Configure the Vault
 
-With the Kerberos Vault installed, we can proceed to configure the various components. Currently, this must be done through the Kerberos Vault UI, but we plan to make it configurable via environment variables, eliminating the need for manual UI configurations.
+With the Vault installed, we can proceed to configure the various components. Currently, this must be done through the Vault UI, but we plan to make it configurable via environment variables, eliminating the need for manual UI configurations.
 
 ![Configure Vault](./assets/images/configure-vault.gif)
 
@@ -332,28 +332,28 @@ With the Kerberos Vault installed, we can proceed to configure the various compo
   - Access key: XJoi2@bgSOvOYBy# (or generate new keys, but don't forget to update them in the next steps)
   - Secret key: OGGqat4lXRpL@9XBYc8FUaId@5 (or generate new keys, but don't forget to update them in the next steps)
 
-### Create a Kerberos Agent
+### Create a Agent
 
-After deploying the Kerberos Vault and configuring the necessary services for storage, database, and integration, you can proceed to deploy the Kerberos Agent with the appropriate configuration. Review the `kerberos-agent-deployment.yaml` file and adjust the relevant settings, such as the RTSP URL, to ensure proper functionality. Please note that you can allow opt for the [Kerberos Factory](https://github.com/kerberos-io/factory/tree/master/kubernetes) which gives you a UI to manage the creation of Kerberos Agents. Also please note if you generated new the keys in the previous Kerberos Vault account creation, you need to update those in the Kerberos Agent deployment.
+After deploying the Vault and configuring the necessary services for storage, database, and integration, you can proceed to deploy the Agent with the appropriate configuration. Review the `kerberos-agent-deployment.yaml` file and adjust the relevant settings, such as the RTSP URL, to ensure proper functionality. Please note that you can allow opt for the [Kerberos Factory](https://github.com/kerberos-io/factory/tree/master/kubernetes) which gives you a UI to manage the creation of Agents. Also please note if you generated new the keys in the previous Vault account creation, you need to update those in the Agent deployment.
 
 ```bash
 kubectl apply -f kerberos-agent-deployment.yaml
 ```
 
-Review the creation of the Kerberos Agent and review the logs of the container to validate the Kerberos Agent is able to connect to the IP camera, and if a recording is being created and transferred to the Kerberos Vault
+Review the creation of the Agent and review the logs of the container to validate the Agent is able to connect to the IP camera, and if a recording is being created and transferred to the Vault
 
 ```bash
 kubectl get po -w -A
 kubectl logs -f kerberos-agent...
 ```
 
-To validate the Kerberos Vault and review any stored recordings, access the user interface at `http://localhost:30080` (after establishing the reverse tunnel).
+To validate the Vault and review any stored recordings, access the user interface at `http://localhost:30080` (after establishing the reverse tunnel).
 
-### Create Kerberos Agents through Kerberos Factory
+### Create Agents through Factory
 
-Managing Kerberos Agents through seperate configuration files might feel cumbersome, especially for non-technical users. This is where Kerberos Factory comes into the picture. Kerberos Factory provides a visual view that allows you to rapidly connect cameras through a user interface, which allows users without any technical background about cameras and kubernetes create Kerberos Agents.
+Managing Agents through seperate configuration files might feel cumbersome, especially for non-technical users. This is where Factory comes into the picture. Factory provides a visual view that allows you to rapidly connect cameras through a user interface, which allows users without any technical background about cameras and kubernetes create Agents.
 
-Kerberos Factory also requires a mongodb, just like Kerberos Vault. Luckily you can reuse the mongodb installation we have deployed earlier, the only thing we'll need to do is to create another `configmap.yaml` in the `kerberos-factory` namespace.
+Factory also requires a mongodb, just like Vault. Luckily you can reuse the MongoDB installation we have deployed earlier, the only thing we'll need to do is to create another `configmap.yaml` in the `kerberos-factory` namespace.
 
 Create the `kerberos-factory` namespace.
 
@@ -361,7 +361,7 @@ Create the `kerberos-factory` namespace.
 kubectl create namespace kerberos-factory
 ```
 
-Apply the manifests, so the Kerberos Factory application is deployed and knows how to connect to the MongoDB.
+Apply the manifests, so Factory is deployed and knows how to connect to the MongoDB.
 
 ```bash
 kubectl apply -f ./mongodb-configmap.yaml -n kerberos-factory
@@ -369,7 +369,7 @@ kubectl apply -f ./kerberos-factory-deployment.yaml -n kerberos-factory
 kubectl apply -f ./kerberos-factory-service.yaml -n kerberos-factory
 ```
 
-To allow our Kerberos Factory to create Kubernetes resources we will need to apply an additional cluster role. This will allow our Kerberos Factory deployment to read and write resources to our Kubernetes cluster.
+To allow our Factory to create Kubernetes resources we will need to apply an additional cluster role. This will allow our Factory deployment to read and write resources to our Kubernetes cluster.
 
 ```bash
 kubectl apply -f ./kerberos-factory-clusterrole.yaml -n kerberos-factory
@@ -381,9 +381,9 @@ Verify if the pod is running
 kubectl get po -w -A
 ```
 
-### Kerberos Hub
+### Hub
 
-Now we have setup the most important building blocks in terms of video surveillance: Kerberos Agents or Kerberos Factory and Kerberos Vault, we can start consolidating our cameras and recorded videos into a single pane of glass also known as Kerberos Hub.
+Now we have setup the most important building blocks in terms of video surveillance: Agents or Factory and Vault, we can start consolidating our cameras and recorded videos into a single pane of glass also known as Hub.
 
 ```bash
 helm repo add kerberos https://charts.kerberos.io
