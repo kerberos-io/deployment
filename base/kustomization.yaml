@@ -5,3 +5,4 @@ resources:
   - factory
   - vault
   - hub
+  - minio

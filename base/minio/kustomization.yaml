@@ -1,0 +1,2 @@
+resources:
+  - minio-tenant-base.yaml

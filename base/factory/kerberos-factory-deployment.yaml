@@ -18,6 +18,10 @@ spec:
       labels:
         app: factory
     spec:
+      initContainers:
+      - name: wait-for-mongodb-before-starup
+        image: busybox
+        command:  ["sh", "-c", "until nc -z mongodb.mongodb 27017 > /dev/null; do echo Waiting for master.; sleep 2; done;"]
       containers:
       - name: factory
         image: "uugai/factory:v1.0.5"
