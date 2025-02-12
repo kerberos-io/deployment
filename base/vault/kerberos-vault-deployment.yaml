@@ -19,12 +19,12 @@ spec:
         app: vault
     spec:
       initContainers:
-      - name: wait-for-mongodb-before-starup
-        image: busybox
-        command:  ["sh", "-c", "until nc -z mongodb.mongodb 27017 > /dev/null; do echo Waiting for master.; sleep 2; done;"]
+        - name: wait-for-mongodb-before-starup
+          image: busybox
+          command: ["sh", "-c", "until nc -z mongodb.mongodb 27017 > /dev/null; do echo Waiting for master.; sleep 2; done;"]
       containers:
         - name: vault
-          image: uugai/vault:v1.0.8
+          image: uugai/vault:v1.0.14
           resources:
             requests:
               memory: 512Mi

@@ -20,7 +20,6 @@ licenseServer:
 # When using a private registry, you can specify the registry here.
 global:
   imageRegistry: "docker.io/"
-
 # Environment: set to 'production', 'develop', 'demo', 'staging' or 'acceptance'.
 # Set to 'true' if this is a private deployment.
 environment: "production"
@@ -66,7 +65,6 @@ rabbitmq:
   username: "yourusername"
   password: "yourpassword"
   exchange: ""
-
 # If you already have a Kafka cluster you might use this instead of RabbitMQ.
 kafka:
   broker: "kafka1.yourdomain.com:9094" # can be internal dns name or external
@@ -82,7 +80,6 @@ turn:
   host: "turn:turn.yourdomain.com:8443" # this needs to be a public accessible DNS name.
   username: "username1"
   password: "password1"
-
 # (optional) OpenAI integration, used for semantic search
 # Langchain is used to translate text to a filter on the media page
 openai:
@@ -113,7 +110,6 @@ kerberosvault:
     provider: "minio"
     accessKey: "XJoi2@bgSOvOYBy#"
     secretKey: " OGGqat4lXRpL@9XBYc8FUaId@5"
-
 email:
   provider: "mailgun"
   from: "support@yourdomain.com"
@@ -147,7 +143,7 @@ kerberoshub:
   api:
     repository: uugai/hub-api
     pullPolicy: IfNotPresent
-    tag: "v1.0.7"
+    tag: "v1.0.16"
     replicas: 1
     jwtSecret: "I1JcwzW3A0t_THIS-IS_NOT_A_SECRET_WJK9jnPkipbnVTpf0efMy" # change to a random value, this is for generating JWT tokens.
     schema: "http"
@@ -181,9 +177,9 @@ kerberoshub:
     #  - hosts:
     #      - "api.yourdomain.com"
     #    secretName: kerberoshub-api
-      #- hosts:
-      #    - "api.legacy.yourdomain.com"
-      #  secretName: kerberoshub-api-legacy
+    #- hosts:
+    #    - "api.legacy.yourdomain.com"
+    #  secretName: kerberoshub-api-legacy
     #  - hosts:
     #      - "admin.api.yourdomain.com"
     #    secretName: kerberoshub-admin
@@ -210,27 +206,27 @@ kerberoshub:
       index: "kerberos-cloud"
       username: ""
       password: ""
-    #sso: # OIDC settings for allowing SSO.
-    #  - domain: "uug.ai"
-    #    redirectUrl: "https://api.cloud.kerberos.io/sso/callback/uug.ai"
-    #    forceSSO: "false"
-    #    issuer: "https://xxx.eu.auth0.com/"
-    #    claimId: "email" # claim which is used to identify the user
-    #    clientId: "xxx"
-    #    clientSecret: "xxx"
-    #    clientVerificationId: "" # This is only required for SSO chaining.
-    #  - domain: "kerberos.io"
-    #    redirectUrl: "https://api.cloud.kerberos.io/sso/callback/kerberos.io"
-    #    forceSSO: "false"
-    #    issuer: "https://accounts.google.com"
-    #    claimId: "email" # claim which is used to identify the user
-    #    clientId: "xxx"
-    #    clientSecret: "xxx"
-    #    clientVerificationId: "" # This is only required for SSO chaining.
+      #sso: # OIDC settings for allowing SSO.
+      #  - domain: "uug.ai"
+      #    redirectUrl: "https://api.cloud.kerberos.io/sso/callback/uug.ai"
+      #    forceSSO: "false"
+      #    issuer: "https://xxx.eu.auth0.com/"
+      #    claimId: "email" # claim which is used to identify the user
+      #    clientId: "xxx"
+      #    clientSecret: "xxx"
+      #    clientVerificationId: "" # This is only required for SSO chaining.
+      #  - domain: "kerberos.io"
+      #    redirectUrl: "https://api.cloud.kerberos.io/sso/callback/kerberos.io"
+      #    forceSSO: "false"
+      #    issuer: "https://accounts.google.com"
+      #    claimId: "email" # claim which is used to identify the user
+      #    clientId: "xxx"
+      #    clientSecret: "xxx"
+      #    clientVerificationId: "" # This is only required for SSO chaining.
   frontend:
     repository: uugai/hub-frontend
     pullPolicy: IfNotPresent
-    tag: "v1.0.17"
+    tag: "v1.0.35"
     replicas: 1
     schema: "http"
     url: "yourdomain.com"
@@ -418,9 +414,9 @@ kerberospipeline:
         memory: 100Mi
         cpu: 100m
   monitor:
-    repository: kerberos/pipe-monitor
+    repository: uugai/hub-pipeline-monitor
     pullPolicy: IfNotPresent
-    tag: "1.0.6256044005"
+    tag: "v1.1.0"
     replicas: 1
     resources:
       requests:
@@ -430,9 +426,9 @@ kerberospipeline:
         memory: 100Mi
         cpu: 100m
   sequence:
-    repository: kerberos/pipe-sequence
+    repository: uugai/hub-pipeline-sequence
     pullPolicy: IfNotPresent
-    tag: "1.0.6256054139"
+    tag: "v1.0.1"
     replicas: 1
     resources:
       requests:
@@ -456,7 +452,7 @@ kerberospipeline:
   notify:
     repository: uugai/hub-pipeline-notification
     pullPolicy: IfNotPresent
-    tag: "v1.0.8"
+    tag: "v1.0.11"
     replicas: 1
     resources:
       requests:
@@ -494,9 +490,9 @@ kerberospipeline:
         #    persistentVolumeClaim:
         #      claimName: custom-layout-claim
   analysis:
-    repository: kerberos/pipe-analysis
+    repository: uugai/hub-pipeline-analysis
     pullPolicy: IfNotPresent
-    tag: "1.0.6897439184"
+    tag: "v1.0.1"
     replicas: 1
     resources:
       requests:
@@ -545,9 +541,9 @@ kerberospipeline:
         cpu: 10m
   sprite:
     enabled: true # Enable or disable the sprite generation 'true' or 'false
-    repository: kerberos/pipe-sprite
+    repository: uugai/hub-pipeline-sprite
     pullPolicy: IfNotPresent
-    tag: "1.0.7190736361"
+    tag: "v1.0.4"
     replicas: 1
     interval: "1" # Number of secondes between each thumbnail in the sprite
     width: "240" # Should not be changed for the moment (hard coded in UI)
