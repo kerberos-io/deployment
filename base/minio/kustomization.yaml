@@ -1,2 +1,4 @@
+namespace: minio-tenant
 resources:
   - minio-tenant-base.yaml
+  - minio-nodeports.yaml

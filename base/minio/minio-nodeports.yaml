@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: minio-nodeport
+  labels:
+    app: myminio
+spec:
+  type: NodePort
+  ports:
+    - port: 9000
+      targetPort: 9000
+      nodePort: 30090 # You can specify a port in the range 30000-32767 or let Kubernetes assign one automatically
+      name: myminio
+      protocol: TCP
+  selector:
+    v1.min.io/tenant: myminio
