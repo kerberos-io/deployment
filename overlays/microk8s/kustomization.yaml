@@ -48,8 +48,3 @@ helmCharts:
     #namespace: vernemq 
     repo: https://vernemq.github.io/docker-vernemq
     valuesFile: ../../base/vernemq/vernemq-values.yaml
-  - name: minio-operator
-    releaseName: minio-operator
-    # For some reason it doesn't work with a namespace
-    #namespace: minio
-    repo: https://operator.min.io
