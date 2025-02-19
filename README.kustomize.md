@@ -71,15 +71,16 @@ For more detailed instructions and troubleshooting, please refer to the official
 
 ## Dependencies
 
-When installing the Kerberos.io stack, several dependencies are required for storage, such as a database (e.g., MongoDB) and a message broker (e.g., RabbitMQ) for asynchronous behavior. We will install these components before setting up the Kerberos Agents and Kerberos Vault.
+When deploying the various solutions, several dependencies are essential for storage, including a database (e.g., MongoDB) and a message broker (e.g., RabbitMQ) for asynchronous operations. These components must be installed prior to setting up the Agents, Factory, Vault, and Hub.
 
-One of the key advantages of MicroK8s is its out-of-the-box addons, which can be enabled with a single command. This eliminates the need for complex Helm charts or operators, simplifying the setup process. We will enable some common services, such as DNS, GPU support, and storage, to streamline the installation.
+One of the significant advantages of MicroK8s is its built-in addons, which can be enabled with a single command. This feature eliminates the need for complex Helm charts or operators, thereby simplifying the setup process. In this guide, we will enable several common services, such as DNS, GPU support, and storage, to streamline the installation. However, if you prefer more control, you may opt to manually install these components using their respective Helm charts or operators.
 
 ```bash
 microk8s enable dns
 microk8s enable dashboard
 microk8s enable nvidia
 microk8s enable hostpath-storage
+microk8s enable minio
 ```
 
 You can verify the status of the enabled addons by running the following command:
@@ -92,6 +93,34 @@ Or view the pod status with:
 
 ```bash
 kubectl get po -w -A
+```
+
+### Storage class
+
+By default, the `hostpath-storage` module uses a dedicated directory on your filesystem. In most cases, you may prefer to use a dedicated hard drive for storing your recordings, database, and other data. To achieve this, you can create your own storage class and assign it to the desired directory. Create a file `ssd-hostpath-sc.yaml` with following contents.
+
+```yaml
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: ssd-hostpath
+provisioner: microk8s.io/hostpath
+reclaimPolicy: Delete
+parameters:
+  pvDir: /media/Storage
+volumeBindingMode: WaitForFirstConsumer
+```
+
+Save the previously mentioned file `CTRL+O` and apply the Kubernetes resource.
+
+```bash
+kubectl apply -f ssd-hostpath-sc.yaml
+```
+
+You can verify the creation of the `storage class` using the following command. This `storage class` will be used in the subsequent installation steps, where each component, such as MongoDB, will create a `persistent volume` using the previously created `storage class`.
+
+```bash
+kubectl get sc -A
 ```
 
 ### Clone repository
@@ -107,7 +136,36 @@ cd deployment
 
 In contrast to the detailed installation instructions, as mentioned here, an easier option to install is to use our Kustomize configure. This will allow you to specify and create your own overlays to install all the different components through a single command line.
 
-    kubectl kustomize overlays/microk8s/ --enable-helm --load-restrictor LoadRestrictionsNone | kubectl apply -f -
+```bash
+kubectl kustomize overlays/microk8s/ --enable-helm --load-restrictor LoadRestrictionsNone | kubectl apply -f -
+```
+
+Once the installation is running you should see something like following:
+
+```bash
+ubuntuvms@ubuntuvms:~/deployment$ kubectl kustomize overlays/microk8s/ --enable-helm  --load-restrictor LoadRestrictionsNone | kubectl apply -f -
+namespace/kerberos-agent unchanged
+namespace/kerberos-factory unchanged
+namespace/kerberos-hub unchanged
+namespace/kerberos-vault unchanged
+namespace/minio-tenant unchanged
+namespace/mongodb unchanged
+namespace/rabbitmq unchanged
+namespace/vernemq unchanged
+customresourcedefinition.apiextensions.k8s.io/alertmanagerconfigs.monitoring.coreos.com configured
+customresourcedefinition.apiextensions.k8s.io/alertmanagers.monitoring.coreos.com configured
+customresourcedefinition.apiextensions.k8s.io/podmonitors.monitoring.coreos.com configured
+customresourcedefinition.apiextensions.k8s.io/probes.monitoring.coreos.com configured
+customresourcedefinition.apiextensions.k8s.io/prometheuses.monitoring.coreos.com configured
+customresourcedefinition.apiextensions.k8s.io/prometheusrules.monitoring.coreos.com configured
+customresourcedefinition.apiextensions.k8s.io/servicemonitors.monitoring.coreos.com configured
+customresourcedefinition.apiextensions.k8s.io/thanosrulers.monitoring.coreos.com configured
+...
+```
+
+Verify the installation using the `kubectl` command, it might take some time until all the Kubernetes pods are spinned up. Once everything is stable you should be able to access Factory, Vault and Hub using the node ip address their designated node ports.
+
+Continue with the [`configuration tutorial`](./README.configure.md) to start with the configuration and integration of the various tools.
 
 ## Cleanup
 
@@ -116,18 +174,6 @@ If you consider to remove the complete stack you might just disable the Microk8s
 ```bash
 microk8s reset
 sudo snap remove microk8s
-```
-
-or if you want to keep the Microk8s installation you can also delete the individual deployments.
-
-```bash
-kubectl delete -f data-filtering-deployment.yaml
-kubectl delete -f kerberos-agent-deployment.yaml
-kubectl delete -f ./kerberos-vault-deployment.yaml -n kerberos-vault
-kubectl delete -f ./mongodb-config.yaml -n kerberos-vault
-helm del rabbitmq -n rabbitmq
-helm del mongodb -n mongodb
-git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl delete -k operator/
 ```
 
 You can confirm all the workloads were removed from your system.
