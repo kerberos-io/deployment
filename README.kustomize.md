@@ -136,6 +136,25 @@ cd deployment
 
 In contrast to the detailed installation instructions, as mentioned here, an easier option to install is to use our Kustomize configure. This will allow you to specify and create your own overlays to install all the different components through a single command line.
 
+Kustomize uses the concept of `bases` and `overlays`, allowing you to customize the base installation with different settings (an overlay). Before executing the `kustomize` command below, navigate to the `overlays/microk8s/kustomization.yaml` file and modify the `inlineValues` of the Hub to match the IP address of your node.
+
+```yaml
+valuesInline:
+   license: "L/+FAw...sJZRBAA"
+   mqtt:
+      host: "<ipaddress>"
+      port: "31080"
+      protocol: "ws"
+      ...
+      host: "turn:<ipaddress>:8443"
+      ...
+   kerberoshub:
+      api:
+      url: "<ipaddress>:32081"
+```
+
+Run the modified overlay using the following command:
+
 ```bash
 kubectl kustomize overlays/microk8s/ --enable-helm --load-restrictor LoadRestrictionsNone | kubectl apply -f -
 ```
