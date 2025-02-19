@@ -347,18 +347,18 @@ kerberoshub:
     tag: "1.0.6436406806"
     resources:
       requests:
-        memory: 10Mi
-        cpu: 10m
+        memory: 50Mi
+        cpu: 50m
   monitordevice:
     repository: kerberos/hub-monitor-device
     pullPolicy: IfNotPresent
     tag: "1.0.6256190978"
     resources:
       requests:
-        memory: 100Mi
+        memory: 50Mi
         cpu: 100m
       limits:
-        memory: 100Mi
+        memory: 50Mi
         cpu: 100m
         # E-mail templates
         #volumeMounts:
@@ -374,11 +374,11 @@ kerberoshub:
     tag: "1.0.6256184527"
     resources:
       requests:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
       limits:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
   forwarder:
     enabled: false
     #repository: kerberos/vault-forwarder
@@ -395,11 +395,11 @@ kerberoshub:
     tag: "1.0.2733724812"
     resources:
       requests:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
       limits:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
 kerberospipeline:
   event:
     repository: kerberos/pipe-event
@@ -408,11 +408,11 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
       limits:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
   monitor:
     repository: uugai/hub-pipeline-monitor
     pullPolicy: IfNotPresent
@@ -420,11 +420,11 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
       limits:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
   sequence:
     repository: uugai/hub-pipeline-sequence
     pullPolicy: IfNotPresent
@@ -432,11 +432,11 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
       limits:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
   throttler:
     repository: kerberos/pipe-throttler
     pullPolicy: IfNotPresent
@@ -444,11 +444,11 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
       limits:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
   notify:
     repository: uugai/hub-pipeline-notification
     pullPolicy: IfNotPresent
@@ -456,11 +456,11 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
       limits:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
         # E-mail templates
         #volumeMounts:
         #  - name: custom-email-templates
@@ -476,11 +476,11 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
       limits:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
         # E-mail templates
         #volumeMounts:
         #  - name: custom-email-templates
@@ -496,11 +496,11 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
       limits:
-        memory: 100Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
   dominantColor:
     repository: kerberos/pipe-dominantcolor
     pullPolicy: IfNotPresent
@@ -508,11 +508,11 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 512Mi
-        cpu: 250m
+        memory: 50Mi
+        cpu: 50m
       limits:
-        memory: 512Mi
-        cpu: 250m
+        memory: 50Mi
+        cpu: 50m
   thumbnail:
     repository: kerberos/pipe-thumbnail
     pullPolicy: IfNotPresent
@@ -525,11 +525,11 @@ kerberospipeline:
       enabled: true # If you want to use Kerberos Vault to store the thumbnails
     resources:
       requests:
-        memory: 512Mi
-        cpu: 250m
+        memory: 50Mi
+        cpu: 50m
       limits:
-        memory: 512Mi
-        cpu: 250m
+        memory: 50Mi
+        cpu: 50m
   counting:
     repository: kerberos/pipe-counting
     pullPolicy: IfNotPresent
@@ -537,8 +537,8 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 10Mi
-        cpu: 10m
+        memory: 50Mi
+        cpu: 50m
   sprite:
     enabled: true # Enable or disable the sprite generation 'true' or 'false
     repository: uugai/hub-pipeline-sprite
@@ -550,11 +550,11 @@ kerberospipeline:
     height: "135" # Should not be changed for the moment (hard coded in UI)
     resources:
       requests:
-        memory: 512Mi
-        cpu: 250m
+        memory: 50Mi
+        cpu: 50m
       limits:
-        memory: 512Mi
-        cpu: 250m
+        memory: 50Mi
+        cpu: 50m
   export:
     repository: kerberos/pipe-export
     pullPolicy: IfNotPresent
@@ -562,5 +562,5 @@ kerberospipeline:
     replicas: 1
     resources:
       requests:
-        memory: 256Mi
-        cpu: 100m
+        memory: 50Mi
+        cpu: 50m
