@@ -27,11 +27,11 @@ spec:
           image: uugai/vault:v1.0.14
           resources:
             requests:
-              memory: 512Mi
-              cpu: 256m
+              memory: 128Mi
+              cpu: 100m
             limits:
-              memory: 512Mi
-              cpu: 256m
+              memory: 128Mi
+              cpu: 100m
           ports:
             - containerPort: 80
           envFrom:
