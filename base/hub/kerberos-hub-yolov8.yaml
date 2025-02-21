@@ -22,7 +22,9 @@ spec:
           #    nvidia.com/gpu: 1 # requesting a single GPU
           env:
             - name: QUEUE_NAME
-              value: "data-filtering" # This is the topic of kafka we will read messages from.
+              value: "kcloud-classify-queue.fifo" # This is the topic of kafka we will read messages from.
+            - name: TARGET_QUEUE_NAME
+              value: "kcloud-analysis-queue" # Once we processed the recording with ML, we will send results/metadata to a target topic of Kafka.
             - name: QUEUE_HOST
               value: rabbitmq.rabbitmq:5672
             - name: QUEUE_EXCHANGE
@@ -73,17 +75,17 @@ spec:
               value: "True"
 
             - name: CLASSIFICATION_FPS
-              value: "3"
+              value: "1"
             - name: CLASSIFICATION_THRESHOLD
               value: "0.3"
             - name: MIN_DETECTIONS
-              value: "5"
+              value: "1"
             - name: MIN_DISTANCE
-              value: "150"
+              value: "0"
             - name: MIN_STATIC_DISTANCE
               value: "0"
             - name: MAX_NUMBER_OF_PREDICTIONS
-              value: "100"
+              value: "10"
             - name: FIND_DOMINANT_COLORS
               value: "False"
             - name: ALLOWED_CLASSIFICATIONS

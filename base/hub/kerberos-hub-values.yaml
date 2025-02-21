@@ -101,15 +101,15 @@ kerberosvault:
   archive:
     provider: "minio"
     accesskey: "XJoi2@bgSOvOYBy#"
-    secretkey: " OGGqat4lXRpL@9XBYc8FUaId@5"
+    secretkey: "OGGqat4lXRpL@9XBYc8FUaId@5"
   thumbnail:
     provider: "minio"
     accessKey: "XJoi2@bgSOvOYBy#"
-    secretKey: " OGGqat4lXRpL@9XBYc8FUaId@5"
+    secretKey: "OGGqat4lXRpL@9XBYc8FUaId@5"
   sprite:
     provider: "minio"
     accessKey: "XJoi2@bgSOvOYBy#"
-    secretKey: " OGGqat4lXRpL@9XBYc8FUaId@5"
+    secretKey: "OGGqat4lXRpL@9XBYc8FUaId@5"
 email:
   provider: "mailgun"
   from: "support@yourdomain.com"
