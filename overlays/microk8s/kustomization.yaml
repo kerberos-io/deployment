@@ -18,6 +18,9 @@ patches:
       - op: replace
         path: /spec/template/spec/containers/0/env/14/value
         value: tcp://localhost:31883
+      - op: replace
+        path: /spec/template/spec/containers/0/env/17/value
+        value: turn:localhost:8443
 helmCharts:
   - name: hub
     releaseName: hub

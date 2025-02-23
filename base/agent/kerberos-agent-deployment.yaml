@@ -63,6 +63,12 @@ spec:
               value: yourusername
             - name: AGENT_MQTT_PASSWORD
               value: yourpassword
+            - name: AGENT_TURN_URI
+              value: turn:localhost:8443
+            - name: AGENT_TURN_USERNAME
+              value: username1
+            - name: AGENT_TURN_PASSWORD
+              value: password1
             # find full list of environment variables here: https://github.com/kerberos-io/agent#override-with-environment-variables
 #---
 #apiVersion: v1
