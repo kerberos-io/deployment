@@ -3,7 +3,14 @@ metadata:
   
 resources:
   - ../../base
-
+patches:
+  - target:
+      kind: StorageClass
+      name: ssd-hostpath
+    patch: |-
+      - op: replace
+        path: /parameters/pvDir
+        value: /media/Storage
 helmCharts:
   - name: hub
     releaseName: hub

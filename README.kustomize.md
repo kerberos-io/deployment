@@ -95,34 +95,6 @@ Or view the pod status with:
 kubectl get po -w -A
 ```
 
-### Storage class
-
-By default, the `hostpath-storage` module uses a dedicated directory on your filesystem. In most cases, you may prefer to use a dedicated hard drive for storing your recordings, database, and other data. To achieve this, you can create your own storage class and assign it to the desired directory. Create a file `ssd-hostpath-sc.yaml` with following contents.
-
-```yaml
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: ssd-hostpath
-provisioner: microk8s.io/hostpath
-reclaimPolicy: Delete
-parameters:
-  pvDir: /media/Storage
-volumeBindingMode: WaitForFirstConsumer
-```
-
-Save the previously mentioned file `CTRL+O` and apply the Kubernetes resource.
-
-```bash
-kubectl apply -f ssd-hostpath-sc.yaml
-```
-
-You can verify the creation of the `storage class` using the following command. This `storage class` will be used in the subsequent installation steps, where each component, such as MongoDB, will create a `persistent volume` using the previously created `storage class`.
-
-```bash
-kubectl get sc -A
-```
-
 ### Clone repository
 
 Next, we will clone this repository to our local environment. This will allow us to execute the necessary configuration files for installing the Minio operator, MongoDB Helm chart, and other required components.
@@ -136,7 +108,7 @@ cd deployment
 
 In contrast to the detailed installation instructions, as mentioned here, an easier option to install is to use our Kustomize configure. This will allow you to specify and create your own overlays to install all the different components through a single command line.
 
-Kustomize uses the concept of `bases` and `overlays`, allowing you to customize the base installation with different settings (an overlay). Before executing the `kustomize` command below, navigate to the `overlays/microk8s/kustomization.yaml` file and modify the `inlineValues` of the Hub to match the IP address of your node.
+Kustomize uses the concept of `bases` and `overlays`, allowing you to customize the base installation with different settings (an overlay). Before executing the `kustomize` command below, navigate to the `overlays/microk8s/kustomization.yaml` file and modify the `inlineValues` of the Hub to match the IP address of your node. Please note that when you use multipass, WSL or any other type of virtualisation, your IP address will be different than the IP address of your host machine. Verify your IP address using the `ifconfig` command.
 
 ```yaml
 valuesInline:
@@ -151,6 +123,19 @@ valuesInline:
    kerberoshub:
       api:
       url: "<ipaddress>:32081"
+```
+
+Within the deployment we are creating a new storage class, pointing to the desired location on disk to store database information, recordings and more. Change the `/media/Storage` value to point to the desired location.
+
+```yaml
+patches:
+  - target:
+      kind: StorageClass
+      name: ssd-hostpath
+    patch: |-
+      - op: replace
+        path: /parameters/pvDir
+        value: /media/Storage
 ```
 
 Run the modified overlay using the following command:
