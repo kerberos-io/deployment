@@ -120,15 +120,15 @@ Kustomize uses the concept of `bases` and `overlays`, allowing you to customize 
 valuesInline:
    license: "L/+FAw...sJZRBAA"
    mqtt:
-      host: "<ipaddress>"
+      host: "localhost"
       port: "31080"
       protocol: "ws"
       ...
-      host: "turn:<ipaddress>:8443"
+      host: "turn:localhost:8443"
       ...
    kerberoshub:
       api:
-      url: "<ipaddress>:32081"
+      url: "localhost:32081"
 ```
 
 Within the deployment we are creating a new storage class, pointing to the desired location on disk to store database information, recordings and more. Change the `/media/Storage` value to point to the desired location.
