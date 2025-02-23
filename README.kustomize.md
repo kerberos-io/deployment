@@ -45,26 +45,32 @@ To install MicroK8s on your system, follow these steps.
    su - $USER
    ```
 
-5. Check the status of MicroK8s. Ensure that MicroK8s is running correctly:
+5. After this, reload the user groups either via a reboot or by running 'newgrp microk8s'.
+
+   ```bash
+   newgrp microk8s
+   ```
+
+6. Check the status of MicroK8s. Ensure that MicroK8s is running correctly:
 
    ```bash
    microk8s status --wait-ready
    ```
 
-6. Add an alias for kubectl as microk8s:
+7. Add an alias for kubectl as microk8s:
 
 To simplify the usage of `kubectl` with MicroK8s, you can create an alias. This allows you to use the `kubectl` command without needing to prefix it with `microk8s.` every time. Add the following line to your shell configuration file (e.g., `.bashrc`, `.zshrc`):
 
 ```sh
-alias kubectl='microk8s kubectl'
-alias helm='microk8s helm'
-```
-
-or use the `snap` command:
-
-```sh
 sudo snap alias microk8s.kubectl kubectl
 sudo snap alias microk8s.helm helm
+```
+
+or use the `alias` command:
+
+```sh
+alias kubectl='microk8s kubectl'
+alias helm='microk8s helm'
 ```
 
 For more detailed instructions and troubleshooting, please refer to the official MicroK8s documentation.
