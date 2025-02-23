@@ -189,16 +189,22 @@ After installing, clear the contents of the `/etc/turnserver.conf` configuration
 sudo nano /etc/turnserver.conf
 ```
 
-Add following configuration and save the `turnserver.conf` file.
+Add following configuration and save the `turnserver.conf` file. Make sure to replace `<ip_address>` with the host IP address.
 
 ```conf
-listening-device=eth0
 listening-port=8443
-relay-ip=172.17.19.105
+relay-ip=<ip_address>
 fingerprint
 lt-cred-mech
 user=username1:password1
 syslog
+```
+
+Enable coturn on startup
+
+```bash
+sudo systemctl enable coturn
+sudo systemctl restart coturn
 ```
 
 ## Cleanup
