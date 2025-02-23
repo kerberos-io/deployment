@@ -57,6 +57,12 @@ spec:
               value: AKIAxxxxxxG5Q
             - name: AGENT_HUB_PRIVATE_KEY
               value: K6rRLBI1xxxCk3C1H
+            - name: AGENT_MQTT_URI	
+              value: tcp://vernemq:1883
+            - name: AGENT_MQTT_USERNAME
+              value: yourusername
+            - name: AGENT_MQTT_PASSWORD
+              value: yourpassword
             # find full list of environment variables here: https://github.com/kerberos-io/agent#override-with-environment-variables
 #---
 #apiVersion: v1
