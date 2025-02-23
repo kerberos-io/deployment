@@ -16,7 +16,7 @@ patches:
       name: agent1
     patch: |-
       - op: replace
-        path: /spec/template/spec/containers/0/env/15/value
+        path: /spec/template/spec/containers/0/env/14/value
         value: tcp://localhost:31883
 helmCharts:
   - name: hub
