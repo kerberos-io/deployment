@@ -285,18 +285,13 @@ kerberoshub:
     # Custom layout: override css
     # By providing a style.css file in the custom folder
     # this file will override any css styling.
-    #volumeMounts:
-    #  - name: custom-layout
-    #    mountPath: /usr/share/nginx/html/assets/custom
-    #  - name: custom-favicon
-    #    mountPath: /usr/share/nginx/html/assets/favicon
-    #volumes:
-    #  - name: custom-layout
-    #    persistentVolumeClaim:
-    #      claimName: custom-layout-claim
-    #  - name: custom-favicon
-    #    persistentVolumeClaim:
-    #      claimName: custom-favicon-claim
+    volumeMounts:
+      - name: custom-layout
+        mountPath: /usr/share/nginx/html/assets/custom
+    volumes:
+      - name: custom-layout
+        persistentVolumeClaim:
+          claimName: custom-layout-claim
 
     # By specifying the below environments variables, you can tweak the
     # headings and paragraphs of Kerberos Hub front-end.

@@ -30,8 +30,8 @@ fi
 cp ../overlays/microk8s/kustomization.yaml ./kustomization.yaml
 
 # Replace placeholders in the local copy of kustomization.yaml
-sed -i "s|<ip_address>|$ip_address|g" ./kustomization.yaml
-sed -i "s|<storage_path>|$storage_path|g" ./kustomization.yaml
+sed -i "s|localhost|$ip_address|g" ./kustomization.yaml
+sed -i "s|/media/Storage|$storage_path|g" ./kustomization.yaml
 
 # Adjust the base path reference
 sed -i "s|../../base|../base|g" ./kustomization.yaml
