@@ -3,3 +3,4 @@ resources:
   - kerberos-hub-nodeports.yaml
   - kerberos-hub-import-database-job.yaml
   - kerberos-hub-yolov8.yaml
+  - ssd-hostpath-persistentvolumeclaim.yaml
