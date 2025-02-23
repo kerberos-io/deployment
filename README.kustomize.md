@@ -173,9 +173,33 @@ customresourcedefinition.apiextensions.k8s.io/thanosrulers.monitoring.coreos.com
 ...
 ```
 
-Verify the installation using the `kubectl` command, it might take some time until all the Kubernetes pods are spinned up. Once everything is stable you should be able to access Factory, Vault and Hub using the node ip address their designated node ports.
+Verify the installation using the `kubectl` command, it might take some time until all the Kubernetes pods are spinned up. Once everything is stable you should be able to access Factory, Vault and Hub using the node ip address their designated node ports. Continue with the [`configuration tutorial`](./README.configure.md) to start with the configuration and integration of the various tools.
 
-Continue with the [`configuration tutorial`](./README.configure.md) to start with the configuration and integration of the various tools.
+### Install Turnserver
+
+If installed and configured correctly, you should be able to access the various user interfaces and view live streams. However, to access the high-definition live view, it is necessary to install and configure a TURN server, such as coturn.
+
+```bash
+sudo apt-get install -y coturn
+```
+
+After installing, clear the contents of the `/etc/turnserver.conf` configuration file.
+
+```bash
+sudo nano /etc/turnserver.conf
+```
+
+Add following configuration and save the `turnserver.conf` file.
+
+```conf
+listening-device=eth0
+listening-port=8443
+relay-ip=172.17.19.105
+fingerprint
+lt-cred-mech
+user=username1:password1
+syslog
+```
 
 ## Cleanup
 
