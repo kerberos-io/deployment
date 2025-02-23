@@ -267,7 +267,7 @@ kerberoshub:
       url: "https://posthog.domain.com"
     # You can disable the Kerberos agent buttons, this make sense
     # in a white-label setup, or where you are managing the Kerberos Agents for your customers.
-    hideAddAgent: "false"
+    hideAddAgent: "true"
     # Multi tenancy (domains)
     # By default the Kerberos Hub allows multi-tenancy through the concept
     # of accounts and subaccounts. However through the concept of domains, you
