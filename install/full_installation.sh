@@ -5,12 +5,12 @@ get_ip_address() {
     ip -4 addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | head -n 1
 }
 
-ip_address=$(get_ip_address)
-
 # Parse command line arguments
-while getopts ":s:" opt; do
+while getopts ":s:i:" opt; do
   case $opt in
     s) storage_path="$OPTARG"
+    ;;
+    i) ip_address="$OPTARG"
     ;;
     \?) echo "Invalid option -$OPTARG" >&2
     ;;
@@ -18,13 +18,23 @@ while getopts ":s:" opt; do
 done
 
 if [ -z "$storage_path" ]; then
-  echo "Usage: $0 -s <storage_path>"
+  echo "Usage: $0 -s <storage_path> [-i <ip_address>]"
   exit 1
 fi
 
-# Replace placeholders in kustomization.yaml
-sed -i "s|<ip_address>|$ip_address|g" ../overlays/microk8s/kustomization.yaml
-sed -i "s|<storage_path>|$storage_path|g" ../overlays/microk8s/kustomization.yaml
+if [ -z "$ip_address" ]; then
+  ip_address=$(get_ip_address)
+fi
+
+# Make a local copy of kustomization.yaml
+cp ../overlays/microk8s/kustomization.yaml ./kustomization.yaml
+
+# Replace placeholders in the local copy of kustomization.yaml
+sed -i "s|<ip_address>|$ip_address|g" ./kustomization.yaml
+sed -i "s|<storage_path>|$storage_path|g" ./kustomization.yaml
 
 # Apply kustomize installation
-kubectl kustomize ../overlays/microk8s/ --enable-helm --load-restrictor LoadRestrictionsNone | kubectl apply -f -
+kubectl kustomize ./ --enable-helm --load-restrictor LoadRestrictionsNone | kubectl apply -f -
+
+# Clean up the local copy
+rm ./kustomization.yaml
