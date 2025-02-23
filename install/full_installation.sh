@@ -33,6 +33,9 @@ cp ../overlays/microk8s/kustomization.yaml ./kustomization.yaml
 sed -i "s|<ip_address>|$ip_address|g" ./kustomization.yaml
 sed -i "s|<storage_path>|$storage_path|g" ./kustomization.yaml
 
+# Adjust the base path reference
+sed -i "s|../../base|../base|g" ./kustomization.yaml
+
 # Apply kustomize installation
 kubectl kustomize ./ --enable-helm --load-restrictor LoadRestrictionsNone | kubectl apply -f -
 
