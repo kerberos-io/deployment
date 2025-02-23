@@ -11,6 +11,13 @@ patches:
       - op: replace
         path: /parameters/pvDir
         value: /media/Storage
+  - target:
+      kind: Deployment
+      name: agent1
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/15/value
+        value: tcp://localhost:31883
 helmCharts:
   - name: hub
     releaseName: hub

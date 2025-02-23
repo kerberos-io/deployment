@@ -58,7 +58,7 @@ spec:
             - name: AGENT_HUB_PRIVATE_KEY
               value: K6rRLBI1xxxCk3C1H
             - name: AGENT_MQTT_URI	
-              value: tcp://vernemq:1883
+              value: tcp://localhost:31883
             - name: AGENT_MQTT_USERNAME
               value: yourusername
             - name: AGENT_MQTT_PASSWORD
