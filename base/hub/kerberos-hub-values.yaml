@@ -155,7 +155,7 @@ kerberoshub:
   api:
     repository: uugai/hub-api
     pullPolicy: IfNotPresent
-    tag: "v1.0.19"
+    tag: "v1.0.22"
     replicas: 1
     jwtSecret: "I1JcwzW3A0t_THIS-IS_NOT_A_SECRET_WJK9jnPkipbnVTpf0efMy" # change to a random value, this is for generating JWT tokens.
     schema: "http"
@@ -238,7 +238,7 @@ kerberoshub:
   frontend:
     repository: uugai/hub-frontend
     pullPolicy: IfNotPresent
-    tag: "v1.0.39"
+    tag: "v1.0.41"
     replicas: 1
     schema: "http"
     url: "yourdomain.com"
@@ -304,7 +304,6 @@ kerberoshub:
       - name: custom-layout
         persistentVolumeClaim:
           claimName: custom-layout-claim
-
     # By specifying the below environments variables, you can tweak the
     # headings and paragraphs of Kerberos Hub front-end.
     # Login page
