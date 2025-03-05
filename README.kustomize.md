@@ -118,13 +118,15 @@ Kustomize uses the concept of `bases` and `overlays`, allowing you to customize 
 
 To simplify the experience, we have created a `configure.sh` script to automate the installation. You can run the script as shown below by providing the IP address of the host machine (or virtualization) and the storage path on the host machine (or virtualization) to persist the state of the various containers.
 
+### A. Scripted installation
+
 ```bash
 ./configure.sh -i <ipaddress> -s <host_storage_path>
 ```
 
 When looking into the `configure.sh` script, you will notice that `microk8s` is utilized. You are encouraged to adjust the overlay to suit your requirements or create a new overlay as needed.
 
-### Native
+### B. Native installation
 
 If you prefer to use `kustomize` directly without the `configure.sh` script, that's perfectly fine. You can adjust an existing overlay or create a new one to suit your needs. By using the `kustomize` configuration mechanism, you can override our `base` directory settings.
 
