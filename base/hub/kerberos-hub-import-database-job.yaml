@@ -84,7 +84,7 @@ data:
             {
                 $set: {
                 'username': 'application',
-                'email': 'example-user@email.com',
+                'email': 'application@email.com',
                 'role': 'application',
                 'admin': true,
                 'password': '$2a$10$jwLcD/.UT/1WLK7ct1XuHewI3GQXwW3zerPhCCs7QDrReEuIHbVYi',
