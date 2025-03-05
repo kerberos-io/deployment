@@ -53,43 +53,22 @@ data:
             {
                 $set: {
                 'username': 'example-user',
-                'email': 'example-user@email.com',
-                'role': 'owner',
-                'admin': true,
+                'email': 'example-user@email.com',,
                 'password': '$2a$10$jwLcD/.UT/1WLK7ct1XuHewI3GQXwW3zerPhCCs7QDrReEuIHbVYi',
-                'amazon_access_key_id': 'AKIAxxxxxxG5Q',
-                'amazon_secret_access_key': 'K6rRLBI1xxxCk3C1H',
                 'isActive': NumberLong(1),
                 'registerToken': '',
                 'timezone': 'Europe/Brussels',
                 'updated_at': ISODate('2020-06-14T05:01:35.000Z'),
                 'created_at': ISODate('2016-09-20T09:27:58.811Z'),
+                'amazon_secret_access_key': 'K6rRLBI1xxxCk3C1H',
+                'amazon_access_key_id': 'AKIAxxxxxxG5Q',
                 'card_brand': 'MasterCard',
                 'card_last_four': '6888',
+                'sequence_first': 1510657836,
                 'card_status': 'ok',
                 'card_status_message': null,
-                'google2fa_enabled': false
-                }
-            },
-            { upsert: true }
-        );
-
-
-        // This will create am application user with the following credentials.
-        // Application user can access the admin panel.
-        // username: application
-        // password: example-password
-        db.users.updateOne(
-            { '_id': ObjectId('57e1011e3178aa6c5cc774d2') },
-            {
-                $set: {
-                'username': 'application',
-                'email': 'application@email.com',
-                'role': 'application',
+                'role': 'owner',
                 'admin': true,
-                'password': '$2a$10$jwLcD/.UT/1WLK7ct1XuHewI3GQXwW3zerPhCCs7QDrReEuIHbVYi',
-                'isActive': NumberLong(1),
-                'timezone': 'Europe/Brussels',
                 'google2fa_enabled': false
                 }
             },
