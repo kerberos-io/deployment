@@ -80,7 +80,7 @@ data:
         // username: application
         // password: example-password
         db.users.updateOne(
-            { '_id': ObjectId('57e1011e3178aa6c5cc774d1') },
+            { '_id': ObjectId('57e1011e3178aa6c5cc774d2') },
             {
                 $set: {
                 'username': 'application',
@@ -104,15 +104,15 @@ data:
             {
                 $set: {
                 'name': 'default',
-                'stripe_id': 'sub_9ECyjjMz3R7etK',
-                'stripe_plan': 'enterprise',
+                'stripe_id': 'xxx',
+                'stripe_plan': 'enterprise',,
+                'stripe_status': 'active'
                 'quantity': 1,
                 'trial_ends_at': null,
                 'ends_at': null,
                 'user_id': '57e1011e3178aa6c5cc774d1',
                 'updated_at': ISODate('2021-04-27T09:45:30.169Z'),
-                'created_at': ISODate('2016-09-20T09:35:03.448Z'),
-                'stripe_status': 'active'
+                'created_at': ISODate('2016-09-20T09:35:03.448Z')
                 }
             },
             { upsert: true }
