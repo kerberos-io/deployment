@@ -46,8 +46,8 @@ data:
         // This will create a user with the following credentials.
         // This user can access the Hub front-end but not the admin panel. To use the admin panel you
         // should use the application user (see below).
-        // username: user
-        // password: password
+        // username: example-user
+        // password: example-password
         db.users.updateOne(
             { '_id': ObjectId('57e1011e3178aa6c5cc774d1') },
             {
@@ -56,7 +56,7 @@ data:
                 'email': 'example-user@email.com',
                 'role': 'owner',
                 'admin': true,
-                'password': '$2a$10$HbuGxkTc3eR2SANuiL8tiOEb6f0DgesLiGXHq7NU8O6zYbTXXho8q',
+                'password': '$2a$10$jwLcD/.UT/1WLK7ct1XuHewI3GQXwW3zerPhCCs7QDrReEuIHbVYi',
                 'amazon_access_key_id': 'AKIAxxxxxxG5Q',
                 'amazon_secret_access_key': 'K6rRLBI1xxxCk3C1H',
                 'isActive': NumberLong(1),
@@ -78,7 +78,7 @@ data:
         // This will create am application user with the following credentials.
         // Application user can access the admin panel.
         // username: application
-        // password: password
+        // password: example-password
         db.users.updateOne(
             { '_id': ObjectId('57e1011e3178aa6c5cc774d1') },
             {
@@ -87,7 +87,7 @@ data:
                 'email': 'example-user@email.com',
                 'role': 'application',
                 'admin': true,
-                'password': '$2a$10$HbuGxkTc3eR2SANuiL8tiOEb6f0DgesLiGXHq7NU8O6zYbTXXho8q',
+                'password': '$2a$10$jwLcD/.UT/1WLK7ct1XuHewI3GQXwW3zerPhCCs7QDrReEuIHbVYi',
                 'isActive': NumberLong(1),
                 'timezone': 'Europe/Brussels',
                 'google2fa_enabled': false
