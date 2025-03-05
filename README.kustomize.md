@@ -114,7 +114,19 @@ cd deployment
 
 In contrast to the detailed installation instructions, as mentioned here, an easier option to install is to use our Kustomize configure. This will allow you to specify and create your own overlays to install all the different components through a single command line.
 
-Kustomize uses the concept of `bases` and `overlays`, allowing you to customize the base installation with different settings (an overlay). Before executing the `kustomize` command below, navigate to the `overlays/microk8s/kustomization.yaml` file and modify the `inlineValues` of the Hub to match the IP address of your node. Please note that when you use multipass, WSL or any other type of virtualisation, your IP address will be different than the IP address of your host machine. Verify your IP address using the `ifconfig` command.
+Kustomize uses the concept of `bases` and `overlays`, allowing you to customize the base installation with different settings (an overlay). Before executing the `kustomize` command below, navigate to the `overlays/microk8s/kustomization.yaml` file and modify the `inlineValues` of the Hub to match the IP address of your node. Please note that when using Multipass, WSL, or any other type of virtualization, your IP address will differ from the IP address of your host machine. Verify your IP address using the `ifconfig` command.
+
+To simplify the experience, we have created a `configure.sh` script to automate the installation. You can run the script as shown below by providing the IP address of the host machine (or virtualization) and the storage path on the host machine (or virtualization) to persist the state of the various containers.
+
+```bash
+./configure.sh -i <ipaddress> -s <host_storage_path>
+```
+
+When looking into the `configure.sh` script, you will notice that `microk8s` is utilized. You are encouraged to adjust the overlay to suit your requirements or create a new overlay as needed.
+
+### Native
+
+If you prefer to use `kustomize` directly without the `configure.sh` script, that's perfectly fine. You can adjust an existing overlay or create a new one to suit your needs. By using the `kustomize` configuration mechanism, you can override our `base` directory settings.
 
 ```yaml
 valuesInline:
@@ -206,6 +218,18 @@ Enable coturn on startup
 sudo systemctl enable coturn
 sudo systemctl restart coturn
 ```
+
+## Custom layout
+
+Once the installation is complete, you can customize the user interface with your own branding. A persistent volume claim (PVC) has been created and attached to the `hub-frontend` pod. To locate the persistent volume, navigate to your specified storage path. The volume will have a name starting with `kerberos-hub-custom-layout-claim-pvc`.
+
+cp -r base/volume/ /media/storage/kerberos-hub-custom-layout-claim-pvc-.../
+
+Once the files are copied, you should see the CSS override on the Hub landing page.
+
+## Access and configuration
+
+Todo
 
 ## Cleanup
 
