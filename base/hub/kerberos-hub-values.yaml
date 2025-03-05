@@ -140,6 +140,18 @@ email:
 # Following are all the different deployments needed to make
 # Kerberos hub properly working.
 kerberoshub:
+  admin: 
+    repository: uugai/admin
+    pullPolicy: IfNotPresent
+    tag: "v1.0.2"
+    replicas: 1
+    resources:
+      requests:
+        memory: 100Mi
+        cpu: 100m
+      limits:
+        memory: 100Mi
+        cpu: 100m
   api:
     repository: uugai/hub-api
     pullPolicy: IfNotPresent
