@@ -6,6 +6,7 @@ get_ip_address() {
 }
 
 # Parse command line arguments
+command=""
 while getopts ":s:i:" opt; do
   case $opt in
     s) storage_path="$OPTARG"
@@ -17,27 +18,49 @@ while getopts ":s:i:" opt; do
   esac
 done
 
-if [ -z "$storage_path" ]; then
-  echo "Usage: $0 -s <storage_path> [-i <ip_address>]"
+shift $((OPTIND -1))
+command=$1
+
+if [ "$command" == "apply" ]; then
+  if [ -z "$storage_path" ]; then
+    echo "Usage: $0 apply -s <storage_path> [-i <ip_address>]"
+    exit 1
+  fi
+
+  if [ -z "$ip_address" ]; then
+    ip_address=$(get_ip_address)
+  fi
+
+  # Make a local copy of kustomization.yaml
+  cp ./overlays/microk8s/kustomization.yaml ./kustomization.yaml
+
+  # Replace placeholders in the local copy of kustomization.yaml
+  sed -i "s|localhost|$ip_address|g" ./kustomization.yaml
+  sed -i "s|/media/Storage|$storage_path|g" ./kustomization.yaml
+
+  # Adjust the base path reference
+  sed -i "s|../../base|./base|g" ./kustomization.yaml
+
+  # Apply kustomize installation
+  kubectl kustomize ./ --enable-helm --load-restrictor LoadRestrictionsNone | kubectl apply -f -
+
+  # Clean up the local copy
+  rm ./kustomization.yaml
+
+elif [ "$command" == "delete" ]; then
+  # Make a local copy of kustomization.yaml
+  cp ./overlays/microk8s/kustomization.yaml ./kustomization.yaml
+
+  # Adjust the base path reference
+  sed -i "s|../../base|./base|g" ./kustomization.yaml
+
+  # Delete kustomize installation
+  kubectl kustomize ./ --enable-helm --load-restrictor LoadRestrictionsNone | kubectl delete -f -
+
+  # Clean up the local copy
+  rm ./kustomization.yaml
+
+else
+  echo "Usage: $0 {apply|delete} [-s <storage_path>] [-i <ip_address>]"
   exit 1
 fi
-
-if [ -z "$ip_address" ]; then
-  ip_address=$(get_ip_address)
-fi
-
-# Make a local copy of kustomization.yaml
-cp ./overlays/microk8s/kustomization.yaml ./kustomization.yaml
-
-# Replace placeholders in the local copy of kustomization.yaml
-sed -i "s|localhost|$ip_address|g" ./kustomization.yaml
-sed -i "s|/media/Storage|$storage_path|g" ./kustomization.yaml
-
-# Adjust the base path reference
-sed -i "s|../../base|./base|g" ./kustomization.yaml
-
-# Apply kustomize installation
-kubectl kustomize ./ --enable-helm --load-restrictor LoadRestrictionsNone | kubectl apply -f -
-
-# Clean up the local copy
-rm ./kustomization.yaml
