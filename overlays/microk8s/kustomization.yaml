@@ -43,6 +43,11 @@ helmCharts:
         kerberoshub:
           api:
             url: "localhost:32081"
+        mongodb:
+          host: mongodb.mongodb
+          adminDatabase: admin
+          username: "root"
+          password: "yourpassword"
   - name: mongodb
     releaseName: mongodb
     namespace: mongodb
