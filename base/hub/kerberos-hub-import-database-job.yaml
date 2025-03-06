@@ -54,7 +54,7 @@ data:
                 'email': 'example-user@email.com',
                 'password': '$2a$10$jwLcD/.UT/1WLK7ct1XuHewI3GQXwW3zerPhCCs7QDrReEuIHbVYi',
                 'role': 'owner',
-                'google2fa_enabled': false
+                'google2fa_enabled': false,
                 'timezone': 'Europe/Brussels',
                 'isActive': NumberLong(1),
                 'registerToken': '',
@@ -65,7 +65,7 @@ data:
                 'card_brand': 'Visa',
                 'card_last_four': '0000',
                 'card_status': 'ok',
-                'card_status_message': null,
+                'card_status_message': null
                 }
             },
             { upsert: true }
@@ -84,12 +84,12 @@ data:
                 'email': 'example-application@email.com',
                 'password': '$2a$10$jwLcD/.UT/1WLK7ct1XuHewI3GQXwW3zerPhCCs7QDrReEuIHbVYi',
                 'role': 'application',
-                'google2fa_enabled': false
+                'google2fa_enabled': false,
                 'timezone': 'Europe/Brussels',
                 'isActive': NumberLong(1),
                 'registerToken': '',
                 'updated_at': ISODate('2020-06-14T05:01:35.000Z'),
-                'created_at': ISODate('2016-09-20T09:27:58.811Z'),
+                'created_at': ISODate('2016-09-20T09:27:58.811Z')
                 }
             },
             { upsert: true }
