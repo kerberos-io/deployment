@@ -239,7 +239,7 @@ sudo systemctl restart coturn
 Once the installation is complete, you can customize the user interface with your own branding. A persistent volume claim (PVC) has been created and attached to the `hub-frontend` pod. To locate the persistent volume, navigate to your specified storage path. The volume will have a name starting with `kerberos-hub-custom-layout-claim-pvc`.
 
 ```bash
-cp -r base/volume/ /media/storage/kerberos-hub-custom-layout-claim-pvc-.../
+cp -r base/volume/* /media/storage/kerberos-hub-custom-layout-claim-pvc-.../
 ```
 
 Once the files are copied, you should see the CSS override on the Hub landing page.
