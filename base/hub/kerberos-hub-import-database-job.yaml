@@ -44,8 +44,6 @@ data:
         db = conn.getDB('Kerberos');
 
         // This will create a user with the following credentials.
-        // This user can access the Hub front-end but not the admin panel. To use the admin panel you
-        // should use the application user (see below).
         // username: example-user
         // password: example-password
         db.users.updateOne(
@@ -53,8 +51,9 @@ data:
             {
                 $set: {
                 'username': 'example-user',
-                'email': 'example-user@email.com',,
+                'email': 'your@email.com',
                 'password': '$2a$10$jwLcD/.UT/1WLK7ct1XuHewI3GQXwW3zerPhCCs7QDrReEuIHbVYi',
+                'role': 'owner',
                 'isActive': NumberLong(1),
                 'registerToken': '',
                 'timezone': 'Europe/Brussels',
@@ -62,13 +61,11 @@ data:
                 'created_at': ISODate('2016-09-20T09:27:58.811Z'),
                 'amazon_secret_access_key': 'K6rRLBI1xxxCk3C1H',
                 'amazon_access_key_id': 'AKIAxxxxxxG5Q',
-                'card_brand': 'MasterCard',
-                'card_last_four': '6888',
+                'card_brand': 'Visa',
+                'card_last_four': '0000',
                 'sequence_first': 1510657836,
                 'card_status': 'ok',
                 'card_status_message': null,
-                'role': 'owner',
-                'admin': true,
                 'google2fa_enabled': false
                 }
             },
@@ -83,15 +80,15 @@ data:
             {
                 $set: {
                 'name': 'default',
-                'stripe_id': 'xxx',
-                'stripe_plan': 'enterprise',,
-                'stripe_status': 'active'
+                'stripe_id': 'sub_9ECyjjMz3R7etK',
+                'stripe_plan': 'enterprise',
                 'quantity': 1,
                 'trial_ends_at': null,
                 'ends_at': null,
                 'user_id': '57e1011e3178aa6c5cc774d1',
                 'updated_at': ISODate('2021-04-27T09:45:30.169Z'),
-                'created_at': ISODate('2016-09-20T09:35:03.448Z')
+                'created_at': ISODate('2016-09-20T09:35:03.448Z'),
+                'stripe_status': 'active'
                 }
             },
             { upsert: true }
