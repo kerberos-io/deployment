@@ -6,7 +6,8 @@ get_ip_address() {
 }
 
 # Parse command line arguments
-command=""
+command=$1
+shift
 while getopts ":s:i:" opt; do
   case $opt in
     s) storage_path="$OPTARG"
@@ -17,9 +18,6 @@ while getopts ":s:i:" opt; do
     ;;
   esac
 done
-
-shift $((OPTIND -1))
-command=$1
 
 if [ "$command" == "apply" ]; then
   if [ -z "$storage_path" ]; then

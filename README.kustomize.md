@@ -120,11 +120,24 @@ To simplify the experience, we have created a `configure.sh` script to automate 
 
 ### A. Scripted installation
 
+To create a new deployment you can use following command.
+
 ```bash
-./configure.sh -i <ipaddress> -s <host_storage_path>
+ubuntu@xxxx:~/deployment$ ./configure.sh
+Usage: ./configure.sh {apply|delete} [-s <storage_path>] [-i <ip_address>]
 ```
 
 When looking into the `configure.sh` script, you will notice that `microk8s` is utilized. You are encouraged to adjust the overlay to suit your requirements or create a new overlay as needed.
+
+```bash
+ubuntu@xxxx:~/deployment$ ./configure.sh apply -i x.x.x.x -s /media/storage
+```
+
+To delete you can use the deletion argument.
+
+```bash
+ubuntu@xxxx:~/deployment$ ./configure.sh delete
+```
 
 ### B. Native installation
 
@@ -225,7 +238,9 @@ sudo systemctl restart coturn
 
 Once the installation is complete, you can customize the user interface with your own branding. A persistent volume claim (PVC) has been created and attached to the `hub-frontend` pod. To locate the persistent volume, navigate to your specified storage path. The volume will have a name starting with `kerberos-hub-custom-layout-claim-pvc`.
 
-cp -r base/volume/ /media/storage/kerberos-hub-custom-layout-claim-pvc-.../
+```bash
+cp -r base/volume/* /media/storage/kerberos-hub-custom-layout-claim-pvc-.../
+```
 
 Once the files are copied, you should see the CSS override on the Hub landing page.
 

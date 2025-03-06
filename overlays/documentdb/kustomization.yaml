@@ -1,5 +1,5 @@
 metadata:
-  name: microk8s
+  name: documentdb
   
 resources:
   - ../../base
@@ -21,6 +21,16 @@ patches:
       - op: replace
         path: /spec/template/spec/containers/0/env/17/value
         value: turn:localhost:8443
+  - target:
+      kind: Job
+      name: hub-import-database-job
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/initContainers/0/command
+        value: ["sh", "-c", "until nc -z docdb-x-x-x-x-x-x.xxx.xx-xx-x.docdb.amazonaws.com 27017 > /dev/null; do echo Waiting for master.; sleep 2; done;"]
+      - op: replace
+        path: /spec/template/spec/containers/0/command
+        value: ['sh', '-c', 'mongosh --host docdb-x-x-x-x-x-x.xxx.xx-xx-x.docdb.amazonaws.com:27017 --username xxxx --password "xxx" --authenticationDatabase admin --db Kerberos --file /data/hub-import.js']
 helmCharts:
   - name: hub
     releaseName: hub
@@ -44,10 +54,11 @@ helmCharts:
           api:
             url: "localhost:32081"
         mongodb:
-          host: mongodb.mongodb
+          host: docdb-x-x-x-x-x-x.xxx.xx-xx-x.docdb.amazonaws.com:27017
           adminDatabase: admin
-          username: "root"
-          password: "yourpassword"
+          authenticationMechanism: SCRAM-SHA-1
+          username: "xxx"
+          password: "xxx"
   - name: mongodb
     releaseName: mongodb
     namespace: mongodb
