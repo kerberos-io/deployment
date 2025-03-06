@@ -56,6 +56,7 @@ helmCharts:
         mongodb:
           host: docdb-x-x-x-x-x-x.xxx.xx-xx-x.docdb.amazonaws.com:27017
           adminDatabase: admin
+          authenticationMechanism: SCRAM-SHA-1
           username: "xxx"
           password: "xxx"
   - name: mongodb
