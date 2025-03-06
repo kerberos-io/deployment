@@ -1,0 +1,82 @@
+metadata:
+  name: documentdb
+  
+resources:
+  - ../../base
+patches:
+  - target:
+      kind: StorageClass
+      name: ssd-hostpath
+    patch: |-
+      - op: replace
+        path: /parameters/pvDir
+        value: /media/Storage
+  - target:
+      kind: Deployment
+      name: agent1
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/env/14/value
+        value: tcp://localhost:31883
+      - op: replace
+        path: /spec/template/spec/containers/0/env/17/value
+        value: turn:localhost:8443
+  - target:
+      kind: Job
+      name: hub-import-database-job
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/initContainers/0/command
+        value: ["sh", "-c", "until nc -z docdb-x-x-x-x-x-x.xxx.xx-xx-x.docdb.amazonaws.com 27017 > /dev/null; do echo Waiting for master.; sleep 2; done;"]
+      - op: replace
+        path: /spec/template/spec/containers/0/command
+        value: ['sh', '-c', 'mongosh --host docdb-x-x-x-x-x-x.xxx.xx-xx-x.docdb.amazonaws.com:27017 --username xxxx --password "xxx" --authenticationDatabase admin --db Kerberos --file /data/hub-import.js']
+helmCharts:
+  - name: hub
+    releaseName: hub
+    namespace: kerberos-hub
+    repo: https://charts.kerberos.io
+    version: 0.77.0
+    valuesFile: ../../base/hub/kerberos-hub-values.yaml
+    valuesInline:
+        license: "L/+FAwEBB2xpY2Vuc2UB/4YAAQIBB1BheWxvYWQBCgABCVNpZ25hdHVyZQEKAAAA/gMw/4YB/gEl/8wQACxnaXRodWIuY29tL3V1Zy1haS9odWItbGljZW5zZS9tb2RlbHMuTGljZW5zZf+BAwEBB0xpY2Vuc2UB/4IAAQwBAklkAf+EAAEDS2V5AQwAAQdDb21wYW55AQwAAQdFeHBUaW1lAQQAAQREYXlzAQQAAQdDYW1lcmFzAQQAAQVTaXRlcwEEAAEGVmF1bHRzAQQAAQpNZWRpYUxpbWl0AQQAAQlQZXJwZXR1YWwBAgABBkFjdGl2ZQECAAEJSXBBZGRyZXNzAQwAAAAY/4MBAQEIT2JqZWN0SUQB/4QAAQYBGAAAPf+COgEMAAAAAAAAAAAAAAAAAg9nZW5lcmljLWxpY2Vuc2UB+AJl6LAHsRMYAfoB0alKIAABEAEUARQDAQAB/gIAFlQqo9yJj1a3OH1+5iGjCPcz9VtrRuGfz/iuQEFohbCfSiZGAdHh16gEc59Z2kPaey+eJcwY0BQsBoipW7SwFRmcHkrWLuxt+Yzi2kvwmL4TN0quWqM4xxBzH1sejS6kZpPm7bw11JBsBuaNOYMbl5lgpPCFajWUH6GzfmuQlptNQKosocacI/9PaaqEUUM0ALjDZNSqqFwZPPsFh9WTeaHGbRbmwQRMPFDgaPCxiHnCCUagbvuVZeOQbKaR5gPTUfPQY/L4mrN9QnMxdzwUJgqm7FbTH4UhoZn6EEzNGTN6DbHhpx8lezzCRW8dzMNuK8R1igiORV5gdWOPzBMZlTgodIZRD07e8iAo2XqT/BWcqaJXutdqXltaiJKshh2QzStdv2WZUynVTguYIQJyBNhrXEkewKZA0UftcSemDPkCmp6VovMMveV4X3Cpzkm7ZHtE7j39At/kpuqY/icTEzRWYuQqEDtqXMVar84VOpgVhxeNrrqZniLq8o3ezRdwy0BJG5xT9cuMxq13ZB3Am9iqTSjx2mh5VZZeB33GjLVAtLscj8NoKWy7BThchXB9xwoiy2RLO8nE+EI8wPbg+ajb2Ta7AFyxHgJJU6cea+zEpiBMARwjPKqk2nn02xdfdqMzQ+E9e115sIqhotBM5RI7uBIf8DDwT93HLsJZRBAA"
+        mqtt:
+          host: "localhost"
+          port: "31080"
+          protocol: "ws"
+          username: "yourusername"
+          password: "yourpassword"
+        turn:
+          host: "turn:localhost:8443"
+          username: "username1"
+          password: "password1"
+        kerberoshub:
+          api:
+            url: "localhost:32081"
+        mongodb:
+          host: docdb-x-x-x-x-x-x.xxx.xx-xx-x.docdb.amazonaws.com:27017
+          adminDatabase: admin
+          username: "xxx"
+          password: "xxx"
+  - name: mongodb
+    releaseName: mongodb
+    namespace: mongodb
+    repo: oci://registry-1.docker.io/bitnamicharts
+    valuesFile: ../../base/mongodb/mongodb-values.yaml
+    valuesInline:
+      global:
+        storageClass: "ssd-hostpath"
+  - name: rabbitmq
+    releaseName: rabbitmq
+    namespace: rabbitmq
+    repo: oci://registry-1.docker.io/bitnamicharts
+    valuesFile: ../../base/rabbitmq/rabbitmq-values.yaml
+    valuesInline:
+      global:
+        storageClass: "ssd-hostpath"
+  - name: vernemq
+    releaseName: vernemq
+    # For some reason it doesn't work with a namespace
+    #namespace: vernemq 
+    repo: https://vernemq.github.io/docker-vernemq
+    valuesFile: ../../base/vernemq/vernemq-values.yaml
