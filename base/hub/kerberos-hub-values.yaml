@@ -140,7 +140,7 @@ email:
 # Following are all the different deployments needed to make
 # Kerberos hub properly working.
 kerberoshub:
-  admin: 
+  admin:
     repository: uugai/admin
     pullPolicy: IfNotPresent
     tag: "v1.0.2"
@@ -155,7 +155,7 @@ kerberoshub:
   api:
     repository: uugai/hub-api
     pullPolicy: IfNotPresent
-    tag: "v1.0.22"
+    tag: "v1.0.26"
     replicas: 1
     jwtSecret: "I1JcwzW3A0t_THIS-IS_NOT_A_SECRET_WJK9jnPkipbnVTpf0efMy" # change to a random value, this is for generating JWT tokens.
     schema: "http"
@@ -238,7 +238,7 @@ kerberoshub:
   frontend:
     repository: uugai/hub-frontend
     pullPolicy: IfNotPresent
-    tag: "v1.0.42"
+    tag: "v1.0.45"
     replicas: 1
     schema: "http"
     url: "yourdomain.com"
@@ -348,9 +348,9 @@ kerberoshub:
       organization: "github-organization"
       team: "github-team"
   cleanup:
-    repository: kerberos/hub-cleanup
+    repository: uugai/hub-cleanup
     pullPolicy: IfNotPresent
-    tag: "1.0.6436406806"
+    tag: "v1.4.0"
     resources:
       requests:
         memory: 50Mi
@@ -375,9 +375,9 @@ kerberoshub:
         #    persistentVolumeClaim:
         #      claimName: custom-layout-claim
   reactivate:
-    repository: kerberos/hub-reactivate
+    repository: uugai/hub-reactivatesubscriptions
     pullPolicy: IfNotPresent
-    tag: "1.0.6256184527"
+    tag: "v1.0.1"
     resources:
       requests:
         memory: 50Mi
@@ -396,9 +396,9 @@ kerberoshub:
     #    cpu: 10m
   # This proxy is legacy for the old agent, will be migrated in the new Hub API.
   proxy:
-    repository: kerberos/vault-proxy
+    repository: uugai/hub-proxy
     pullPolicy: IfNotPresent
-    tag: "1.0.2733724812"
+    tag: "v1.0.0"
     resources:
       requests:
         memory: 50Mi
@@ -408,9 +408,9 @@ kerberoshub:
         cpu: 50m
 kerberospipeline:
   event:
-    repository: kerberos/pipe-event
+    repository: uugai/hub-pipeline-event
     pullPolicy: IfNotPresent
-    tag: "1.0.6256042211"
+    tag: "v1.0.1"
     replicas: 1
     resources:
       requests:
@@ -422,7 +422,7 @@ kerberospipeline:
   monitor:
     repository: uugai/hub-pipeline-monitor
     pullPolicy: IfNotPresent
-    tag: "v1.1.0"
+    tag: "v1.2.0"
     replicas: 1
     resources:
       requests:
@@ -434,7 +434,7 @@ kerberospipeline:
   sequence:
     repository: uugai/hub-pipeline-sequence
     pullPolicy: IfNotPresent
-    tag: "v1.0.1"
+    tag: "v1.1.0"
     replicas: 1
     resources:
       requests:
@@ -444,9 +444,9 @@ kerberospipeline:
         memory: 50Mi
         cpu: 50m
   throttler:
-    repository: kerberos/pipe-throttler
+    repository: uugai/hub-pipeline-throttler
     pullPolicy: IfNotPresent
-    tag: "1.0.6256059962"
+    tag: "v1.1.0"
     replicas: 1
     resources:
       requests:
@@ -458,7 +458,7 @@ kerberospipeline:
   notify:
     repository: uugai/hub-pipeline-notification
     pullPolicy: IfNotPresent
-    tag: "v1.0.11"
+    tag: "v1.0.12"
     replicas: 1
     resources:
       requests:
@@ -476,9 +476,9 @@ kerberospipeline:
         #    persistentVolumeClaim:
         #      claimName: custom-layout-claim
   notifyTest:
-    repository: kerberos/pipe-notify-test
+    repository: uugai/hub-pipeline-notification-test
     pullPolicy: IfNotPresent
-    tag: "1.0.6256094666"
+    tag: "v1.2.1"
     replicas: 1
     resources:
       requests:
@@ -498,7 +498,7 @@ kerberospipeline:
   analysis:
     repository: uugai/hub-pipeline-analysis
     pullPolicy: IfNotPresent
-    tag: "v1.0.1"
+    tag: "v1.0.10"
     replicas: 1
     resources:
       requests:
@@ -508,9 +508,9 @@ kerberospipeline:
         memory: 50Mi
         cpu: 50m
   dominantColor:
-    repository: kerberos/pipe-dominantcolor
+    repository: uugai/hub-pipeline-dominantcolors
     pullPolicy: IfNotPresent
-    tag: "1.0.6971463620"
+    tag: "v1.1.2"
     replicas: 1
     resources:
       requests:
@@ -520,9 +520,9 @@ kerberospipeline:
         memory: 50Mi
         cpu: 50m
   thumbnail:
-    repository: kerberos/pipe-thumbnail
+    repository: uugai/hub-pipeline-thumbnail
     pullPolicy: IfNotPresent
-    tag: "1.0.6962799851"
+    tag: "v1.1.5"
     replicas: 1
     quality: "1" # 1 (best) - 31 (worst)
     width: "600"
@@ -537,9 +537,9 @@ kerberospipeline:
         memory: 50Mi
         cpu: 50m
   counting:
-    repository: kerberos/pipe-counting
+    repository: uugai/hub-pipeline-counting
     pullPolicy: IfNotPresent
-    tag: "1.0.6251572994"
+    tag: "v1.0.5"
     replicas: 1
     resources:
       requests:
