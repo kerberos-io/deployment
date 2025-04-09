@@ -155,7 +155,7 @@ kerberoshub:
   api:
     repository: uugai/hub-api
     pullPolicy: IfNotPresent
-    tag: "v1.0.26"
+    tag: "v1.0.29"
     replicas: 1
     jwtSecret: "I1JcwzW3A0t_THIS-IS_NOT_A_SECRET_WJK9jnPkipbnVTpf0efMy" # change to a random value, this is for generating JWT tokens.
     schema: "http"
@@ -238,7 +238,7 @@ kerberoshub:
   frontend:
     repository: uugai/hub-frontend
     pullPolicy: IfNotPresent
-    tag: "v1.0.45"
+    tag: "v1.0.51"
     replicas: 1
     schema: "http"
     url: "yourdomain.com"
@@ -350,15 +350,15 @@ kerberoshub:
   cleanup:
     repository: uugai/hub-cleanup
     pullPolicy: IfNotPresent
-    tag: "v1.4.0"
+    tag: "v1.4.1"
     resources:
       requests:
         memory: 50Mi
         cpu: 50m
   monitordevice:
-    repository: kerberos/hub-monitor-device
+    repository: uugai/hub-monitor-device
     pullPolicy: IfNotPresent
-    tag: "1.0.6256190978"
+    tag: "v1.1.0"
     resources:
       requests:
         memory: 50Mi
@@ -458,7 +458,7 @@ kerberospipeline:
   notify:
     repository: uugai/hub-pipeline-notification
     pullPolicy: IfNotPresent
-    tag: "v1.0.12"
+    tag: "v1.0.13"
     replicas: 1
     resources:
       requests:
@@ -498,7 +498,7 @@ kerberospipeline:
   analysis:
     repository: uugai/hub-pipeline-analysis
     pullPolicy: IfNotPresent
-    tag: "v1.0.10"
+    tag: "v1.0.13"
     replicas: 1
     resources:
       requests:
@@ -539,7 +539,7 @@ kerberospipeline:
   counting:
     repository: uugai/hub-pipeline-counting
     pullPolicy: IfNotPresent
-    tag: "v1.0.5"
+    tag: "v1.5.0"
     replicas: 1
     resources:
       requests:
