@@ -1,0 +1,30 @@
+name: Deploy on kind using Kustmize
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *" # This will run the workflow every day at midnight UTC
+
+jobs:
+  deploy:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, ubuntu-22.04, ubuntu-24.04]
+        #kind: [v0.21.0, v0.22.0, v0.23.0, v0.24.0, v0.25.0]
+        kind: [v0.25.0]
+    steps:
+      - name: Create kind
+        uses: helm/kind-action@v1
+        with:
+          version: ${{ matrix.kind }}
+      - name: Print Kubernetes Version
+        run: |
+          kubectl version
+      - name: Test kind
+        run: |
+          kubectl get no
+          kubectl get pods -A -o wide
+          kubectl get sc
+      - name: Checkout repository
+        uses: actions/checkout@v2
