@@ -1,0 +1,19 @@
+{
+	"name": "go:1.24-bookworm",
+	"dockerFile": "Dockerfile",
+    "runArgs": ["--privileged"],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-kubernetes-tools.vscode-kubernetes-tools",
+				"redhat.vscode-yaml",
+				"Tim-Koehler.helm-intellisense",
+				"ms-vscode.azurecli",
+				"ms-vscode-remote.remote-containers",
+				"GitHub.copilot",
+				"fabiospampinato.vscode-diff",
+				"ms-azuretools.vscode-docker"
+			]
+		}
+	}
+}
