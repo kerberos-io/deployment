@@ -2,13 +2,8 @@ kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
   name: ssd-hostpath
-  annotations:
-    openebs.io/cas-type: local
-    cas.openebs.io/config: |
-      - name: StorageType
-        value: hostpath
-      - name: BasePath
-        value: /media/Storage
-provisioner: openebs.io/local
+provisioner: microk8s.io/hostpath
 reclaimPolicy: Delete
+parameters:
+  pvDir: /media/Storage
 volumeBindingMode: WaitForFirstConsumer
