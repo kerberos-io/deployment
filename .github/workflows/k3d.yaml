@@ -36,6 +36,12 @@ jobs:
           echo "Sleeping for 60 seconds, give time for the operator to create the CRDs" && sleep 60
           kubectl get sc
           kubectl get po -A -o wide
+      - name: Create storage class
+        id: create-storage-class
+        run: |
+          kubectl apply -f ./base/ssd-hostpath-storageclass-openebs.yaml
+          echo "Sleeping for 30 seconds, give time for the storage class to be created" && sleep 30
+          kubectl get sc
       - name: Install Prometheus operator
         id: install-prometheus-operator
         run: |
