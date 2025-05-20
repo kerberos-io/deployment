@@ -2,6 +2,9 @@
 	"name": "go:1.24-bookworm",
 	"dockerFile": "Dockerfile",
     "runArgs": ["--privileged"],
+	"features": {
+        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+    },
 	"customizations": {
 		"vscode": {
 			"extensions": [

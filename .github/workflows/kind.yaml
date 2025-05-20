@@ -116,4 +116,4 @@ jobs:
           helm install hub kerberos/hub --values ./base/hub/kerberos-hub-values.yaml -n kerberos-hub --create-namespace
           echo "Sleeping for 300 seconds, give time for the helm chart to create the pods" && sleep 300
           kubectl get pods -A -o wide
-          kubectl get pods -A -o wide | grep kerberos-hub | awk '{print $3}' | grep -q '1/1' && echo "kerberos-hub pod is running with status 1/1" || (echo "kerberos-hub pod is not running with status 1/1" && exit 1)
+          kubectl get pods -A -o wide | grep hub-frontend- | awk '{print $3}' | grep -q '1/1' && echo "hub-frontend pod is running with status 1/1" || (echo "hub-frontend pod is not running with status 1/1" && exit 1)
