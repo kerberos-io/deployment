@@ -155,7 +155,7 @@ kerberoshub:
   api:
     repository: uugai/hub-api
     pullPolicy: IfNotPresent
-    tag: "v1.1.4"
+    tag: "v1.6.1"
     replicas: 1
     jwtSecret: "I1JcwzW3A0t_THIS-IS_NOT_A_SECRET_WJK9jnPkipbnVTpf0efMy" # change to a random value, this is for generating JWT tokens.
     schema: "http"
@@ -238,7 +238,7 @@ kerberoshub:
   frontend:
     repository: uugai/hub-frontend
     pullPolicy: IfNotPresent
-    tag: "v1.1.7"
+    tag: "v1.4.2"
     replicas: 1
     schema: "http"
     url: "yourdomain.com"
@@ -434,7 +434,7 @@ kerberospipeline:
   sequence:
     repository: uugai/hub-pipeline-sequence
     pullPolicy: IfNotPresent
-    tag: "v1.2.3"
+    tag: "v1.5.0"
     replicas: 1
     resources:
       requests:
@@ -458,7 +458,7 @@ kerberospipeline:
   notify:
     repository: uugai/hub-pipeline-notification
     pullPolicy: IfNotPresent
-    tag: "v1.0.13"
+    tag: "v1.0.16"
     replicas: 1
     resources:
       requests:
@@ -498,7 +498,7 @@ kerberospipeline:
   analysis:
     repository: uugai/hub-pipeline-analysis
     pullPolicy: IfNotPresent
-    tag: "v1.3.2"
+    tag: "v1.4.0"
     replicas: 1
     resources:
       requests:
@@ -522,7 +522,7 @@ kerberospipeline:
   thumbnail:
     repository: uugai/hub-pipeline-thumbnail
     pullPolicy: IfNotPresent
-    tag: "v1.1.5"
+    tag: "v1.1.6"
     replicas: 1
     quality: "1" # 1 (best) - 31 (worst)
     width: "600"
