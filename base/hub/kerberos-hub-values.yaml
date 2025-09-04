@@ -155,7 +155,7 @@ kerberoshub:
   api:
     repository: uugai/hub-api
     pullPolicy: IfNotPresent
-    tag: "v1.6.3"
+    tag: "v1.6.5"
     replicas: 1
     jwtSecret: "I1JcwzW3A0t_THIS-IS_NOT_A_SECRET_WJK9jnPkipbnVTpf0efMy" # change to a random value, this is for generating JWT tokens.
     schema: "http"
@@ -238,7 +238,7 @@ kerberoshub:
   frontend:
     repository: uugai/hub-frontend
     pullPolicy: IfNotPresent
-    tag: "v1.5.1"
+    tag: "v1.5.7"
     replicas: 1
     schema: "http"
     url: "yourdomain.com"
@@ -410,7 +410,7 @@ kerberospipeline:
   event:
     repository: uugai/hub-pipeline-event
     pullPolicy: IfNotPresent
-    tag: "v1.0.1"
+    tag: "v1.2.0"
     replicas: 1
     resources:
       requests:
@@ -422,7 +422,7 @@ kerberospipeline:
   monitor:
     repository: uugai/hub-pipeline-monitor
     pullPolicy: IfNotPresent
-    tag: "v1.2.1"
+    tag: "v1.3.3"
     replicas: 1
     resources:
       requests:
@@ -434,7 +434,7 @@ kerberospipeline:
   sequence:
     repository: uugai/hub-pipeline-sequence
     pullPolicy: IfNotPresent
-    tag: "v1.5.0"
+    tag: "v1.6.4"
     replicas: 1
     resources:
       requests:
@@ -446,7 +446,7 @@ kerberospipeline:
   throttler:
     repository: uugai/hub-pipeline-throttler
     pullPolicy: IfNotPresent
-    tag: "v1.1.0"
+    tag: "v1.2.0"
     replicas: 1
     resources:
       requests:
@@ -458,7 +458,7 @@ kerberospipeline:
   notify:
     repository: uugai/hub-pipeline-notification
     pullPolicy: IfNotPresent
-    tag: "v1.0.16"
+    tag: "v1.0.20"
     replicas: 1
     resources:
       requests:
@@ -498,7 +498,7 @@ kerberospipeline:
   analysis:
     repository: uugai/hub-pipeline-analysis
     pullPolicy: IfNotPresent
-    tag: "v1.4.0"
+    tag: "v1.6.1"
     replicas: 1
     resources:
       requests:
@@ -522,7 +522,7 @@ kerberospipeline:
   thumbnail:
     repository: uugai/hub-pipeline-thumbnail
     pullPolicy: IfNotPresent
-    tag: "v1.1.6"
+    tag: "v1.2.1"
     replicas: 1
     quality: "1" # 1 (best) - 31 (worst)
     width: "600"
@@ -539,7 +539,7 @@ kerberospipeline:
   counting:
     repository: uugai/hub-pipeline-counting
     pullPolicy: IfNotPresent
-    tag: "v1.6.0"
+    tag: "v1.6.2"
     replicas: 1
     resources:
       requests:
@@ -549,7 +549,7 @@ kerberospipeline:
     enabled: true # Enable or disable the sprite generation 'true' or 'false
     repository: uugai/hub-pipeline-sprite
     pullPolicy: IfNotPresent
-    tag: "v1.0.4"
+    tag: "v1.0.7"
     replicas: 1
     interval: "1" # Number of secondes between each thumbnail in the sprite
     width: "240" # Should not be changed for the moment (hard coded in UI)
