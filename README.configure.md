@@ -53,6 +53,13 @@ With the Vault installed, we can proceed to configure the various components. Cu
   - Main provider: minio
   - Day limit: 30
   - Integration: rabbitmq
-  - Directory: \*
+  - Directory: \* (use \* for wildcard to allow all users, or specify "example-user" to restrict to that user only)
   - Access key: XJoi2@bgSOvOYBy# (or generate new keys, but don't forget to update them in the next steps)
   - Secret key: OGGqat4lXRpL@9XBYc8FUaId@5 (or generate new keys, but don't forget to update them in the next steps)
+
+**Important:** The **Directory** field controls which Hub users can store recordings using this account:
+- `*` (wildcard) - Allows any Hub user to store recordings
+- `example-user` - Only allows the specific user "example-user" to store recordings
+- The Directory value must match the `AGENT_KERBEROSVAULT_DIRECTORY` environment variable in agent deployments
+- Agents will create a subdirectory in storage: `minio://mybucket/{directory-value}/`
+- See agent configuration: `base/agent/camera1-deployment.yaml` (line 56)
