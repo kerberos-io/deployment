@@ -5,7 +5,7 @@ on:
   schedule:
     - cron: "0 0 * * *" # This will run the workflow every day at midnight UTC
 jobs:
-  setup-cluster:
+  deploy:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -39,16 +39,6 @@ jobs:
           kubectl apply -f ./base/ssd-hostpath-storageclass-openebs.yaml
           kubectl wait --for=jsonpath='{.metadata.name}'=ssd-hostpath storageclass/ssd-hostpath --timeout=60s
           kubectl get sc
-  
-  install-prometheus:
-    needs: setup-cluster
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
       - name: Install Prometheus operator
         id: install-prometheus-operator
         run: |
@@ -56,16 +46,6 @@ jobs:
           kubectl wait --for=condition=available deployment/prometheus-operator -n default --timeout=300s
           kubectl get crd
           kubectl get po -A -o wide
-  
-  install-minio:
-    needs: setup-cluster
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
       - name: Install Minio
         id: install-minio
         run: |
@@ -76,16 +56,6 @@ jobs:
           kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 statefulset/myminio-pool-0 -n minio-tenant --timeout=300s
           kubectl get po -A -o wide
           kubectl get po -A -o wide | grep myminio-pool-0-0 | awk '{print $3}' | grep -q '2/2' && echo "myminio-pool-0-0 pod is running with status 2/2" || (echo "myminio-pool-0-0 pod is not running with status 2/2" && exit 1)
-  
-  install-mongodb:
-    needs: setup-cluster
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
       - name: Install MongoDB
         id: install-mongodb
         run: |
@@ -93,16 +63,6 @@ jobs:
           kubectl create namespace mongodb
           helm install mongodb -n mongodb bitnami/mongodb --values ./base/mongodb/mongodb-values.yaml --wait --timeout=5m
           kubectl get pods -A -o wide
-  
-  install-rabbitmq:
-    needs: setup-cluster
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
       - name: Install RabbitMQ
         id: install-rabbitmq
         run: |
@@ -111,16 +71,6 @@ jobs:
           helm install rabbitmq -n rabbitmq bitnami/rabbitmq --values ./base/rabbitmq/rabbitmq-values.yaml --wait --timeout=5m
           kubectl get pods -A -o wide
           kubectl exec --namespace rabbitmq rabbitmq-0 -- rabbitmqctl status
-  
-  install-vernemq:
-    needs: setup-cluster
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
       - name: Install Vernemq (MQTT Broker)
         id: install-vernemq
         run: |
@@ -129,16 +79,6 @@ jobs:
           helm install vernemq vernemq/vernemq --values ./base/vernemq/vernemq-values.yaml -n vernemq --create-namespace --wait --timeout=5m
           kubectl get pods -A -o wide
           kubectl exec --namespace vernemq vernemq-0 -- /vernemq/bin/vmq-admin cluster show
-  
-  install-vault:
-    needs: [setup-cluster, install-mongodb]
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
       - name: Install Vault
         id: install-vault
         run: |
@@ -150,16 +90,6 @@ jobs:
           kubectl wait --for=condition=available deployment/vault -n kerberos-vault --timeout=300s
           kubectl get pods -A -o wide 
           kubectl get pods -A -o wide | grep vault | awk '{print $3}' | grep -q '1/1' && echo "vault pod is running with status 1/1" || (echo "vault pod is not running with status 1/1" && exit 1)
-  
-  install-agent:
-    needs: [setup-cluster, install-minio, install-vault]
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
       - name: Install Agent
         id: install-agent
         run: |
@@ -168,16 +98,6 @@ jobs:
           kubectl wait --for=condition=available deployment/agent1 -n kerberos-agent --timeout=300s
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep agent1 | awk '{print $3}' | grep -q '1/1' && echo "agent1 pod is running with status 1/1" || (echo "agent1 pod is not running with status 1/1" && exit 1)
-  
-  install-data-filtering:
-    needs: [setup-cluster, install-vault]
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
       - name: Install data filtering
         id: install-data-filtering
         run: |
@@ -186,16 +106,6 @@ jobs:
           kubectl wait --for=condition=ready deployment/data-filtering -n kerberos-vault --timeout=300s
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep data-filtering | awk '{print $3}' | grep -q '1/1' && echo "data-filtering pod is running with status 1/1" || (echo "data-filtering pod is not running with status 1/1" && exit 1)
-  
-  install-hub:
-    needs: [setup-cluster, install-mongodb, install-minio]
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-22.04, ubuntu-24.04]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
       - name: Install Hub Helm chart
         id: install-hub
         run: |
