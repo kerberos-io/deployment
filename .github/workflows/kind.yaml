@@ -93,6 +93,7 @@ jobs:
       - name: Install Agent
         id: install-agent
         run: |
+          kubectl create namespace kerberos-agent
           kubectl apply -f ./base/agent/kerberos-agent-deployment.yaml -n kerberos-agent
           kubectl wait --for=condition=available deployment/agent1 -n kerberos-agent --timeout=300s
           kubectl get pods -A -o wide

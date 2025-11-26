@@ -37,7 +37,7 @@ jobs:
         id: install-prometheus-operator
         run: |
           kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.48.1/bundle.yaml
-          echo "Sleeping for 30 seconds, give time for the operator to create the CRDs" && sleep 30
+          kubectl wait --for=condition=available deployment/prometheus-operator -n default --timeout=300s
           kubectl get crd
           kubectl get po -A -o wide
       - name: Install Minio
@@ -45,7 +45,9 @@ jobs:
         run: |
           git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl apply -k operator/
           kubectl apply -f ./base/minio/minio-tenant-base.yaml
-          echo "Sleeping for 60 seconds, give time for the operator/tenant to create the CRDs" && sleep 60
+          echo "Waiting for resources to be created..."
+          sleep 10
+          kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 statefulset/myminio-pool-0 -n minio-tenant --timeout=300s
           kubectl get po -A -o wide
           kubectl get po -A -o wide | grep myminio-pool-0-0 | awk '{print $3}' | grep -q '2/2' && echo "myminio-pool-0-0 pod is running with status 2/2" || (echo "myminio-pool-0-0 pod is not running with status 2/2" && exit 1)
       - name: Install MongoDB
@@ -53,60 +55,56 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           kubectl create namespace mongodb
-          helm install mongodb -n mongodb bitnami/mongodb --values ./base/mongodb/mongodb-values.yaml
-          echo "Sleeping for 500 seconds, give time for the helm chart to create the pods" && sleep 500
+          helm install mongodb -n mongodb bitnami/mongodb --values ./base/mongodb/mongodb-values.yaml --wait --timeout=5m
           kubectl get pods -A -o wide
-          kubectl get pods -A -o wide | grep mongodb | awk '{print $3}' | grep -q '1/1' && echo "mongodb pod is running with status 1/1" || (echo "mongodb pod is not running with status 1/1" && exit 1)
       - name: Install RabbitMQ
         id: install-rabbitmq
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           kubectl create namespace rabbitmq
-          helm install rabbitmq -n rabbitmq bitnami/rabbitmq --values ./base/rabbitmq/rabbitmq-values.yaml
-          echo "Sleeping for 60 seconds, give time for the helm chart to create the pods" && sleep 60
+          helm install rabbitmq -n rabbitmq bitnami/rabbitmq --values ./base/rabbitmq/rabbitmq-values.yaml --wait --timeout=5m
           kubectl get pods -A -o wide
-          kubectl get pods -A -o wide | grep rabbitmq | awk '{print $3}' | grep -q '1/1' && echo "rabbitmq pod is running with status 1/1" || (echo "rabbitmq pod is not running with status 1/1" && exit 1)
+          kubectl exec --namespace rabbitmq rabbitmq-0 -- rabbitmqctl status
       - name: Install Vernemq (MQTT Broker)
         id: install-vernemq
         run: |
           kubectl create namespace vernemq
           helm repo add vernemq https://vernemq.github.io/docker-vernemq
-          helm install vernemq vernemq/vernemq --values ./base/vernemq/vernemq-values.yaml -n vernemq --create-namespace
-          echo "Sleeping for 120 seconds, give time for the helm chart to create the pods" && sleep 120
+          helm install vernemq vernemq/vernemq --values ./base/vernemq/vernemq-values.yaml -n vernemq --create-namespace --wait --timeout=5m
           kubectl get pods -A -o wide
-          kubectl get pods -A -o wide | grep vernemq-0 | awk '{print $3}' | grep -q '1/1' && echo "vernemq pod is running with status 1/1" || (echo "vernemq pod is not running with status 1/1" && exit 1)
           kubectl exec --namespace vernemq vernemq-0 -- /vernemq/bin/vmq-admin cluster show
-      - name: Install Kerberos Vault
-        id: install-kerberos-vault
+      - name: Install Vault
+        id: install-vault
         run: |
           kubectl create namespace kerberos-vault
           kubectl apply -f ./base/vault/mongodb-configmap.yaml -n kerberos-vault
           kubectl apply -f ./base/vault/kerberos-vault-deployment.yaml -n kerberos-vault
           kubectl apply -f ./base/vault/kerberos-vault-service.yaml -n kerberos-vault
-          echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
+          sleep 10
+          kubectl wait --for=condition=available deployment/vault -n kerberos-vault --timeout=300s
           kubectl get pods -A -o wide 
-          kubectl get pods -A -o wide | grep kerberos-vault | awk '{print $3}' | grep -q '1/1' && echo "kerberos-vault pod is running with status 1/1" || (echo "kerberos-vault pod is not running with status 1/1" && exit 1)
-      - name: Install Kerberos Agent
-        id: install-kerberos-agent
+          kubectl get pods -A -o wide | grep vault | awk '{print $3}' | grep -q '1/1' && echo "vault pod is running with status 1/1" || (echo "vault pod is not running with status 1/1" && exit 1)
+      - name: Install Agent
+        id: install-agent
         run: |
-          kubectl apply -f ./base/agent/kerberos-agent-deployment.yaml
-          echo "Sleeping for 30 seconds, give time for the helm chart to create the pods" && sleep 30
+          kubectl create namespace kerberos-agent
+          kubectl apply -f ./base/agent/kerberos-agent-deployment.yaml -n kerberos-agent
+          kubectl wait --for=condition=available deployment/agent1 -n kerberos-agent --timeout=300s
           kubectl get pods -A -o wide
-          kubectl get pods -A -o wide | grep agent | awk '{print $3}' | grep -q '1/1' && echo "kerberos-agent pod is running with status 1/1" || (echo "kerberos-agent pod is not running with status 1/1" && exit 1)
-      - name: Install Data filtering
+          kubectl get pods -A -o wide | grep agent1 | awk '{print $3}' | grep -q '1/1' && echo "agent1 pod is running with status 1/1" || (echo "agent1 pod is not running with status 1/1" && exit 1)
+      - name: Install data filtering
         id: install-data-filtering
         run: |
           sed -e '/nvidia/ s/^#*/#/' -i ./base/vault/data-filtering-deployment.yaml
           kubectl apply -f ./base/vault/data-filtering-deployment.yaml
-          echo "Sleeping for 250 seconds, give time for the helm chart to create the pods" && sleep 250
+          kubectl wait --for=condition=ready deployment/data-filtering -n kerberos-vault --timeout=300s
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep data-filtering | awk '{print $3}' | grep -q '1/1' && echo "data-filtering pod is running with status 1/1" || (echo "data-filtering pod is not running with status 1/1" && exit 1)
-      - name: Install Kerberos Hub helm chart
-        id: install-kerberos-hub
+      - name: Install Hub Helm chart
+        id: install-hub
         run: |
           helm repo add kerberos https://charts.kerberos.io
           kubectl create namespace kerberos-hub
-          helm install hub kerberos/hub --values ./base/hub/kerberos-hub-values.yaml -n kerberos-hub --create-namespace
-          echo "Sleeping for 300 seconds, give time for the helm chart to create the pods" && sleep 300
+          helm install hub kerberos/hub --values ./base/hub/kerberos-hub-values.yaml -n kerberos-hub --create-namespace --wait --timeout=10m
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep hub-frontend- | awk '{print $3}' | grep -q '1/1' && echo "hub-frontend pod is running with status 1/1" || (echo "hub-frontend pod is not running with status 1/1" && exit 1)
