@@ -103,6 +103,7 @@ jobs:
         run: |
           helm repo add kerberos https://charts.kerberos.io
           kubectl create namespace kerberos-hub
-          helm install hub kerberos/hub --values ./base/hub/kerberos-hub-values.yaml -n kerberos-hub --create-namespace --wait --timeout=10m
+          helm install hub kerberos/hub --values ./base/hub/kerberos-hub-values.yaml -n kerberos-hub --create-namespace
+          sleep 100
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep hub-frontend- | awk '{print $3}' | grep -q '1/1' && echo "hub-frontend pod is running with status 1/1" || (echo "hub-frontend pod is not running with status 1/1" && exit 1)
