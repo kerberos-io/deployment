@@ -1,24 +1,24 @@
 name: Deploy on k3d
-
 on:
   workflow_dispatch:
   pull_request:
   schedule:
     - cron: "0 0 * * *" # This will run the workflow every day at midnight UTC
-  
 jobs:
   deploy:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-22.04, ubuntu-24.04]
+        os: [ubuntu-22.04, ubuntu-24.04]
         #k3d: [v5.5.2, v5.6.0, v5.7.5]
         k3d: [v5.7.5]
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: "Create single cluster"
         uses: AbsaOSS/k3d-action@v2
         with:
-          k3d-version: ${{ matrix.k3d }}
+          k3d-version: ${{ matrix.k3d }}  
           cluster-name: "k3d-cluster"
       - name: Print Kubernetes Version
         run: |
@@ -29,8 +29,6 @@ jobs:
           kubectl get no
           kubectl get pods -A -o wide
           kubectl get sc
-      - name: Checkout repository
-        uses: actions/checkout@v2
       - name: Install OpenEBS
         run: |
           kubectl apply -f https://openebs.github.io/charts/openebs-operator.yaml
@@ -64,7 +62,7 @@ jobs:
           helm repo add bitnami https://charts.bitnami.com/bitnami
           kubectl create namespace mongodb
           helm install mongodb -n mongodb bitnami/mongodb --values ./base/mongodb/mongodb-values.yaml
-          echo "Sleeping for 250 seconds, give time for the helm chart to create the pods" && sleep 250
+          echo "Sleeping for 500 seconds, give time for the helm chart to create the pods" && sleep 500
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep mongodb | awk '{print $3}' | grep -q '1/1' && echo "mongodb pod is running with status 1/1" || (echo "mongodb pod is not running with status 1/1" && exit 1)
       - name: Install RabbitMQ
