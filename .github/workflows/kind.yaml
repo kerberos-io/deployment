@@ -52,7 +52,7 @@ jobs:
           git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl apply -k operator/
           kubectl apply -f ./base/minio/minio-tenant-base.yaml
           echo "Waiting for resources to be created..."
-          sleep 10
+          sleep 5
           kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 statefulset/myminio-pool-0 -n minio-tenant --timeout=300s
           kubectl get po -A -o wide
           kubectl get po -A -o wide | grep myminio-pool-0-0 | awk '{print $3}' | grep -q '2/2' && echo "myminio-pool-0-0 pod is running with status 2/2" || (echo "myminio-pool-0-0 pod is not running with status 2/2" && exit 1)
@@ -86,17 +86,17 @@ jobs:
           kubectl apply -f ./base/vault/mongodb-configmap.yaml -n kerberos-vault
           kubectl apply -f ./base/vault/kerberos-vault-deployment.yaml -n kerberos-vault
           kubectl apply -f ./base/vault/kerberos-vault-service.yaml -n kerberos-vault
-          sleep 10
+          sleep 5
           kubectl wait --for=condition=available deployment/vault -n kerberos-vault --timeout=300s
           kubectl get pods -A -o wide 
-          kubectl get pods -A -o wide | grep kerberos-vault | awk '{print $3}' | grep -q '1/1' && echo "kerberos-vault pod is running with status 1/1" || (echo "kerberos-vault pod is not running with status 1/1" && exit 1)
+          kubectl get pods -A -o wide | grep vault | awk '{print $3}' | grep -q '1/1' && echo "vault pod is running with status 1/1" || (echo "vault pod is not running with status 1/1" && exit 1)
       - name: Install Agent
         id: install-agent
         run: |
           kubectl apply -f ./base/agent/kerberos-agent-deployment.yaml
           kubectl wait --for=condition=available deployment/agent1 -n kerberos-agent --timeout=300s
           kubectl get pods -A -o wide
-          kubectl get pods -A -o wide | grep agent | awk '{print $3}' | grep -q '1/1' && echo "kerberos-agent pod is running with status 1/1" || (echo "kerberos-agent pod is not running with status 1/1" && exit 1)
+          kubectl get pods -A -o wide | grep agent1 | awk '{print $3}' | grep -q '1/1' && echo "agent1 pod is running with status 1/1" || (echo "agent1 pod is not running with status 1/1" && exit 1)
       - name: Install data filtering
         id: install-data-filtering
         run: |
