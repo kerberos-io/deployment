@@ -1,17 +1,15 @@
 name: Deploy on kind
-
 on:
   workflow_dispatch:
   pull_request:
   schedule:
     - cron: "0 0 * * *" # This will run the workflow every day at midnight UTC
-
 jobs:
   deploy:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-22.04, ubuntu-24.04]
+        os: [ubuntu-22.04, ubuntu-24.04]
         #kind: [v0.21.0, v0.22.0, v0.23.0, v0.24.0, v0.25.0]
         kind: [v0.25.0]
     steps:
@@ -62,7 +60,7 @@ jobs:
           helm repo add bitnami https://charts.bitnami.com/bitnami
           kubectl create namespace mongodb
           helm install mongodb -n mongodb bitnami/mongodb --values ./base/mongodb/mongodb-values.yaml
-          echo "Sleeping for 250 seconds, give time for the helm chart to create the pods" && sleep 250
+          echo "Sleeping for 500 seconds, give time for the helm chart to create the pods" && sleep 500
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep mongodb | awk '{print $3}' | grep -q '1/1' && echo "mongodb pod is running with status 1/1" || (echo "mongodb pod is not running with status 1/1" && exit 1)
       - name: Install RabbitMQ
