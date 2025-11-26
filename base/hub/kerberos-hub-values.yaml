@@ -155,7 +155,7 @@ kerberoshub:
   api:
     repository: uugai/hub-api
     pullPolicy: IfNotPresent
-    tag: "v1.6.5"
+    tag: "v1.6.8"
     replicas: 1
     jwtSecret: "I1JcwzW3A0t_THIS-IS_NOT_A_SECRET_WJK9jnPkipbnVTpf0efMy" # change to a random value, this is for generating JWT tokens.
     schema: "http"
@@ -238,7 +238,7 @@ kerberoshub:
   frontend:
     repository: uugai/hub-frontend
     pullPolicy: IfNotPresent
-    tag: "v1.5.7"
+    tag: "v1.6.7"
     replicas: 1
     schema: "http"
     url: "yourdomain.com"
@@ -377,7 +377,7 @@ kerberoshub:
   reactivate:
     repository: uugai/hub-reactivatesubscriptions
     pullPolicy: IfNotPresent
-    tag: "v1.0.1"
+    tag: "v1.0.2"
     resources:
       requests:
         memory: 50Mi
@@ -422,7 +422,7 @@ kerberospipeline:
   monitor:
     repository: uugai/hub-pipeline-monitor
     pullPolicy: IfNotPresent
-    tag: "v1.3.3"
+    tag: "v1.3.5"
     replicas: 1
     resources:
       requests:
@@ -434,7 +434,7 @@ kerberospipeline:
   sequence:
     repository: uugai/hub-pipeline-sequence
     pullPolicy: IfNotPresent
-    tag: "v1.6.4"
+    tag: "v1.6.6"
     replicas: 1
     resources:
       requests:
@@ -510,7 +510,7 @@ kerberospipeline:
   dominantColor:
     repository: uugai/hub-pipeline-dominantcolors
     pullPolicy: IfNotPresent
-    tag: "v1.1.2"
+    tag: "v1.2.0"
     replicas: 1
     resources:
       requests:
@@ -549,7 +549,7 @@ kerberospipeline:
     enabled: true # Enable or disable the sprite generation 'true' or 'false
     repository: uugai/hub-pipeline-sprite
     pullPolicy: IfNotPresent
-    tag: "v1.0.7"
+    tag: "v1.0.9"
     replicas: 1
     interval: "1" # Number of secondes between each thumbnail in the sprite
     width: "240" # Should not be changed for the moment (hard coded in UI)
