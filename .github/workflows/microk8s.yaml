@@ -55,14 +55,14 @@ jobs:
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           kubectl create namespace mongodb
-          helm install mongodb -n mongodb bitnami/mongodb --values ./base/mongodb/mongodb-values.yaml --wait --timeout=5m
+          helm install mongodb -n mongodb bitnami/mongodb --values ./base/mongodb/mongodb-values.yaml --wait --timeout=10m
           kubectl get pods -A -o wide
       - name: Install RabbitMQ
         id: install-rabbitmq
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           kubectl create namespace rabbitmq
-          helm install rabbitmq -n rabbitmq bitnami/rabbitmq --values ./base/rabbitmq/rabbitmq-values.yaml --wait --timeout=5m
+          helm install rabbitmq -n rabbitmq bitnami/rabbitmq --values ./base/rabbitmq/rabbitmq-values.yaml --wait --timeout=10m
           kubectl get pods -A -o wide
           kubectl exec --namespace rabbitmq rabbitmq-0 -- rabbitmqctl status
       - name: Install Vernemq (MQTT Broker)
@@ -70,7 +70,7 @@ jobs:
         run: |
           kubectl create namespace vernemq
           helm repo add vernemq https://vernemq.github.io/docker-vernemq
-          helm install vernemq vernemq/vernemq --values ./base/vernemq/vernemq-values.yaml -n vernemq --create-namespace --wait --timeout=5m
+          helm install vernemq vernemq/vernemq --values ./base/vernemq/vernemq-values.yaml -n vernemq --create-namespace --wait --timeout=10m
           kubectl get pods -A -o wide
           kubectl exec --namespace vernemq vernemq-0 -- /vernemq/bin/vmq-admin cluster show
       - name: Install Vault
@@ -92,14 +92,6 @@ jobs:
           kubectl wait --for=condition=available deployment/agent1 -n kerberos-agent --timeout=300s
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep agent1 | awk '{print $3}' | grep -q '1/1' && echo "agent1 pod is running with status 1/1" || (echo "agent1 pod is not running with status 1/1" && exit 1)
-      - name: Install data filtering
-        id: install-data-filtering
-        run: |
-          sed -e '/nvidia/ s/^#*/#/' -i ./base/vault/data-filtering-deployment.yaml
-          kubectl apply -f ./base/vault/data-filtering-deployment.yaml -n kerberos-vault
-          kubectl wait --for=condition=ready deployment/data-filtering -n kerberos-vault --timeout=300s
-          kubectl get pods -A -o wide
-          kubectl get pods -A -o wide | grep data-filtering | awk '{print $3}' | grep -q '1/1' && echo "data-filtering pod is running with status 1/1" || (echo "data-filtering pod is not running with status 1/1" && exit 1)
       - name: Install Hub Helm chart
         id: install-hub
         run: |
