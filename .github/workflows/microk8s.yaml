@@ -1,6 +1,7 @@
 name: Deploy on microk8s
 on:
   workflow_dispatch:
+  pull_request:
   schedule:
     - cron: "0 0 * * *" # This will run the workflow every day at midnight UTC
 jobs:

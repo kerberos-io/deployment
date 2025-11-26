@@ -2,9 +2,10 @@ name: Deploy on k3d
 
 on:
   workflow_dispatch:
+  pull_request:
   schedule:
     - cron: "0 0 * * *" # This will run the workflow every day at midnight UTC
-
+  
 jobs:
   deploy:
     runs-on: ${{ matrix.os }}
