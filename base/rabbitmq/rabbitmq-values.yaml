@@ -19,13 +19,16 @@ global:
   ##
   imagePullSecrets: []
   storageClass: "openebs-hostpath"
+  security:
+    allowInsecureImages: true
+    
 ## @section RabbitMQ Image parameters
 ## Bitnami RabbitMQ image version
 ## ref: https://hub.docker.com/r/bitnami/rabbitmq/tags/
 ## @param image.registry [default: REGISTRY_NAME] RabbitMQ image registry
 ## @param image.repository [default: REPOSITORY_NAME/rabbitmq] RabbitMQ image repository
 ## @skip image.tag RabbitMQ image tag (immutable tags are recommended)
-## @param image.digest RabbitMQ image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.digest RabbitMQ image digest in allowInsecureImages way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy RabbitMQ image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Set to true if you would like to see extra information on logs
