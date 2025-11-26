@@ -93,7 +93,7 @@ jobs:
       - name: Install Agent
         id: install-agent
         run: |
-          kubectl apply -f ./base/agent/kerberos-agent-deployment.yaml
+          kubectl apply -f ./base/agent/kerberos-agent-deployment.yaml -n kerberos-agent
           kubectl wait --for=condition=available deployment/agent1 -n kerberos-agent --timeout=300s
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep agent1 | awk '{print $3}' | grep -q '1/1' && echo "agent1 pod is running with status 1/1" || (echo "agent1 pod is not running with status 1/1" && exit 1)
