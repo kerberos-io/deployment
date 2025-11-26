@@ -51,6 +51,10 @@ jobs:
         run: |
           git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl apply -k operator/
           kubectl apply -f ./base/minio/minio-tenant-base.yaml
+          echo "Waiting for resources to be created..."
+          sleep 10
+          kubectl get statefulsets -A
+          kubectl get po -A -o wide
           kubectl wait --for=jsonpath='{.status.readyReplicas}'=1 statefulset/myminio-pool-0 -n minio-tenant --timeout=300s
           kubectl get po -A -o wide
           kubectl get po -A -o wide | grep myminio-pool-0-0 | awk '{print $3}' | grep -q '2/2' && echo "myminio-pool-0-0 pod is running with status 2/2" || (echo "myminio-pool-0-0 pod is not running with status 2/2" && exit 1)
