@@ -106,7 +106,7 @@ jobs:
         id: install-data-filtering
         run: |
           sed -e '/nvidia/ s/^#*/#/' -i ./base/vault/data-filtering-deployment.yaml
-          kubectl apply -f ./base/vault/data-filtering-deployment.yaml
+          kubectl apply -f ./base/vault/data-filtering-deployment.yaml -n kerberos-vault
           kubectl wait --for=condition=ready deployment/data-filtering -n kerberos-vault --timeout=300s
           kubectl get pods -A -o wide
           kubectl get pods -A -o wide | grep data-filtering | awk '{print $3}' | grep -q '1/1' && echo "data-filtering pod is running with status 1/1" || (echo "data-filtering pod is not running with status 1/1" && exit 1)
