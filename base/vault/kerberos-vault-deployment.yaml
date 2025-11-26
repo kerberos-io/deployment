@@ -24,7 +24,7 @@ spec:
           command: ["sh", "-c", "until nc -z mongodb.mongodb 27017 > /dev/null; do echo Waiting for master.; sleep 2; done;"]
       containers:
         - name: vault
-          image: uugai/vault:v1.1.6
+          image: uugai/vault:v1.1.13
           resources:
             requests:
               memory: 128Mi
