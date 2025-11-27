@@ -128,3 +128,15 @@ jobs:
           kubectl wait --for=condition=available deployment/pipe-sprite -n kerberos-hub --timeout=300s
           kubectl wait --for=condition=available deployment/pipe-throttler -n kerberos-hub --timeout=300s
           kubectl get pods -A -o wide
+      - name: Send Slack Notification on Success
+        if: success()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{\"text\": \"✅ K3d deployment successful on ${{ matrix.os }} (${{ matrix.k3d }}) - triggered by ${{ github.actor }}\"}" $SLACK_WEBHOOK_URL
+      - name: Send Slack Notification on Failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{\"text\": \"❌ K3d deployment failed on ${{ matrix.os }} (${{ matrix.k3d }}) - <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View logs>\"}" $SLACK_WEBHOOK_URL

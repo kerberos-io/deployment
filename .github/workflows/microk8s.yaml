@@ -10,7 +10,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, ubuntu-24.04]
-        #microk8s: [1.29/stable, 1.30/stable, 1.31/stable, 1.32/stable]
         microk8s: [1.32/stable]
     steps:
       - uses: balchua/microk8s-actions@v0.4.3
@@ -118,3 +117,16 @@ jobs:
           kubectl wait --for=condition=available deployment/pipe-sprite -n kerberos-hub --timeout=300s
           kubectl wait --for=condition=available deployment/pipe-throttler -n kerberos-hub --timeout=300s
           kubectl get pods -A -o wide
+      - name: Send Slack Notification on Success
+        if: success()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{\"text\": \"✅ MicroK8s deployment successful on ${{ matrix.os }} (${{ matrix.microk8s }}) - triggered by ${{ github.actor }}\"}" $SLACK_WEBHOOK_URL
+      - name: Send Slack Notification on Failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{\"text\": \"❌ MicroK8s deployment failed on ${{ matrix.os }} (${{ matrix.microk8s }}) - <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View logs>\"}" $SLACK_WEBHOOK_URL
+          
