@@ -124,3 +124,19 @@ jobs:
           kubectl wait --for=condition=available deployment/pipe-sprite -n kerberos-hub --timeout=300s
           kubectl wait --for=condition=available deployment/pipe-throttler -n kerberos-hub --timeout=300s
           kubectl get pods -A -o wide
+      - name: Send Slack Notification on Success
+        if: success()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{
+            \"text\": \"✅ Kind Deployment Successful! :rocket:\n*OS*: ${{ matrix.os }}\n*Kind Version*: ${{ matrix.kind }}\n*Workflow*: ${{ github.workflow }}\n*Triggered by*: ${{ github.actor }}\n*Repository*: ${{ github.repository }}\"
+          }" $SLACK_WEBHOOK_URL
+      - name: Send Slack Notification on Failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{
+            \"text\": \"❌ Kind Deployment Failed! :x:\n*OS*: ${{ matrix.os }}\n*Kind Version*: ${{ matrix.kind }}\n*Workflow*: ${{ github.workflow }}\n*Triggered by*: ${{ github.actor }}\n*Repository*: ${{ github.repository }}\n*Run URL*: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+          }" $SLACK_WEBHOOK_URL

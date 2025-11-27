@@ -17,3 +17,19 @@ jobs:
           azure_openai_endpoint: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
           azure_openai_version: ${{ secrets.AZURE_OPENAI_VERSION }}
           overwrite_description: true
+      - name: Send Slack Notification on Success
+        if: success()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{
+            \"text\": \"✅ PR Description Auto-fill Successful! :robot_face:\n*Workflow*: ${{ github.workflow }}\n*PR*: ${{ github.event.pull_request.title }}\n*Triggered by*: ${{ github.actor }}\n*Repository*: ${{ github.repository }}\"
+          }" $SLACK_WEBHOOK_URL
+      - name: Send Slack Notification on Failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{
+            \"text\": \"❌ PR Description Auto-fill Failed! :x:\n*Workflow*: ${{ github.workflow }}\n*PR*: ${{ github.event.pull_request.title }}\n*Triggered by*: ${{ github.actor }}\n*Repository*: ${{ github.repository }}\n*Run URL*: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+          }" $SLACK_WEBHOOK_URL
