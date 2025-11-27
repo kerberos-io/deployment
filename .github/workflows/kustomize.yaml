@@ -29,19 +29,15 @@ jobs:
           kubectl get sc
       - name: Checkout repository
         uses: actions/checkout@v2
-      # - name: Send Slack Notification on Success
-      #   if: success()
-      #   env:
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      #   run: |
-      #     curl -X POST -H 'Content-type: application/json' --data "{
-      #       \"text\": \"✅ Kustomize Deployment Successful! :rocket:\n*OS*: ${{ matrix.os }}\n*Kind Version*: ${{ matrix.kind }}\n*Workflow*: ${{ github.workflow }}\n*Triggered by*: ${{ github.actor }}\n*Repository*: ${{ github.repository }}\"
-      #     }" $SLACK_WEBHOOK_URL
-      # - name: Send Slack Notification on Failure
-      #   if: failure()
-      #   env:
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-      #   run: |
-      #     curl -X POST -H 'Content-type: application/json' --data "{
-      #       \"text\": \"❌ Kustomize Deployment Failed! :x:\n*OS*: ${{ matrix.os }}\n*Kind Version*: ${{ matrix.kind }}\n*Workflow*: ${{ github.workflow }}\n*Triggered by*: ${{ github.actor }}\n*Repository*: ${{ github.repository }}\n*Run URL*: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
-      #     }" $SLACK_WEBHOOK_URL
+      - name: Send Slack Notification on Success
+        if: success()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{\"text\": \"✅ Kustomize deployment successful on ${{ matrix.os }} (${{ matrix.kind }}) - triggered by ${{ github.actor }}\"}" $SLACK_WEBHOOK_URL
+      - name: Send Slack Notification on Failure
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data "{\"text\": \"❌ Kustomize deployment failed on ${{ matrix.os }} (${{ matrix.kind }}) - <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View logs>\"}" $SLACK_WEBHOOK_URL

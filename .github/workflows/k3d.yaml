@@ -133,14 +133,10 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data "{
-            \"text\": \"✅ K3d Deployment Successful! :rocket:\n*OS*: ${{ matrix.os }}\n*K3d Version*: ${{ matrix.k3d }}\n*Workflow*: ${{ github.workflow }}\n*Triggered by*: ${{ github.actor }}\n*Repository*: ${{ github.repository }}\"
-          }" $SLACK_WEBHOOK_URL
+          curl -X POST -H 'Content-type: application/json' --data "{\"text\": \"✅ K3d deployment successful on ${{ matrix.os }} (${{ matrix.k3d }}) - triggered by ${{ github.actor }}\"}" $SLACK_WEBHOOK_URL
       - name: Send Slack Notification on Failure
         if: failure()
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
-          curl -X POST -H 'Content-type: application/json' --data "{
-            \"text\": \"❌ K3d Deployment Failed! :x:\n*OS*: ${{ matrix.os }}\n*K3d Version*: ${{ matrix.k3d }}\n*Workflow*: ${{ github.workflow }}\n*Triggered by*: ${{ github.actor }}\n*Repository*: ${{ github.repository }}\n*Run URL*: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
-          }" $SLACK_WEBHOOK_URL
+          curl -X POST -H 'Content-type: application/json' --data "{\"text\": \"❌ K3d deployment failed on ${{ matrix.os }} (${{ matrix.k3d }}) - <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View logs>\"}" $SLACK_WEBHOOK_URL
