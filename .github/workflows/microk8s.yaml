@@ -10,7 +10,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, ubuntu-24.04]
-        #microk8s: [1.29/stable, 1.30/stable, 1.31/stable, 1.32/stable]
         microk8s: [1.32/stable]
     steps:
       - uses: balchua/microk8s-actions@v0.4.3
