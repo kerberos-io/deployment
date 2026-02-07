@@ -153,9 +153,9 @@ kerberoshub:
         memory: 100Mi
         cpu: 100m
   api:
-    repository: uugai/hub-api
+    repository: ghcr.io/uug-ai/hub-api
     pullPolicy: IfNotPresent
-    tag: "v1.6.8"
+    tag: "v1.8.6"
     replicas: 1
     jwtSecret: "I1JcwzW3A0t_THIS-IS_NOT_A_SECRET_WJK9jnPkipbnVTpf0efMy" # change to a random value, this is for generating JWT tokens.
     schema: "http"
@@ -236,9 +236,9 @@ kerberoshub:
       #    clientSecret: "xxx"
       #    clientVerificationId: "" # This is only required for SSO chaining.
   frontend:
-    repository: uugai/hub-frontend
+    repository: ghcr.io/uug-ai/hub-frontend
     pullPolicy: IfNotPresent
-    tag: "v1.6.7"
+    tag: "v1.7.15"
     replicas: 1
     schema: "http"
     url: "yourdomain.com"
@@ -420,9 +420,9 @@ kerberospipeline:
         memory: 50Mi
         cpu: 50m
   monitor:
-    repository: uugai/hub-pipeline-monitor
+    repository: ghcr.io/uug-ai/hub-pipeline-monitor
     pullPolicy: IfNotPresent
-    tag: "v1.3.5"
+    tag: "v1.3.9"
     replicas: 1
     resources:
       requests:
@@ -432,9 +432,9 @@ kerberospipeline:
         memory: 50Mi
         cpu: 50m
   sequence:
-    repository: uugai/hub-pipeline-sequence
+    repository: ghcr.io/uug-ai/hub-pipeline-sequence
     pullPolicy: IfNotPresent
-    tag: "v1.6.6"
+    tag: "v1.6.9"
     replicas: 1
     resources:
       requests:
@@ -456,9 +456,9 @@ kerberospipeline:
         memory: 50Mi
         cpu: 50m
   notify:
-    repository: uugai/hub-pipeline-notification
+    repository: ghcr.io/uug-ai/hub-pipeline-notification
     pullPolicy: IfNotPresent
-    tag: "v1.0.20"
+    tag: "v1.1.5"
     replicas: 1
     resources:
       requests:
@@ -496,9 +496,9 @@ kerberospipeline:
         #    persistentVolumeClaim:
         #      claimName: custom-layout-claim
   analysis:
-    repository: uugai/hub-pipeline-analysis
+    repository: ghcr.io/uug-ai/hub-pipeline-analysis
     pullPolicy: IfNotPresent
-    tag: "v1.6.1"
+    tag: "v1.7.6"
     replicas: 1
     resources:
       requests:
@@ -508,9 +508,9 @@ kerberospipeline:
         memory: 50Mi
         cpu: 50m
   dominantColor:
-    repository: uugai/hub-pipeline-dominantcolors
+    repository: ghcr.io/uug-ai/hub-pipeline-dominantcolors
     pullPolicy: IfNotPresent
-    tag: "v1.2.0"
+    tag: "v2.0.2"
     replicas: 1
     resources:
       requests:
@@ -520,9 +520,9 @@ kerberospipeline:
         memory: 50Mi
         cpu: 50m
   thumbnail:
-    repository: uugai/hub-pipeline-thumbnail
+    repository: ghcr.io/uug-ai/hub-pipeline-thumbnail
     pullPolicy: IfNotPresent
-    tag: "v1.2.1"
+    tag: "v1.3.1"
     replicas: 1
     quality: "1" # 1 (best) - 31 (worst)
     width: "600"
@@ -539,7 +539,7 @@ kerberospipeline:
   counting:
     repository: uugai/hub-pipeline-counting
     pullPolicy: IfNotPresent
-    tag: "v1.6.2"
+    tag: "v1.6.3"
     replicas: 1
     resources:
       requests:
@@ -562,9 +562,9 @@ kerberospipeline:
         memory: 50Mi
         cpu: 50m
   export:
-    repository: uugai/hub-pipeline-export
+    repository: kerberos/pipe-export
     pullPolicy: IfNotPresent
-    tag: "v1.0.0"
+    tag: "1.0.6437127898"
     replicas: 1
     resources:
       requests:
