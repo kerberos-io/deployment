@@ -155,7 +155,7 @@ kerberoshub:
   api:
     repository: ghcr.io/uug-ai/hub-api
     pullPolicy: IfNotPresent
-    tag: "v1.8.6"
+    tag: "v1.8.14"
     replicas: 1
     jwtSecret: "I1JcwzW3A0t_THIS-IS_NOT_A_SECRET_WJK9jnPkipbnVTpf0efMy" # change to a random value, this is for generating JWT tokens.
     schema: "http"
@@ -238,7 +238,7 @@ kerberoshub:
   frontend:
     repository: ghcr.io/uug-ai/hub-frontend
     pullPolicy: IfNotPresent
-    tag: "v1.7.15"
+    tag: "v1.8.0"
     replicas: 1
     schema: "http"
     url: "yourdomain.com"
@@ -434,7 +434,7 @@ kerberospipeline:
   sequence:
     repository: ghcr.io/uug-ai/hub-pipeline-sequence
     pullPolicy: IfNotPresent
-    tag: "v1.6.9"
+    tag: "v1.6.11"
     replicas: 1
     resources:
       requests:
@@ -458,7 +458,7 @@ kerberospipeline:
   notify:
     repository: ghcr.io/uug-ai/hub-pipeline-notification
     pullPolicy: IfNotPresent
-    tag: "v1.1.5"
+    tag: "v1.3.0"
     replicas: 1
     resources:
       requests:
@@ -498,7 +498,7 @@ kerberospipeline:
   analysis:
     repository: ghcr.io/uug-ai/hub-pipeline-analysis
     pullPolicy: IfNotPresent
-    tag: "v1.7.6"
+    tag: "v1.7.7"
     replicas: 1
     resources:
       requests:
@@ -562,9 +562,9 @@ kerberospipeline:
         memory: 50Mi
         cpu: 50m
   export:
-    repository: kerberos/pipe-export
+    repository: ghcr.io/uug-ai/hub-pipeline-export
     pullPolicy: IfNotPresent
-    tag: "1.0.6437127898"
+    tag: "v1.1.3"
     replicas: 1
     resources:
       requests:
