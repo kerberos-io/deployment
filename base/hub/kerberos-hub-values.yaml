@@ -155,7 +155,7 @@ kerberoshub:
   api:
     repository: ghcr.io/uug-ai/hub-api
     pullPolicy: IfNotPresent
-    tag: "v1.8.14"
+    tag: "v1.8.17"
     replicas: 1
     jwtSecret: "I1JcwzW3A0t_THIS-IS_NOT_A_SECRET_WJK9jnPkipbnVTpf0efMy" # change to a random value, this is for generating JWT tokens.
     schema: "http"
@@ -238,7 +238,7 @@ kerberoshub:
   frontend:
     repository: ghcr.io/uug-ai/hub-frontend
     pullPolicy: IfNotPresent
-    tag: "v1.8.0"
+    tag: "v1.8.4"
     replicas: 1
     schema: "http"
     url: "yourdomain.com"
@@ -458,7 +458,7 @@ kerberospipeline:
   notify:
     repository: ghcr.io/uug-ai/hub-pipeline-notification
     pullPolicy: IfNotPresent
-    tag: "v1.3.0"
+    tag: "v1.3.1"
     replicas: 1
     resources:
       requests:
@@ -498,7 +498,7 @@ kerberospipeline:
   analysis:
     repository: ghcr.io/uug-ai/hub-pipeline-analysis
     pullPolicy: IfNotPresent
-    tag: "v1.7.7"
+    tag: "v1.7.8"
     replicas: 1
     resources:
       requests:
@@ -547,9 +547,9 @@ kerberospipeline:
         cpu: 50m
   sprite:
     enabled: true # Enable or disable the sprite generation 'true' or 'false
-    repository: uugai/hub-pipeline-sprite
+    repository: ghcr.io/uug-ai/hub-pipeline-sprite
     pullPolicy: IfNotPresent
-    tag: "v1.0.9"
+    tag: "v1.0.10"
     replicas: 1
     interval: "1" # Number of secondes between each thumbnail in the sprite
     width: "240" # Should not be changed for the moment (hard coded in UI)
