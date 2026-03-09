@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hub-yolov8
+  name: hub-pipeline-classifier
   labels:
-    app: hub-yolov8
+    app: hub-pipeline-classifier
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hub-yolov8
+      app: hub-pipeline-classifier
   template:
     metadata:
       labels:
-        app: hub-yolov8
+        app: hub-pipeline-classifier
     spec:
       containers:
-        - name: hub-yolov8
-          image: uugai/hub-yolov8:latest
+        - name: hub-pipeline-classifier
+          image: ghcr.io/uug-ai/hub-pipeline-classifier:v1.5.5
           #resources:
           #  limits:
           #    nvidia.com/gpu: 1 # requesting a single GPU
