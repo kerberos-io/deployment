@@ -7,7 +7,7 @@ Deploying the Kerberos.io stack may initially appear to be a complex task due to
 The Kerberos.io stack offers flexible installation options, supporting deployment in hybrid environments, fully in the cloud, or entirely at the edge. This deployment guide covers the installation of various Kerberos.io components. For detailed information on each component, please refer to their respective repositories.
 
 - [Kerberos Agent](https://github.com/kerberos-io/agent)
-- [Kerberos Factory](https://github.com/kerberos-io/factory)
+- [Factory](https://github.com/kerberos-io/factory)
 - [Kerberos Vault](https://github.com/kerberos-io/vault)
 - [Kerberos Hub](https://github.com/kerberos-io/hub)
 

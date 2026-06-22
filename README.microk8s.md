@@ -334,7 +334,7 @@ With the Vault installed, we can proceed to configure the various components. Cu
 
 ### Create a Agent
 
-After deploying the Vault and configuring the necessary services for storage, database, and integration, you can proceed to deploy the Agent with the appropriate configuration. Review the `kerberos-agent-deployment.yaml` file and adjust the relevant settings, such as the RTSP URL, to ensure proper functionality. Please note that you can allow opt for the [Kerberos Factory](https://github.com/kerberos-io/factory/tree/master/kubernetes) which gives you a UI to manage the creation of Agents. Also please note if you generated new the keys in the previous Vault account creation, you need to update those in the Agent deployment.
+After deploying the Vault and configuring the necessary services for storage, database, and integration, you can proceed to deploy the Agent with the appropriate configuration. Review the `kerberos-agent-deployment.yaml` file and adjust the relevant settings, such as the RTSP URL, to ensure proper functionality. Please note that you can allow opt for the [Factory](https://github.com/kerberos-io/factory/tree/master/kubernetes) which gives you a UI to manage the creation of Agents. Also please note if you generated new the keys in the previous Vault account creation, you need to update those in the Agent deployment.
 
 ```bash
 kubectl apply -f kerberos-agent-deployment.yaml

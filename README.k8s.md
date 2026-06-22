@@ -351,7 +351,7 @@ With the Kerberos Vault installed, we can proceed to configure the various compo
 
 ### Create a Kerberos Agent
 
-After deploying the Kerberos Vault and configuring the necessary services for storage, database, and integration, you can proceed to deploy the Kerberos Agent with the appropriate configuration. Review the `kerberos-agent-deployment.yaml` file and adjust the relevant settings, such as the RTSP URL, to ensure proper functionality. As mentioned below note that you can opt for the [Kerberos Factory](https://github.com/kerberos-io/factory/tree/master/kubernetes) which gives you a UI to manage the creation of Kerberos Agents. **_(Please note if you generated new the keys in the previous Kerberos Vault account creation, you need to update those in the Kerberos Agent deployment)_**
+After deploying the Kerberos Vault and configuring the necessary services for storage, database, and integration, you can proceed to deploy the Kerberos Agent with the appropriate configuration. Review the `kerberos-agent-deployment.yaml` file and adjust the relevant settings, such as the RTSP URL, to ensure proper functionality. As mentioned below note that you can opt for the [Factory](https://github.com/kerberos-io/factory/tree/master/kubernetes) which gives you a UI to manage the creation of Kerberos Agents. **_(Please note if you generated new the keys in the previous Kerberos Vault account creation, you need to update those in the Kerberos Agent deployment)_**
 
 ```bash
 kubectl apply -f kerberos-agent-deployment.yaml
@@ -366,11 +366,11 @@ kubectl logs -f kerberos-agent...
 
 To validate the Kerberos Vault and review any stored recordings, access the user interface at `http://localhost:30080` (after establishing the reverse tunnel).
 
-### Create Kerberos Agents through Kerberos Factory
+### Create Kerberos Agents through Factory
 
-Managing Kerberos Agents through seperate configuration files might feel cumbersome, especially for non-technical users. This is where Kerberos Factory comes into the picture. Kerberos Factory provides a visual view that allows you to rapidly connect cameras through a user interface, which allows users without any technical background about cameras and kubernetes create Kerberos Agents.
+Managing Kerberos Agents through seperate configuration files might feel cumbersome, especially for non-technical users. This is where Factory comes into the picture. Factory provides a visual view that allows you to rapidly connect cameras through a user interface, which allows users without any technical background about cameras and kubernetes create Kerberos Agents.
 
-Kerberos Factory also requires a mongodb, just like Kerberos Vault. Luckily you can reuse the mongodb installation we have deployed earlier, the only thing we'll need to do is to create another `configmap.yaml` in the `kerberos-factory` namespace.
+Factory also requires a mongodb, just like Kerberos Vault. Luckily you can reuse the mongodb installation we have deployed earlier, the only thing we'll need to do is to create another `configmap.yaml` in the `kerberos-factory` namespace.
 
 Create the `kerberos-factory` namespace.
 
@@ -378,7 +378,7 @@ Create the `kerberos-factory` namespace.
 kubectl create namespace kerberos-factory
 ```
 
-Apply the manifests, so the Kerberos Factory application is deployed and knows how to connect to the MongoDB.
+Apply the manifests, so the Factory application is deployed and knows how to connect to the MongoDB.
 
 ```bash
 kubectl apply -f ./mongodb-configmap.yaml -n kerberos-factory
@@ -386,7 +386,7 @@ kubectl apply -f ./kerberos-factory-deployment.yaml -n kerberos-factory
 kubectl apply -f ./kerberos-factory-service.yaml -n kerberos-factory
 ```
 
-To allow our Kerberos Factory to create Kubernetes resources we will need to apply an additional cluster role. This will allow our Kerberos Factory deployment to read and write resources to our Kubernetes cluster.
+To allow our Factory to create Kubernetes resources we will need to apply an additional cluster role. This will allow our Factory deployment to read and write resources to our Kubernetes cluster.
 
 ```bash
 kubectl apply -f ./kerberos-factory-clusterrole.yaml -n kerberos-factory

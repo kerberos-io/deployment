@@ -18,13 +18,9 @@ spec:
       labels:
         app: factory
     spec:
-      initContainers:
-      - name: wait-for-mongodb-before-starup
-        image: busybox
-        command:  ["sh", "-c", "until nc -z mongodb.mongodb 27017 > /dev/null; do echo Waiting for master.; sleep 2; done;"]
       containers:
       - name: factory
-        image: "uugai/factory:v1.0.5"
+        image: "uugai/factory:v2.0.1"
         resources:
           requests:
             memory: 128Mi
@@ -34,9 +30,6 @@ spec:
             cpu: 100m
         ports:
           - containerPort: 80
-        envFrom:
-          - configMapRef:
-              name: mongodb
         env:
         - name: GIN_MODE
           value: release
@@ -53,7 +46,11 @@ spec:
         # Do not touch this, unless you know what you are doing.
         - name: NAMESPACE
           value: "kerberos-factory"
-        - name: FACTORY_ENVIRONMENT
+        # Store the factory and agent configuration in Kubernetes ConfigMaps
+        # (no MongoDB required) and schedule agents with the Kubernetes engine.
+        - name: FACTORY_CONFIGURATION
+          value: "configmap"
+        - name: FACTORY_ENGINE
           value: "kubernetes"
         - name: K8S_PROXY
           value: http://localhost:80

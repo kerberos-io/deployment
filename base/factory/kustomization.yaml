@@ -1,6 +1,5 @@
 namespace: kerberos-factory
 resources:
-  - mongodb-configmap.yaml
   - kerberos-factory-deployment.yaml
   - kerberos-factory-service.yaml
   - kerberos-factory-clusterrole.yaml
