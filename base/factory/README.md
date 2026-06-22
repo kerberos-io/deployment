@@ -2,7 +2,7 @@
 
 This directory holds the raw Kubernetes manifests for **Factory**. Factory
 is a web application that runs *inside* your cluster and uses the Kubernetes API to
-deploy, configure and observe Kerberos Agents (one Deployment + Service per camera).
+deploy, configure and observe Agents (one Deployment + Service per camera).
 
 > **Scope of this README.** At the top level of this repository Factory is normally
 > installed through **Kustomize** (see [`overlays/`](../../overlays) and the

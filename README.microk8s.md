@@ -71,7 +71,7 @@ For more detailed instructions and troubleshooting, please refer to the official
 
 ## Dependencies
 
-Before installing, several dependencies are required for storage, such as a database (e.g., MongoDB) and a message broker (e.g., RabbitMQ) for asynchronous behavior. We will install these components before setting up the Kerberos Agents and Kerberos Vault.
+Before installing, several dependencies are required for storage, such as a database (e.g., MongoDB) and a message broker (e.g., RabbitMQ) for asynchronous behavior. We will install these components before setting up the Agents and Kerberos Vault.
 
 One of the key advantages of MicroK8s is its out-of-the-box addons, which can be enabled with a single command. This eliminates the need for complex Helm charts or operators, simplifying the setup process. We will enable some common services, such as DNS, GPU support, and storage, to streamline the installation.
 
@@ -332,7 +332,7 @@ With the Vault installed, we can proceed to configure the various components. Cu
   - Access key: XJoi2@bgSOvOYBy# (or generate new keys, but don't forget to update them in the next steps)
   - Secret key: OGGqat4lXRpL@9XBYc8FUaId@5 (or generate new keys, but don't forget to update them in the next steps)
 
-### Create a Agent
+### Create an Agent
 
 After deploying the Vault and configuring the necessary services for storage, database, and integration, you can proceed to deploy the Agent with the appropriate configuration. Review the `kerberos-agent-deployment.yaml` file and adjust the relevant settings, such as the RTSP URL, to ensure proper functionality. Please note that you can allow opt for the [Factory](https://github.com/kerberos-io/factory/tree/master/kubernetes) which gives you a UI to manage the creation of Agents. Also please note if you generated new the keys in the previous Vault account creation, you need to update those in the Agent deployment.
 

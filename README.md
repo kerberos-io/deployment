@@ -6,7 +6,7 @@ Deploying the Kerberos.io stack may initially appear to be a complex task due to
 
 The Kerberos.io stack offers flexible installation options, supporting deployment in hybrid environments, fully in the cloud, or entirely at the edge. This deployment guide covers the installation of various Kerberos.io components. For detailed information on each component, please refer to their respective repositories.
 
-- [Kerberos Agent](https://github.com/kerberos-io/agent)
+- [Agent](https://github.com/kerberos-io/agent)
 - [Factory](https://github.com/kerberos-io/factory)
 - [Kerberos Vault](https://github.com/kerberos-io/vault)
 - [Kerberos Hub](https://github.com/kerberos-io/hub)
@@ -27,11 +27,11 @@ Given these differences, we have created specific architectural frameworks for s
 
 ## Edge (self-hosted) deployment
 
-Edge (self-hosted) deployments are typically used for camera processing and edge storage. In this setup, Kerberos Agents are deployed and connected to cameras, with recordings stored in the Kerberos Vault. Additionally, you may want to create integrations, such as [data filtering](https://github.com/uug-ai/data-filtering), to ensure only relevant recordings are retained, or set up custom notifications to your first or third-party platforms. In this edge scenario, hardware is being deployed in the local network to handle the workloads; for example AMD64 or ARM64 processors.
+Edge (self-hosted) deployments are typically used for camera processing and edge storage. In this setup, Agents are deployed and connected to cameras, with recordings stored in the Kerberos Vault. Additionally, you may want to create integrations, such as [data filtering](https://github.com/uug-ai/data-filtering), to ensure only relevant recordings are retained, or set up custom notifications to your first or third-party platforms. In this edge scenario, hardware is being deployed in the local network to handle the workloads; for example AMD64 or ARM64 processors.
 
 ![Edge - self-hosted deployment](./assets/images/deployment-self-hosted.svg)
 
-A key aspect of this deployment is the scaling of Kerberos Agents. Each camera is assigned a dedicated Kerberos Agent container, which is linked to a central Kerberos Vault. The Kerberos Vault stores metadata in MongoDB, recordings in Minio (or another S3-compliant object storage), and can generate events in a message broker like RabbitMQ. This approach enables you to develop custom applications/logic that can respond to the creation of new recordings.
+A key aspect of this deployment is the scaling of Agents. Each camera is assigned a dedicated Agent container, which is linked to a central Kerberos Vault. The Kerberos Vault stores metadata in MongoDB, recordings in Minio (or another S3-compliant object storage), and can generate events in a message broker like RabbitMQ. This approach enables you to develop custom applications/logic that can respond to the creation of new recordings.
 
 Based on your technology experience and preferences, you can choose from the following deployment guides:
 

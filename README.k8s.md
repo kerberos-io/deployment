@@ -10,7 +10,7 @@
 
 Kubernetes is an open-source platform for automating the deployment, scaling, and management of containerized applications. It provides features like automated deployment, self-healing, service discovery, and storage orchestration. Kubernetes is essential for modern cloud-native application development and operations.
 
-In this tutorial, we will guide you through the installation of the Kerberos.io edge stack, which includes the Kerberos Agent, Kerberos Vault, and the Data Filtering Service. This setup enables the storage of recordings from multiple cameras at the edge, facilitating local data processing and ensuring secure and efficient management of video streams.
+In this tutorial, we will guide you through the installation of the Kerberos.io edge stack, which includes the Agent, Kerberos Vault, and the Data Filtering Service. This setup enables the storage of recordings from multiple cameras at the edge, facilitating local data processing and ensuring secure and efficient management of video streams.
 
 ## Install Kubernetes on Ubuntu with kubeadm
 
@@ -112,7 +112,7 @@ Ensure that all nodes are in the Ready state and all pods are in the Running sta
 
 ## Dependencies
 
-When installing the Kerberos.io stack, several dependencies are required for storage, such as a database (e.g., MongoDB) and a message broker (e.g., RabbitMQ) for asynchronous behavior. We will install these components before setting up the Kerberos Agents and Kerberos Vault.
+When installing the Kerberos.io stack, several dependencies are required for storage, such as a database (e.g., MongoDB) and a message broker (e.g., RabbitMQ) for asynchronous behavior. We will install these components before setting up the Agents and Kerberos Vault.
 
 ### Clone repository
 
@@ -131,7 +131,7 @@ When you create a Kubernetes cluster using `kubeadm` on a bare metal machine
 
 MinIO is a high-performance, distributed object storage system that is compatible with Amazon S3 cloud storage service. It is designed to handle large-scale data storage and retrieval, making it an ideal choice for modern cloud-native applications.
 
-In the context of the Kerberos.io stack, MinIO will be used to store recordings from the Kerberos Agents. These recordings are crucial for surveillance and monitoring purposes, and having a reliable storage solution like MinIO ensures that the data is stored securely and can be accessed efficiently.
+In the context of the Kerberos.io stack, MinIO will be used to store recordings from the Agents. These recordings are crucial for surveillance and monitoring purposes, and having a reliable storage solution like MinIO ensures that the data is stored securely and can be accessed efficiently.
 
 ```bash
 git clone --depth 1 --branch v6.0.1 https://github.com/minio/operator.git && kubectl apply -k operator/
@@ -349,15 +349,15 @@ With the Kerberos Vault installed, we can proceed to configure the various compo
   - Access key: XJoi2@bgSOvOYBy# (or generate new keys, but don't forget to update them in the next steps)
   - Secret key: OGGqat4lXRpL@9XBYc8FUaId@5 (or generate new keys, but don't forget to update them in the next steps)
 
-### Create a Kerberos Agent
+### Create an Agent
 
-After deploying the Kerberos Vault and configuring the necessary services for storage, database, and integration, you can proceed to deploy the Kerberos Agent with the appropriate configuration. Review the `kerberos-agent-deployment.yaml` file and adjust the relevant settings, such as the RTSP URL, to ensure proper functionality. As mentioned below note that you can opt for the [Factory](https://github.com/kerberos-io/factory/tree/master/kubernetes) which gives you a UI to manage the creation of Kerberos Agents. **_(Please note if you generated new the keys in the previous Kerberos Vault account creation, you need to update those in the Kerberos Agent deployment)_**
+After deploying the Kerberos Vault and configuring the necessary services for storage, database, and integration, you can proceed to deploy the Agent with the appropriate configuration. Review the `kerberos-agent-deployment.yaml` file and adjust the relevant settings, such as the RTSP URL, to ensure proper functionality. As mentioned below note that you can opt for the [Factory](https://github.com/kerberos-io/factory/tree/master/kubernetes) which gives you a UI to manage the creation of Agents. **_(Please note if you generated new the keys in the previous Kerberos Vault account creation, you need to update those in the Agent deployment)_**
 
 ```bash
 kubectl apply -f kerberos-agent-deployment.yaml
 ```
 
-Review the creation of the Kerberos Agent and review the logs of the container to validate the Kerberos Agent is able to connect to the IP camera, and if a recording is being created and transferred to the Kerberos Vault
+Review the creation of the Agent and review the logs of the container to validate the Agent is able to connect to the IP camera, and if a recording is being created and transferred to the Kerberos Vault
 
 ```bash
 kubectl get po -w -A
@@ -366,9 +366,9 @@ kubectl logs -f kerberos-agent...
 
 To validate the Kerberos Vault and review any stored recordings, access the user interface at `http://localhost:30080` (after establishing the reverse tunnel).
 
-### Create Kerberos Agents through Factory
+### Create Agents through Factory
 
-Managing Kerberos Agents through seperate configuration files might feel cumbersome, especially for non-technical users. This is where Factory comes into the picture. Factory provides a visual view that allows you to rapidly connect cameras through a user interface, which allows users without any technical background about cameras and kubernetes create Kerberos Agents.
+Managing Agents through seperate configuration files might feel cumbersome, especially for non-technical users. This is where Factory comes into the picture. Factory provides a visual view that allows you to rapidly connect cameras through a user interface, which allows users without any technical background about cameras and kubernetes create Agents.
 
 Factory also requires a mongodb, just like Kerberos Vault. Luckily you can reuse the mongodb installation we have deployed earlier, the only thing we'll need to do is to create another `configmap.yaml` in the `kerberos-factory` namespace.
 
@@ -400,7 +400,7 @@ kubectl get po -w -A
 
 ### Optimized Data Filtering for Enhanced Bandwidth Efficiency and Relevance
 
-Once your Kerberos Agents are properly connected and all recordings are stored in the Kerberos Vault, you may encounter additional challenges such as bandwidth limitations, storage constraints, and the need to efficiently locate relevant data. To accomplish this, we can configure an integration to filter the recordings, ensuring that only the relevant ones are retained.
+Once your Agents are properly connected and all recordings are stored in the Kerberos Vault, you may encounter additional challenges such as bandwidth limitations, storage constraints, and the need to efficiently locate relevant data. To accomplish this, we can configure an integration to filter the recordings, ensuring that only the relevant ones are retained.
 
 Assuming all configurations are correctly set and all Kubernetes deployments are operational, you can apply the `data-filtering-deployment.yaml` deployment. This deployment will schedule a pod that listens to the configured integration in Kerberos Vault and runs a YOLOv8 model to evaluate the recordings and match them against specified conditions.
 
