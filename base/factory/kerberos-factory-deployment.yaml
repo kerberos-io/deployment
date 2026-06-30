@@ -52,6 +52,8 @@ spec:
           value: "configmap"
         - name: FACTORY_ENGINE
           value: "kubernetes"
+        - name: FACTORY_ENVIRONMENT
+          value: "kubernetes"
         - name: K8S_PROXY
           value: http://localhost:80
 
